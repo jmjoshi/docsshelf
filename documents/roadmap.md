@@ -16,7 +16,56 @@ The app aims to provide secure, efficient document handling with features like O
 - Tools: React Native CLI, Expo for prototyping, GitHub for version control.
 - Budget: Covers development, testing, and basic deployment.
 
-## 2. Phase 1: Project Setup and Foundation (Weeks 1-4)
+## 2. MVP Features
+The Minimum Viable Product (MVP) focuses on core functionalities that deliver value to users while validating the app's concept. MVP features are prioritized for the first release (end of Phase 2), ensuring a functional, secure, and user-friendly app. Advanced features are deferred to post-MVP phases.
+
+### Core MVP Features:
+1. **User Authentication**:
+   - Secure login/signup with email/password.
+   - Biometric MFA (fingerprint/face ID).
+   - Account creation with basic profile (name, email).
+
+2. **Document Management**:
+   - Upload documents from device (PDF, images, text).
+   - Local storage with AES-256 encryption.
+   - Create categories and folders.
+   - Basic viewing and deletion of documents.
+
+3. **Search and Organization**:
+   - Search by filename or metadata.
+   - Sort and filter documents by date/category.
+
+4. **Security and Privacy**:
+   - End-to-end encryption for all data.
+   - Zero-knowledge storage (no server access to user data).
+   - Secure key management with device keystore.
+
+5. **Offline Functionality**:
+   - Full app operation without internet.
+   - Local caching for fast access.
+
+6. **UI/UX Basics**:
+   - Intuitive navigation (tabs for Home, Documents, Settings).
+   - Responsive design for iOS/Android.
+   - Basic accessibility (screen reader support).
+
+7. **Performance**:
+   - Handle up to 1,000 documents efficiently.
+   - <2s app launch, <500ms search for 1k docs.
+
+### Non-MVP Features (Post-Launch):
+- OCR and auto-categorization.
+- Sharing and collaboration.
+- Cloud sync (opt-in).
+- Advanced analytics and internationalization.
+- These will be added based on user feedback and Phase 3.
+
+**MVP Success Criteria**:
+- 80% user satisfaction in beta testing.
+- Secure handling of documents without data breaches.
+- App store approval and initial downloads.
+
+## 3. Phase 1: Project Setup and Foundation (Weeks 1-4)
 **Goal**: Establish the development environment, core architecture, and basic app structure.
 
 ### Next Steps:
@@ -93,7 +142,7 @@ The app aims to provide secure, efficient document handling with features like O
 
 **Deliverables**: Alpha version with core features, user testing feedback incorporated.
 
-## 4. Phase 3: Advanced Features and Integrations (Weeks 17-28)
+## 5. Phase 3: Advanced Features and Integrations (Weeks 17-28)
 **Goal**: Add OCR, sharing, and compliance features to enhance functionality.
 
 ### Next Steps:
@@ -129,7 +178,7 @@ The app aims to provide secure, efficient document handling with features like O
 
 **Deliverables**: Beta version with advanced features, compliance documentation.
 
-## 5. Phase 4: Testing, Deployment, and Launch (Weeks 29-36)
+## 6. Phase 4: Testing, Deployment, and Launch (Weeks 29-36)
 **Goal**: Ensure quality, deploy to app stores, and prepare for launch.
 
 ### Next Steps:
@@ -159,7 +208,7 @@ The app aims to provide secure, efficient document handling with features like O
 
 **Deliverables**: Production release, user documentation.
 
-## 6. Phase 5: Maintenance and Scaling (Post-Launch)
+## 7. Phase 5: Maintenance and Scaling (Post-Launch)
 **Goal**: Monitor, update, and scale the app based on user feedback.
 
 ### Next Steps:
@@ -184,7 +233,7 @@ The app aims to provide secure, efficient document handling with features like O
 
 **Deliverables**: Ongoing updates, scaling reports.
 
-## 7. Overall Timeline and Milestones
+## 8. Overall Timeline and Milestones
 - **Month 1**: Project setup and foundation.
 - **Months 2-4**: Core features development.
 - **Months 5-7**: Advanced features and integrations.
@@ -193,7 +242,7 @@ The app aims to provide secure, efficient document handling with features like O
 
 **Total Timeline**: 6-9 months, depending on team size and complexity.
 
-## 8. Risks and Mitigation
+## 9. Risks and Mitigation
 - **Risk**: Security vulnerabilities in encryption.
   - **Mitigation**: Regular audits, use vetted libraries, follow OWASP guidelines.
 - **Risk**: Performance issues on older devices.
@@ -205,7 +254,7 @@ The app aims to provide secure, efficient document handling with features like O
 - **Risk**: Team availability.
   - **Mitigation**: Backup developers, clear documentation.
 
-## 9. Conclusion
+## 10. Conclusion
 This roadmap provides a structured path to building DocsShelf, ensuring alignment with technical requirements and best practices. Start with Phase 1 setup, and iterate based on testing and feedback. For questions or adjustments, refer to `technical_requirements.md` or contact the development team.
 
 **Next Immediate Action**: Begin Phase 1 by setting up the development environment and initializing the React Native project.</content>
