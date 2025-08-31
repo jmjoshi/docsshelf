@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Card, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import {
   loginSuccess,
   loginFailure,
 } from '../../store/slices/authSlice';
+import { AuthService } from '../../services/auth';
 
 interface LoginScreenProps {
   navigation: {
@@ -17,9 +18,35 @@ interface LoginScreenProps {
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
   const dispatch = useDispatch();
 
-  const handleLogin = () => {
+  useEffect(() => {
+    checkBiometricAvailability();
+  }, []);
+
+  const checkBiometricAvailability = async () => {
+    try {
+      const available = await AuthService.authenticateWithBiometrics();
+      setIsBiometricAvailable(available);
+    } catch {
+      console.log('Biometric not available');
+    }
+  };
+
+  const handleBiometricLogin = async () => {
+    try {
+      const success = await AuthService.authenticateWithBiometrics();
+      if (success) {
+        // For demo, use stored credentials or prompt for email
+        Alert.alert('Biometric Success', 'Please enter your email to proceed');
+      }
+    } catch {
+      Alert.alert('Error', 'Biometric authentication failed');
+    }
+  };
+
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill all fields');
       return;
@@ -27,23 +54,19 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
     dispatch(loginStart());
 
-    // Simulate login
-    setTimeout(() => {
-      if (email === 'test@example.com' && password === 'password') {
-        dispatch(
-          loginSuccess({
-            id: '1',
-            email,
-            firstName: 'John',
-            lastName: 'Doe',
-            phoneNumbers: [{ type: 'mobile', number: '1234567890' }],
-          })
-        );
+    try {
+      const user = await AuthService.login({ email, password });
+      if (user) {
+        dispatch(loginSuccess(user));
+        Alert.alert('Success', 'Login successful!');
       } else {
         dispatch(loginFailure('Invalid credentials'));
         Alert.alert('Error', 'Invalid credentials');
       }
-    }, 1000);
+    } catch {
+      dispatch(loginFailure('Login failed'));
+      Alert.alert('Error', 'Login failed. Please try again.');
+    }
   };
 
   return (
@@ -69,6 +92,16 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <Button mode="contained" onPress={handleLogin} style={styles.button}>
             Login
           </Button>
+          {isBiometricAvailable && (
+            <Button
+              mode="outlined"
+              onPress={handleBiometricLogin}
+              style={styles.button}
+              icon="fingerprint"
+            >
+              Use Biometric Login
+            </Button>
+          )}
           <Button
             mode="outlined"
             onPress={() => navigation.navigate('Register')}

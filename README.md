@@ -153,8 +153,39 @@ npm run lint:fix
 
 - **End-to-End Encryption**: All data encrypted with AES-256-GCM
 - **Biometric Authentication**: Fingerprint/face ID support
-- **Secure Key Storage**: Keys stored in device keystore
+- **Secure Key Storage**: Keys stored in device keystore using React Native Keychain
 - **Zero-Knowledge**: No server-side data access
+- **Password Security**: PBKDF2 key derivation with strong password requirements
+- **Audit Logging**: All user actions logged locally in SQLite database
+- **Secure Registration**: Email/password with validation and secure hashing
+
+## Authentication Setup
+
+The app implements a comprehensive authentication system:
+
+### User Registration
+- Email and password registration
+- Strong password requirements (12+ chars, mixed case, numbers, symbols)
+- Phone number collection (optional multiple numbers)
+- Secure password hashing with PBKDF2
+- Automatic encryption key generation and storage
+
+### User Login
+- Email/password authentication
+- Biometric authentication support (fingerprint/face ID)
+- Failed login attempt logging
+- Session management with Redux
+
+### Biometric Setup
+- Optional biometric authentication
+- Device keystore integration
+- Fallback to password authentication
+
+### Security Implementation
+- **Encryption Service**: AES-256-GCM encryption/decryption
+- **Key Management**: Secure key storage in device keystore
+- **Database Security**: SQLite with encrypted metadata
+- **Audit System**: Comprehensive logging of all user actions
 
 ## Contributing
 

@@ -3,6 +3,7 @@ import { View, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Text, TextInput, Button, Card, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../store/slices/authSlice';
+import { AuthService } from '../../services/auth';
 
 interface RegisterScreenProps {
   navigation: {
@@ -31,24 +32,29 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     setPhoneNumbers(updated);
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!firstName || !lastName || !email || !password) {
       Alert.alert('Error', 'Please fill all required fields');
       return;
     }
 
-    // Simulate registration
-    dispatch(
-      loginSuccess({
-        id: Date.now().toString(),
-        email,
+    try {
+      const user = await AuthService.register({
         firstName,
         lastName,
+        email,
+        password,
         phoneNumbers: phoneNumbers.filter((p) => p.number),
-      })
-    );
+      });
 
-    Alert.alert('Success', 'Account created successfully');
+      dispatch(loginSuccess(user));
+      Alert.alert('Success', 'Account created successfully!');
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        error instanceof Error ? error.message : 'Registration failed'
+      );
+    }
   };
 
   return (
@@ -77,7 +83,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             style={styles.input}
           />
           <TextInput
-            label="Password"
+            label="Password (min 12 chars, uppercase, lowercase, number, symbol)"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
