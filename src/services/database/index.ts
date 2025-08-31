@@ -488,6 +488,102 @@ export class DatabaseService {
     }
   }
 
+  // Get documents with pagination for performance
+  static async getDocumentsByUserPaginated(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      // Get total count
+      const [countResult] = await this.db.executeSql(
+        'SELECT COUNT(*) as total FROM documents WHERE userId = ?',
+        [userId]
+      );
+      const totalCount = countResult.rows.item(0).total;
+
+      // Get paginated results
+      const offset = (page - 1) * pageSize;
+      const [results] = await this.db.executeSql(
+        'SELECT * FROM documents WHERE userId = ? ORDER BY createdAt DESC LIMIT ? OFFSET ?',
+        [userId, pageSize, offset]
+      );
+
+      const documents: Document[] = [];
+      for (let i = 0; i < results.rows.length; i++) {
+        const doc = results.rows.item(i);
+        documents.push({
+          ...doc,
+          tags: JSON.parse(doc.tags || '[]'),
+          isSynced: Boolean(doc.isSynced),
+        });
+      }
+
+      const hasMore = offset + documents.length < totalCount;
+
+      return { documents, totalCount, hasMore };
+    } catch (error) {
+      console.error('Failed to get paginated documents:', error);
+      throw error;
+    }
+  }
+
+  // Search documents with pagination
+  static async searchDocumentsPaginated(
+    userId: string,
+    query: string,
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      const lowerQuery = query.toLowerCase();
+      const searchPattern = `%${lowerQuery}%`;
+
+      // Get total count for search
+      const [countResult] = await this.db.executeSql(
+        `SELECT COUNT(*) as total FROM documents WHERE userId = ? AND (
+          LOWER(name) LIKE ? OR
+          LOWER(category) LIKE ? OR
+          LOWER(tags) LIKE ?
+        )`,
+        [userId, searchPattern, searchPattern, searchPattern]
+      );
+      const totalCount = countResult.rows.item(0).total;
+
+      // Get paginated search results
+      const offset = (page - 1) * pageSize;
+      const [results] = await this.db.executeSql(
+        `SELECT * FROM documents WHERE userId = ? AND (
+          LOWER(name) LIKE ? OR
+          LOWER(category) LIKE ? OR
+          LOWER(tags) LIKE ?
+        ) ORDER BY createdAt DESC LIMIT ? OFFSET ?`,
+        [userId, searchPattern, searchPattern, searchPattern, pageSize, offset]
+      );
+
+      const documents: Document[] = [];
+      for (let i = 0; i < results.rows.length; i++) {
+        const doc = results.rows.item(i);
+        documents.push({
+          ...doc,
+          tags: JSON.parse(doc.tags || '[]'),
+          isSynced: Boolean(doc.isSynced),
+        });
+      }
+
+      const hasMore = offset + documents.length < totalCount;
+
+      return { documents, totalCount, hasMore };
+    } catch (error) {
+      console.error('Failed to search documents paginated:', error);
+      throw error;
+    }
+  }
+
   static async updateDocument(
     id: string,
     updates: Partial<Document>

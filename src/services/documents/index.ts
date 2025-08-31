@@ -153,6 +153,24 @@ export class DocumentService {
     }
   }
 
+  // Get documents with pagination
+  static async getDocumentsPaginated(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
+    try {
+      return await DatabaseService.getDocumentsByUserPaginated(
+        userId,
+        page,
+        pageSize
+      );
+    } catch (error) {
+      console.error('Failed to get paginated documents:', error);
+      throw error;
+    }
+  }
+
   // Search documents
   static async searchDocuments(
     userId: string,
@@ -172,6 +190,26 @@ export class DocumentService {
       );
     } catch (error) {
       console.error('Failed to search documents:', error);
+      throw error;
+    }
+  }
+
+  // Search documents with pagination
+  static async searchDocumentsPaginated(
+    userId: string,
+    query: string,
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
+    try {
+      return await DatabaseService.searchDocumentsPaginated(
+        userId,
+        query,
+        page,
+        pageSize
+      );
+    } catch (error) {
+      console.error('Failed to search documents paginated:', error);
       throw error;
     }
   }

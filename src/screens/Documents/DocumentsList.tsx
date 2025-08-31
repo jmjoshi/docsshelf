@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import {
   Text,
@@ -11,6 +11,7 @@ import {
   Snackbar,
   useTheme,
   Surface,
+  ActivityIndicator,
 } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
@@ -18,10 +19,11 @@ import { Document } from '../../types';
 import { DocumentService } from '../../services/documents';
 import { addDocument } from '../../store/slices/documentsSlice';
 import HapticFeedback from 'react-native-haptic-feedback';
+import { PerformanceMonitor } from '../../utils/performance';
 
 export default function DocumentsListScreen() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredDocuments, setFilteredDocuments] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
@@ -30,26 +32,124 @@ export default function DocumentsListScreen() {
     'success'
   );
 
-  const documents = useSelector(
-    (state: RootState) => state.documents.documents
-  );
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const PAGE_SIZE = 50;
+
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  useEffect(() => {
-    if (searchQuery) {
-      // Filter documents based on search query
-      const filtered = documents.filter(
-        (doc) =>
-          doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (doc.category && doc.category.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
-      setFilteredDocuments(filtered);
-    } else {
-      setFilteredDocuments(documents);
+  // Load initial documents
+  const loadDocuments = useCallback(
+    async (page: number = 1, isLoadMore: boolean = false) => {
+      if (!userId) return;
+
+      try {
+        if (isLoadMore) {
+          setIsLoadingMore(true);
+        } else {
+          setIsLoading(true);
+          PerformanceMonitor.startTimer(`Load Documents Page ${page}`);
+        }
+
+        const result = await DocumentService.getDocumentsPaginated(
+          userId,
+          page,
+          PAGE_SIZE
+        );
+
+        if (isLoadMore) {
+          setDocuments((prev) => [...prev, ...result.documents]);
+        } else {
+          setDocuments(result.documents);
+          PerformanceMonitor.endTimer(`Load Documents Page ${page}`);
+          PerformanceMonitor.logMemoryUsage('After Document Load');
+        }
+
+        setHasMore(result.hasMore);
+        setCurrentPage(page);
+      } catch (error) {
+        console.error('Failed to load documents:', error);
+        showSnackbar('Failed to load documents', 'error');
+      } finally {
+        setIsLoading(false);
+        setIsLoadingMore(false);
+      }
+    },
+    [userId]
+  );
+
+  // Load more documents for infinite scroll
+  const loadMoreDocuments = useCallback(() => {
+    if (!isLoadingMore && hasMore && !isLoading) {
+      loadDocuments(currentPage + 1, true);
     }
-  }, [documents, searchQuery]);
+  }, [currentPage, hasMore, isLoading, isLoadingMore, loadDocuments]);
+
+  // Search documents with pagination
+  const searchDocuments = useCallback(
+    async (query: string, page: number = 1, isLoadMore: boolean = false) => {
+      if (!userId) return;
+
+      try {
+        if (isLoadMore) {
+          setIsLoadingMore(true);
+        } else {
+          setIsLoading(true);
+          PerformanceMonitor.startTimer(`Search: ${query}`);
+        }
+
+        const result = await DocumentService.searchDocumentsPaginated(
+          userId,
+          query,
+          page,
+          PAGE_SIZE
+        );
+
+        if (isLoadMore) {
+          setDocuments((prev) => [...prev, ...result.documents]);
+        } else {
+          setDocuments(result.documents);
+          PerformanceMonitor.endTimer(`Search: ${query}`);
+          PerformanceMonitor.logMemoryUsage('After Search');
+        }
+
+        setHasMore(result.hasMore);
+        setCurrentPage(page);
+      } catch (error) {
+        console.error('Failed to search documents:', error);
+        showSnackbar('Failed to search documents', 'error');
+      } finally {
+        setIsLoading(false);
+        setIsLoadingMore(false);
+      }
+    },
+    [userId]
+  );
+
+  // Handle search query changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchQuery.trim()) {
+        searchDocuments(searchQuery.trim());
+      } else {
+        loadDocuments(1);
+      }
+    }, 300); // Debounce search
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, loadDocuments, searchDocuments]);
+
+  // Initial load
+  useEffect(() => {
+    if (userId) {
+      loadDocuments(1);
+    }
+  }, [userId, loadDocuments]);
 
   const showSnackbar = (
     message: string,
@@ -230,27 +330,58 @@ export default function DocumentsListScreen() {
         </Button>
       </View>
 
-      {filteredDocuments.length === 0 ? (
-        <Text
-          style={[styles.empty, { color: theme.colors.onSurfaceVariant }]}
-          accessible={true}
-          accessibilityLabel={
-            searchQuery
+      {documents.length === 0 ? (
+        isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+            <Text
+              style={[
+                styles.loadingText,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              Loading documents...
+            </Text>
+          </View>
+        ) : (
+          <Text
+            style={[styles.empty, { color: theme.colors.onSurfaceVariant }]}
+            accessible={true}
+            accessibilityLabel={
+              searchQuery
+                ? 'No documents match your search'
+                : 'No documents yet. Start by uploading one!'
+            }
+          >
+            {searchQuery
               ? 'No documents match your search'
-              : 'No documents yet. Start by uploading one!'
-          }
-        >
-          {searchQuery
-            ? 'No documents match your search'
-            : 'No documents yet. Start by uploading one!'}
-        </Text>
+              : 'No documents yet. Start by uploading one!'}
+          </Text>
+        )
       ) : (
         <FlatList
-          data={filteredDocuments}
+          data={documents}
           renderItem={renderDocument}
           keyExtractor={(item) => item.id}
+          onEndReached={loadMoreDocuments}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isLoadingMore ? (
+              <View style={styles.loadingMore}>
+                <ActivityIndicator size="small" />
+                <Text
+                  style={[
+                    styles.loadingText,
+                    { color: theme.colors.onSurfaceVariant },
+                  ]}
+                >
+                  Loading more...
+                </Text>
+              </View>
+            ) : null
+          }
           accessible={true}
-          accessibilityLabel={`List of ${filteredDocuments.length} documents`}
+          accessibilityLabel={`List of ${documents.length} documents`}
         />
       )}
 
@@ -324,5 +455,18 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+  },
+  loadingMore: {
+    padding: 20,
+    alignItems: 'center',
   },
 });

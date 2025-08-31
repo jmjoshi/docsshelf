@@ -164,6 +164,7 @@ npm run lint:fix
 The app implements a comprehensive authentication system:
 
 ### User Registration
+
 - Email and password registration
 - Strong password requirements (12+ chars, mixed case, numbers, symbols)
 - Phone number collection (optional multiple numbers)
@@ -171,17 +172,20 @@ The app implements a comprehensive authentication system:
 - Automatic encryption key generation and storage
 
 ### User Login
+
 - Email/password authentication
 - Biometric authentication support (fingerprint/face ID)
 - Failed login attempt logging
 - Session management with Redux
 
 ### Biometric Setup
+
 - Optional biometric authentication
 - Device keystore integration
 - Fallback to password authentication
 
 ### Security Implementation
+
 - **Encryption Service**: AES-256-GCM encryption/decryption
 - **Key Management**: Secure key storage in device keystore
 - **Database Security**: SQLite with encrypted metadata
