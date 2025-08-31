@@ -10,6 +10,7 @@ import LoginScreen from '../screens/Auth/Login';
 import RegisterScreen from '../screens/Auth/Register';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { Ionicons } from '@expo/vector-icons';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 const AuthStack = createStackNavigator<AuthStackParamList>();
@@ -27,9 +28,33 @@ function AuthNavigator() {
 function MainNavigator() {
   return (
     <MainTab.Navigator screenOptions={{ headerShown: false }}>
-      <MainTab.Screen name="Home" component={HomeScreen} />
-      <MainTab.Screen name="Documents" component={DocumentsListScreen} />
-      <MainTab.Screen name="Settings" component={SettingsMainScreen} />
+      <MainTab.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <MainTab.Screen 
+        name="Documents" 
+        component={DocumentsListScreen} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="document" color={color} size={size} />
+          ),
+        }}
+      />
+      <MainTab.Screen 
+        name="Settings" 
+        component={SettingsMainScreen} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" color={color} size={size} />
+          ),
+        }}
+      />
     </MainTab.Navigator>
   );
 }

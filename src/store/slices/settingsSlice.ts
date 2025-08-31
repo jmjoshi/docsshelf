@@ -40,8 +40,8 @@ const settingsSlice = createSlice({
     setStorageLimit: (state, action: PayloadAction<number>) => {
       state.storageLimit = action.payload;
     },
-    updateSettings: (state, action: PayloadAction<Partial<SettingsState>>) => {
-      return { ...state, ...action.payload };
+    toggleTheme: (state) => {
+      state.theme = state.theme === 'light' ? 'dark' : 'light';
     },
   },
 });
@@ -53,6 +53,6 @@ export const {
   setBiometricEnabled,
   setAutoBackupEnabled,
   setStorageLimit,
-  updateSettings,
+  toggleTheme,
 } = settingsSlice.actions;
 export default settingsSlice.reducer;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, ScrollView } from 'react-native';
+import { Text, TextInput, Button, Card, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../store/slices/authSlice';
 
@@ -41,55 +42,65 @@ export default function RegisterScreen({ navigation }: any) {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Register for DocsShelf</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={setFirstName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Text style={styles.subtitle}>Phone Numbers</Text>
-      {phoneNumbers.map((phone, index) => (
-        <View key={index} style={styles.phoneContainer}>
+      <Card style={styles.card}>
+        <Card.Content>
+          <Title style={styles.title}>Register for DocsShelf</Title>
           <TextInput
-            style={[styles.input, { flex: 1, marginRight: 10 }]}
-            placeholder="Type (e.g., mobile)"
-            value={phone.type}
-            onChangeText={(value) => updatePhoneNumber(index, 'type', value)}
+            label="First Name"
+            value={firstName}
+            onChangeText={setFirstName}
+            style={styles.input}
           />
           <TextInput
-            style={[styles.input, { flex: 2 }]}
-            placeholder="Number"
-            value={phone.number}
-            onChangeText={(value) => updatePhoneNumber(index, 'number', value)}
-            keyboardType="phone-pad"
+            label="Last Name"
+            value={lastName}
+            onChangeText={setLastName}
+            style={styles.input}
           />
-        </View>
-      ))}
-      <Button title="Add Phone Number" onPress={addPhoneNumber} />
-      <Button title="Register" onPress={handleRegister} />
-      <Button title="Back to Login" onPress={() => navigation.goBack()} />
+          <TextInput
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+          <TextInput
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+          />
+          <Text style={styles.subtitle}>Phone Numbers</Text>
+          {phoneNumbers.map((phone, index) => (
+            <View key={index} style={styles.phoneContainer}>
+              <TextInput
+                label="Type (e.g., mobile)"
+                value={phone.type}
+                onChangeText={(value) => updatePhoneNumber(index, 'type', value)}
+                style={[styles.input, { flex: 1, marginRight: 10 }]}
+              />
+              <TextInput
+                label="Number"
+                value={phone.number}
+                onChangeText={(value) => updatePhoneNumber(index, 'number', value)}
+                keyboardType="phone-pad"
+                style={[styles.input, { flex: 2 }]}
+              />
+            </View>
+          ))}
+          <Button mode="outlined" onPress={addPhoneNumber} style={styles.button}>
+            Add Phone Number
+          </Button>
+          <Button mode="contained" onPress={handleRegister} style={styles.button}>
+            Register
+          </Button>
+          <Button mode="text" onPress={() => navigation.goBack()} style={styles.button}>
+            Back to Login
+          </Button>
+        </Card.Content>
+      </Card>
     </ScrollView>
   );
 }
@@ -98,25 +109,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  card: {
+    padding: 10,
   },
   title: {
-    fontSize: 24,
     textAlign: 'center',
     marginBottom: 20,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
+    marginTop: 10,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
     marginBottom: 10,
-    borderRadius: 5,
   },
   phoneContainer: {
     flexDirection: 'row',
     marginBottom: 10,
+  },
+  button: {
+    marginTop: 10,
   },
 });

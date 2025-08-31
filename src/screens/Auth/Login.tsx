@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { Text, TextInput, Button, Card, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../../store/slices/authSlice';
 
@@ -35,24 +36,32 @@ export default function LoginScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login to DocsShelf</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Register" onPress={() => navigation.navigate('Register')} />
+      <Card style={styles.card}>
+        <Card.Content>
+          <Title style={styles.title}>Login to DocsShelf</Title>
+          <TextInput
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+          <TextInput
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+          />
+          <Button mode="contained" onPress={handleLogin} style={styles.button}>
+            Login
+          </Button>
+          <Button mode="outlined" onPress={() => navigation.navigate('Register')} style={styles.button}>
+            Register
+          </Button>
+        </Card.Content>
+      </Card>
     </View>
   );
 }
@@ -62,17 +71,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  card: {
+    padding: 10,
   },
   title: {
-    fontSize: 24,
     textAlign: 'center',
     marginBottom: 20,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
     marginBottom: 10,
-    borderRadius: 5,
+  },
+  button: {
+    marginTop: 10,
   },
 });
