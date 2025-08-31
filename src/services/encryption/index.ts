@@ -14,9 +14,25 @@ export class EncryptionService {
 
   // Derive key from password using PBKDF2
   static deriveKey(password: string, salt?: string): string {
-    const saltWordArray = salt
-      ? CryptoJS.enc.Hex.parse(salt)
-      : CryptoJS.lib.WordArray.random(128 / 8);
+    let saltWordArray: CryptoJS.lib.WordArray;
+    if (salt) {
+      // If salt is provided as hex string, parse it
+
+      if (salt.length === 32) {
+        // 16 bytes = 32 hex chars
+
+        saltWordArray = CryptoJS.enc.Hex.parse(salt);
+      } else {
+        // If salt is provided as string, use it directly
+
+        saltWordArray = CryptoJS.enc.Utf8.parse(salt);
+      }
+    } else {
+      // Generate random salt
+
+      saltWordArray = CryptoJS.lib.WordArray.random(128 / 8);
+    }
+
     const key = CryptoJS.PBKDF2(password, saltWordArray, {
       keySize: this.KEY_SIZE / 32,
       iterations: 10000,
@@ -33,9 +49,12 @@ export class EncryptionService {
       padding: CryptoJS.pad.Pkcs7,
     });
 
-    // Combine IV and encrypted data
-    const combined = iv.concat(encrypted.ciphertext);
-    return combined.toString(CryptoJS.enc.Base64);
+    // Combine IV and encrypted data as JSON
+    const result = {
+      iv: iv.toString(),
+      data: encrypted.toString(),
+    };
+    return JSON.stringify(result);
   }
 
   // Decrypt data with AES-256-GCM
@@ -43,26 +62,22 @@ export class EncryptionService {
     encryptedData: string,
     key: string
   ): Promise<string> {
-    const combined = CryptoJS.enc.Base64.parse(encryptedData);
-    const iv = combined.clone();
-    iv.sigBytes = this.IV_SIZE / 8;
-    iv.clamp();
+    try {
+      const parsed = JSON.parse(encryptedData);
+      const iv = CryptoJS.enc.Hex.parse(parsed.iv);
 
-    const ciphertext = combined.clone();
-    ciphertext.words.splice(0, iv.words.length);
-    ciphertext.sigBytes -= iv.sigBytes;
-
-    const decrypted = CryptoJS.AES.decrypt(
-      { ciphertext } as CryptoJS.lib.CipherParams,
-      key,
-      {
+      const decrypted = CryptoJS.AES.decrypt(parsed.data, key, {
         iv: iv,
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7,
-      }
-    );
+      });
 
-    return decrypted.toString(CryptoJS.enc.Utf8);
+      const result = decrypted.toString(CryptoJS.enc.Utf8);
+
+      return result;
+    } catch {
+      throw new Error('Decryption failed: Invalid encrypted data format');
+    }
   }
 
   // Store encryption key securely in Keychain
