@@ -43,7 +43,7 @@ export default function DocumentsListScreen() {
       const filtered = documents.filter(
         (doc) =>
           doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          doc.category.toLowerCase().includes(searchQuery.toLowerCase())
+          (doc.category && doc.category.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       setFilteredDocuments(filtered);
     } else {
@@ -88,6 +88,7 @@ export default function DocumentsListScreen() {
         // Add to Redux store
         const doc: Document = {
           id: result.id,
+          userId: userId,
           name: result.name,
           path: result.path,
           category: 'General',
@@ -95,6 +96,7 @@ export default function DocumentsListScreen() {
           size: result.size,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          tags: [],
         };
         dispatch(addDocument(doc));
         showSnackbar('Document uploaded successfully');
@@ -137,6 +139,7 @@ export default function DocumentsListScreen() {
         // Add to Redux store
         const doc: Document = {
           id: result.id,
+          userId: userId,
           name: result.name,
           path: result.path,
           category: 'Scanned',
@@ -144,6 +147,7 @@ export default function DocumentsListScreen() {
           size: result.size,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          tags: [],
         };
         dispatch(addDocument(doc));
         showSnackbar('Document scanned successfully');
@@ -162,18 +166,18 @@ export default function DocumentsListScreen() {
     <Card
       style={[styles.card, { backgroundColor: theme.colors.surface }]}
       accessible={true}
-      accessibilityLabel={`Document: ${item.name}, Category: ${item.category}, Size: ${(item.size / 1024).toFixed(2)} KB`}
+      accessibilityLabel={`Document: ${item.name}, Category: ${item.category || 'Uncategorized'}, Size: ${item.size ? (item.size / 1024).toFixed(2) + ' KB' : 'Unknown'}`}
     >
       <Card.Content>
         <Title style={{ color: theme.colors.onSurface }}>{item.name}</Title>
         <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
-          Category: {item.category}
+          Category: {item.category || 'Uncategorized'}
         </Paragraph>
         <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
-          Folder: {item.folder}
+          Folder: {item.folder || 'No folder'}
         </Paragraph>
         <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
-          Size: {(item.size / 1024).toFixed(2)} KB
+          Size: {item.size ? (item.size / 1024).toFixed(2) + ' KB' : 'Unknown'}
         </Paragraph>
       </Card.Content>
     </Card>

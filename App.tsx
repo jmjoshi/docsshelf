@@ -8,6 +8,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { AuthService } from './src/services/auth';
 import { DatabaseService } from './src/services/database';
 import { StorageService } from './src/services/storage';
+import { SyncService } from './src/services/sync';
 
 const theme = {
   ...MD3LightTheme,
@@ -37,6 +38,7 @@ export default function App() {
         await AuthService.init();
         await DatabaseService.initDatabase();
         await StorageService.initStorage();
+        await SyncService.initialize();
         console.log('App initialized successfully');
       } catch (error) {
         console.error('Failed to initialize app:', error);

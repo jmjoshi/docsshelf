@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authReducer, documentsReducer, settingsReducer } from './slices';
+import { syncMiddleware } from './middleware/syncMiddleware';
 
 const authPersistConfig = {
   key: 'auth',
@@ -33,7 +34,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }),
+    }).concat(syncMiddleware),
 });
 
 export const persistor = persistStore(store);
