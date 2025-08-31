@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Card, Title } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import {
+  TextInput,
+  Button,
+  Card,
+  Title,
+  Snackbar,
+  useTheme,
+} from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import {
   loginStart,
@@ -8,6 +15,7 @@ import {
   loginFailure,
 } from '../../store/slices/authSlice';
 import { AuthService } from '../../services/auth';
+import HapticFeedback from 'react-native-haptic-feedback';
 
 interface LoginScreenProps {
   navigation: {
@@ -19,7 +27,11 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useEffect(() => {
     checkBiometricAvailability();
@@ -34,46 +46,72 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     }
   };
 
+  const showSnackbar = (message: string) => {
+    setSnackbarMessage(message);
+    setSnackbarVisible(true);
+  };
+
   const handleBiometricLogin = async () => {
+    HapticFeedback.trigger('impactLight');
     try {
       const success = await AuthService.authenticateWithBiometrics();
       if (success) {
-        // For demo, use stored credentials or prompt for email
-        Alert.alert('Biometric Success', 'Please enter your email to proceed');
+        showSnackbar(
+          'Biometric authentication successful! Please enter your email to proceed.'
+        );
+        HapticFeedback.trigger('notificationSuccess');
       }
     } catch {
-      Alert.alert('Error', 'Biometric authentication failed');
+      showSnackbar('Biometric authentication failed');
+      HapticFeedback.trigger('notificationError');
     }
   };
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please fill all fields');
+      showSnackbar('Please fill all fields');
+      HapticFeedback.trigger('notificationError');
       return;
     }
 
+    HapticFeedback.trigger('impactMedium');
+    setIsLoading(true);
     dispatch(loginStart());
 
     try {
       const user = await AuthService.login({ email, password });
       if (user) {
         dispatch(loginSuccess(user));
-        Alert.alert('Success', 'Login successful!');
+        showSnackbar('Login successful!');
+        HapticFeedback.trigger('notificationSuccess');
       } else {
         dispatch(loginFailure('Invalid credentials'));
-        Alert.alert('Error', 'Invalid credentials');
+        showSnackbar('Invalid credentials');
+        HapticFeedback.trigger('notificationError');
       }
     } catch {
       dispatch(loginFailure('Login failed'));
-      Alert.alert('Error', 'Login failed. Please try again.');
+      showSnackbar('Login failed. Please try again.');
+      HapticFeedback.trigger('notificationError');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Card style={styles.card}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <Card.Content>
-          <Title style={styles.title}>Login to DocsShelf</Title>
+          <Title
+            style={[styles.title, { color: theme.colors.onSurface }]}
+            accessible={true}
+            accessibilityRole="header"
+            accessibilityLabel="Login to DocsShelf"
+          >
+            Login to DocsShelf
+          </Title>
           <TextInput
             label="Email"
             value={email}
@@ -81,6 +119,9 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
+            accessible={true}
+            accessibilityLabel="Email address"
+            accessibilityHint="Enter your email address"
           />
           <TextInput
             label="Password"
@@ -88,9 +129,21 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             onChangeText={setPassword}
             secureTextEntry
             style={styles.input}
+            accessible={true}
+            accessibilityLabel="Password"
+            accessibilityHint="Enter your password"
           />
-          <Button mode="contained" onPress={handleLogin} style={styles.button}>
-            Login
+          <Button
+            mode="contained"
+            onPress={handleLogin}
+            style={styles.button}
+            loading={isLoading}
+            disabled={isLoading}
+            accessible={true}
+            accessibilityLabel="Login button"
+            accessibilityHint="Tap to log in with your credentials"
+          >
+            {isLoading ? 'Logging in...' : 'Login'}
           </Button>
           {isBiometricAvailable && (
             <Button
@@ -98,19 +151,38 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               onPress={handleBiometricLogin}
               style={styles.button}
               icon="fingerprint"
+              accessible={true}
+              accessibilityLabel="Biometric login"
+              accessibilityHint="Use fingerprint or face ID to log in"
             >
               Use Biometric Login
             </Button>
           )}
           <Button
             mode="outlined"
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => {
+              HapticFeedback.trigger('impactLight');
+              navigation.navigate('Register');
+            }}
             style={styles.button}
+            accessible={true}
+            accessibilityLabel="Register new account"
+            accessibilityHint="Navigate to registration screen"
           >
             Register
           </Button>
         </Card.Content>
       </Card>
+
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={4000}
+        accessible={true}
+        accessibilityLabel={snackbarMessage}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 }

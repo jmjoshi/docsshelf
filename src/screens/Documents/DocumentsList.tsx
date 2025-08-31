@@ -8,21 +8,34 @@ import {
   FAB,
   Button,
   Searchbar,
+  Snackbar,
+  useTheme,
+  Surface,
 } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Document } from '../../types';
 import { DocumentService } from '../../services/documents';
 import { addDocument } from '../../store/slices/documentsSlice';
+import HapticFeedback from 'react-native-haptic-feedback';
 
 export default function DocumentsListScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredDocuments, setFilteredDocuments] = useState<Document[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState<'success' | 'error'>(
+    'success'
+  );
+
   const documents = useSelector(
     (state: RootState) => state.documents.documents
   );
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useEffect(() => {
     if (searchQuery) {
@@ -38,17 +51,29 @@ export default function DocumentsListScreen() {
     }
   }, [documents, searchQuery]);
 
+  const showSnackbar = (
+    message: string,
+    type: 'success' | 'error' = 'success'
+  ) => {
+    setSnackbarMessage(message);
+    setSnackbarType(type);
+    setSnackbarVisible(true);
+  };
+
   const handleUpload = async () => {
     if (!userId) {
-      Alert.alert('Error', 'User not authenticated');
+      showSnackbar('User not authenticated', 'error');
       return;
     }
+
+    HapticFeedback.trigger('impactMedium');
+    setIsUploading(true);
 
     try {
       // Request permissions
       const permissions = await DocumentService.requestPermissions();
       if (!permissions.mediaLibrary) {
-        Alert.alert('Permission Required', 'Please grant media library access');
+        showSnackbar('Please grant media library access', 'error');
         return;
       }
 
@@ -72,25 +97,32 @@ export default function DocumentsListScreen() {
           updatedAt: new Date().toISOString(),
         };
         dispatch(addDocument(doc));
-        Alert.alert('Success', 'Document uploaded successfully');
+        showSnackbar('Document uploaded successfully');
+        HapticFeedback.trigger('notificationSuccess');
       }
     } catch (error) {
       console.error('Upload failed:', error);
-      Alert.alert('Error', 'Failed to upload document');
+      showSnackbar('Failed to upload document', 'error');
+      HapticFeedback.trigger('notificationError');
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const handleScan = async () => {
     if (!userId) {
-      Alert.alert('Error', 'User not authenticated');
+      showSnackbar('User not authenticated', 'error');
       return;
     }
+
+    HapticFeedback.trigger('impactMedium');
+    setIsScanning(true);
 
     try {
       // Request permissions
       const permissions = await DocumentService.requestPermissions();
       if (!permissions.camera) {
-        Alert.alert('Permission Required', 'Please grant camera access');
+        showSnackbar('Please grant camera access', 'error');
         return;
       }
 
@@ -114,47 +146,96 @@ export default function DocumentsListScreen() {
           updatedAt: new Date().toISOString(),
         };
         dispatch(addDocument(doc));
-        Alert.alert('Success', 'Document scanned successfully');
+        showSnackbar('Document scanned successfully');
+        HapticFeedback.trigger('notificationSuccess');
       }
     } catch (error) {
       console.error('Scan failed:', error);
-      Alert.alert('Error', 'Failed to scan document');
+      showSnackbar('Failed to scan document', 'error');
+      HapticFeedback.trigger('notificationError');
+    } finally {
+      setIsScanning(false);
     }
   };
 
   const renderDocument = ({ item }: { item: Document }) => (
-    <Card style={styles.card}>
+    <Card
+      style={[styles.card, { backgroundColor: theme.colors.surface }]}
+      accessible={true}
+      accessibilityLabel={`Document: ${item.name}, Category: ${item.category}, Size: ${(item.size / 1024).toFixed(2)} KB`}
+    >
       <Card.Content>
-        <Title>{item.name}</Title>
-        <Paragraph>Category: {item.category}</Paragraph>
-        <Paragraph>Folder: {item.folder}</Paragraph>
-        <Paragraph>Size: {(item.size / 1024).toFixed(2)} KB</Paragraph>
+        <Title style={{ color: theme.colors.onSurface }}>{item.name}</Title>
+        <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
+          Category: {item.category}
+        </Paragraph>
+        <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
+          Folder: {item.folder}
+        </Paragraph>
+        <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
+          Size: {(item.size / 1024).toFixed(2)} KB
+        </Paragraph>
       </Card.Content>
     </Card>
   );
 
   return (
-    <View style={styles.container}>
-      <Title style={styles.title}>Your Documents</Title>
+    <Surface
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <Title
+        style={[styles.title, { color: theme.colors.onBackground }]}
+        accessibilityRole="header"
+        accessibilityLabel="Your Documents"
+      >
+        Your Documents
+      </Title>
 
       <Searchbar
         placeholder="Search documents..."
         onChangeText={setSearchQuery}
         value={searchQuery}
-        style={styles.searchbar}
+        style={[styles.searchbar, { backgroundColor: theme.colors.surface }]}
+        accessible={true}
+        accessibilityLabel="Search documents"
+        accessibilityHint="Type to filter documents by name or category"
       />
 
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={handleUpload} style={styles.button}>
-          Upload Document
+        <Button
+          mode="contained"
+          onPress={handleUpload}
+          style={styles.button}
+          disabled={isUploading}
+          loading={isUploading}
+          accessibilityLabel="Upload document"
+          accessibilityHint="Select a file from your device to upload"
+        >
+          {isUploading ? 'Uploading...' : 'Upload Document'}
         </Button>
-        <Button mode="contained" onPress={handleScan} style={styles.button}>
-          Scan Document
+        <Button
+          mode="contained"
+          onPress={handleScan}
+          style={styles.button}
+          disabled={isScanning}
+          loading={isScanning}
+          accessibilityLabel="Scan document"
+          accessibilityHint="Use camera to scan a document"
+        >
+          {isScanning ? 'Scanning...' : 'Scan Document'}
         </Button>
       </View>
 
       {filteredDocuments.length === 0 ? (
-        <Text style={styles.empty}>
+        <Text
+          style={[styles.empty, { color: theme.colors.onSurfaceVariant }]}
+          accessible={true}
+          accessibilityLabel={
+            searchQuery
+              ? 'No documents match your search'
+              : 'No documents yet. Start by uploading one!'
+          }
+        >
           {searchQuery
             ? 'No documents match your search'
             : 'No documents yet. Start by uploading one!'}
@@ -164,21 +245,43 @@ export default function DocumentsListScreen() {
           data={filteredDocuments}
           renderItem={renderDocument}
           keyExtractor={(item) => item.id}
+          accessible={true}
+          accessibilityLabel={`List of ${filteredDocuments.length} documents`}
         />
       )}
 
       <FAB
-        style={styles.fab}
+        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
         icon="plus"
-        onPress={() =>
+        onPress={() => {
+          HapticFeedback.trigger('impactLight');
           Alert.alert('Add Document', 'Choose an option', [
             { text: 'Upload', onPress: handleUpload },
             { text: 'Scan', onPress: handleScan },
             { text: 'Cancel', style: 'cancel' },
-          ])
-        }
+          ]);
+        }}
+        accessible={true}
+        accessibilityLabel="Add new document"
+        accessibilityHint="Opens menu to choose upload or scan option"
       />
-    </View>
+
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={4000}
+        style={{
+          backgroundColor:
+            snackbarType === 'error'
+              ? theme.colors.error
+              : theme.colors.primary,
+        }}
+        accessible={true}
+        accessibilityLabel={snackbarMessage}
+      >
+        {snackbarMessage}
+      </Snackbar>
+    </Surface>
   );
 }
 
