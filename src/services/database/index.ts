@@ -30,6 +30,7 @@ export interface Document {
   size?: number;
   mimeType?: string;
   category?: string;
+  folder?: string;
   tags: string[];
   createdAt: string;
   updatedAt: string;
@@ -97,6 +98,7 @@ export class DatabaseService {
           size INTEGER,
           mimeType TEXT,
           category TEXT,
+          folder TEXT,
           tags TEXT, -- JSON array
           createdAt TEXT NOT NULL,
           updatedAt TEXT NOT NULL,
@@ -278,6 +280,7 @@ export class DatabaseService {
     size?: number,
     mimeType?: string,
     category?: string,
+    folder?: string,
     tags?: string[]
   ): Promise<string> {
     if (!this.db) throw new Error('Database not initialized');
@@ -287,8 +290,8 @@ export class DatabaseService {
 
     try {
       await this.db.executeSql(
-        `INSERT INTO documents (id, userId, name, path, size, mimeType, category, tags, createdAt, updatedAt)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO documents (id, userId, name, path, size, mimeType, category, folder, tags, createdAt, updatedAt)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           id,
           userId,
@@ -297,6 +300,7 @@ export class DatabaseService {
           size || null,
           mimeType || null,
           category || null,
+          folder || null,
           tags ? JSON.stringify(tags) : null,
           now,
           now,

@@ -1,18 +1,20 @@
 // Storage service for file operations with encryption
-import RNFS from 'react-native-fs';
+import * as FileSystem from 'expo-file-system';
 import { EncryptionService } from '../encryption';
 import { DatabaseService } from '../database';
 
 export class StorageService {
   private static readonly DOCUMENTS_DIR =
-    RNFS.DocumentDirectoryPath + '/documents';
+    FileSystem.documentDirectory + 'documents/';
 
   // Initialize storage directories
   static async initStorage(): Promise<void> {
     try {
-      const exists = await RNFS.exists(this.DOCUMENTS_DIR);
-      if (!exists) {
-        await RNFS.mkdir(this.DOCUMENTS_DIR);
+      const dirInfo = await FileSystem.getInfoAsync(this.DOCUMENTS_DIR);
+      if (!dirInfo.exists) {
+        await FileSystem.makeDirectoryAsync(this.DOCUMENTS_DIR, {
+          intermediates: true,
+        });
       }
     } catch (error) {
       console.error('Failed to initialize storage:', error);
@@ -26,7 +28,9 @@ export class StorageService {
     fileName: string,
     userId: string,
     encryptionKey: string,
-    mimeType?: string
+    mimeType?: string,
+    category?: string,
+    folder?: string
   ): Promise<string> {
     try {
       // Encrypt the file data
@@ -36,19 +40,23 @@ export class StorageService {
       );
 
       // Generate unique file path
-      const filePath = `${this.DOCUMENTS_DIR}/${userId}_${Date.now()}_${fileName}`;
+      const filePath = `${this.DOCUMENTS_DIR}${userId}_${Date.now()}_${fileName}`;
 
       // Write encrypted data to file
-      await RNFS.writeFile(filePath, encryptedData, 'base64');
+      await FileSystem.writeAsStringAsync(filePath, encryptedData, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
 
       // Save metadata to database
-      const fileStats = await RNFS.stat(filePath);
+      const fileInfo = await FileSystem.getInfoAsync(filePath);
       await DatabaseService.saveDocumentMetadata(
         userId,
         fileName,
         filePath,
-        parseInt(fileStats.size.toString(), 10),
-        mimeType
+        fileInfo.exists ? fileInfo.size || 0 : 0,
+        mimeType,
+        category,
+        folder
       );
 
       return filePath;
@@ -65,7 +73,9 @@ export class StorageService {
   ): Promise<string> {
     try {
       // Read encrypted data from file
-      const encryptedData = await RNFS.readFile(filePath, 'base64');
+      const encryptedData = await FileSystem.readAsStringAsync(filePath, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
 
       // Decrypt the data
       const decryptedData = await EncryptionService.decryptFile(
@@ -84,7 +94,7 @@ export class StorageService {
   static async deleteFile(filePath: string, userId: string): Promise<void> {
     try {
       // Delete physical file
-      await RNFS.unlink(filePath);
+      await FileSystem.deleteAsync(filePath);
 
       // Log deletion in audit
       await DatabaseService.logAudit(
@@ -100,12 +110,12 @@ export class StorageService {
 
   static async getFileInfo(
     filePath: string
-  ): Promise<{ size: number; mtime: Date }> {
+  ): Promise<{ size: number; modificationTime: number }> {
     try {
-      const stat = await RNFS.stat(filePath);
+      const fileInfo = await FileSystem.getInfoAsync(filePath);
       return {
-        size: parseInt(stat.size.toString(), 10),
-        mtime: new Date(stat.mtime),
+        size: fileInfo.exists ? fileInfo.size || 0 : 0,
+        modificationTime: fileInfo.exists ? fileInfo.modificationTime || 0 : 0,
       };
     } catch (error) {
       console.error('Failed to get file info:', error);
@@ -116,10 +126,10 @@ export class StorageService {
   // List user files
   static async listUserFiles(userId: string): Promise<string[]> {
     try {
-      const files = await RNFS.readDir(this.DOCUMENTS_DIR);
+      const files = await FileSystem.readDirectoryAsync(this.DOCUMENTS_DIR);
       return files
-        .filter((file: { name: string }) => file.name.startsWith(`${userId}_`))
-        .map((file: { path: string }) => file.path);
+        .filter((file) => file.startsWith(`${userId}_`))
+        .map((file) => `${this.DOCUMENTS_DIR}${file}`);
     } catch (error) {
       console.error('Failed to list user files:', error);
       return [];
@@ -133,7 +143,10 @@ export class StorageService {
     userId: string
   ): Promise<void> {
     try {
-      await RNFS.moveFile(oldPath, newPath);
+      await FileSystem.moveAsync({
+        from: oldPath,
+        to: newPath,
+      });
       await DatabaseService.logAudit(
         userId,
         'FILE_MOVED',
@@ -152,7 +165,10 @@ export class StorageService {
     userId: string
   ): Promise<void> {
     try {
-      await RNFS.copyFile(sourcePath, destinationPath);
+      await FileSystem.copyAsync({
+        from: sourcePath,
+        to: destinationPath,
+      });
       await DatabaseService.logAudit(
         userId,
         'FILE_COPIED',

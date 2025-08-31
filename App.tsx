@@ -6,11 +6,24 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { store, persistor } from './src/store/store';
 import AppNavigator from './src/navigation/AppNavigator';
 import { AuthService } from './src/services/auth';
+import { DatabaseService } from './src/services/database';
+import { StorageService } from './src/services/storage';
 
 export default function App() {
   useEffect(() => {
-    // Initialize authentication service
-    AuthService.init().catch(console.error);
+    const initializeApp = async () => {
+      try {
+        // Initialize services
+        await AuthService.init();
+        await DatabaseService.initDatabase();
+        await StorageService.initStorage();
+        console.log('App initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize app:', error);
+      }
+    };
+
+    initializeApp();
   }, []);
 
   return (
