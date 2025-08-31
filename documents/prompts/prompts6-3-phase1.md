@@ -3,12 +3,14 @@ jmjoshi: how do I start development and testing of mobile app on phones
 GitHub Copilot: To start development and testing of your React Native (Expo) mobile app on physical phones, follow these steps. Based on your project structure (including android, ios, .expo, and Expo references in docs), this appears to be an Expo-managed or bare workflow project. I'll cover both Android and iOS, assuming you have the necessary tools installed (e.g., Node.js, Expo CLI via `npm install -g @expo/cli`). If dependencies aren't installed, run `npm install` in the project root first.
 
 ### Prerequisites
+
 - **Phone setup**: Ensure your phone is on the same Wi-Fi network as your development machine.
 - **Expo CLI**: Install globally if not already: `npm install -g @expo/cli`.
 - **Project ready**: Your app code should be in src (e.g., entry point like `App.js` or `index.js` in the root or src). If not, create a basic `App.js` with a simple component.
 - **USB cable** for initial wired connection (wireless options below).
 
 ### For Android Phones
+
 1. **Enable Developer Options and USB Debugging**:
    - Go to **Settings > About Phone**.
    - Tap **Build Number** 7 times until "You are now a developer" appears.
@@ -21,7 +23,7 @@ GitHub Copilot: To start development and testing of your React Native (Expo) mob
    - Verify connection: Open a terminal in VS Code (Ctrl+`) and run `adb devices` (install Android SDK/platform-tools if needed). You should see your device listed.
 
 3. **Run the App on Device**:
-   - If **managed workflow** (no custom native code): 
+   - If **managed workflow** (no custom native code):
      - Run `expo start` in the project root.
      - Install the **Expo Go** app on your phone from the Google Play Store.
      - Scan the QR code displayed in the terminal with Expo Go.
@@ -35,6 +37,7 @@ GitHub Copilot: To start development and testing of your React Native (Expo) mob
    - Re-run the app command above.
 
 ### For iOS Phones
+
 iOS development requires a Mac with Xcode (Windows can't build iOS apps natively). If you have access to a Mac, follow these steps. Otherwise, use an iOS Simulator on a Mac for testing.
 
 1. **Set Up Xcode and Device**:
@@ -57,6 +60,7 @@ iOS development requires a Mac with Xcode (Windows can't build iOS apps natively
    - Disconnect USB and re-run the app command.
 
 ### Additional Tips
+
 - **Metro Bundler**: Ensure it's running (starts automatically with `expo start`). If issues, clear cache with `expo start -c`.
 - **Debugging**: Use React Native Debugger or Flipper for inspecting app state. Shake the phone for the Dev Menu (reload, debug, etc.).
 - **Permissions**: Grant camera/storage permissions on the phone if your app uses them (e.g., for OCR/document scanning).
@@ -83,7 +87,8 @@ The guide is tailored to your project's Expo-based setup and covers cross-platfo
 
 jmjoshi: why do i see reference to yumzoom repository, this project DocsShelf is independant project for mobile app development, use it for reference in the docs
 
-GitHub Copilot: 
+GitHub Copilot:
+
 ```
 
 
@@ -91,6 +96,7 @@ Made changes.
 
 
 ```
+
 I've updated the document to remove the specific "yumzoom" repository reference. The clone step now uses a placeholder for your DocsShelf repo URL and notes that you can skip it if you're already working in the workspace. The guide now correctly treats DocsShelf as an independent project. If you'd like any other adjustments, let me know!
 
 jmjoshi: Execute step by step instructions for cross platform development setup and development using VS code, I have already opened docsshelf project folder and the folder structure recommended for mobile app development is already created under docsshelf root folder
@@ -106,6 +112,7 @@ Made changes.
 I've executed the initial steps for setting up your DocsShelf React Native project in VS Code. Here's what was completed and the next actions:
 
 ### Completed Steps:
+
 1. **Verified Prerequisites:**
    - Node.js v22.14.0 ✅
    - npm v10.9.2 ✅
@@ -122,6 +129,7 @@ I've executed the initial steps for setting up your DocsShelf React Native proje
 5. **Started Expo Development Server:** ✅ (Running in background with ID `c00a83e8-9c86-48ee-8f92-68646070a602`)
 
 ### Next Steps (Manual Installation Required):
+
 Since you're on Windows, complete these for full Android development:
 
 1. **Install JDK 11 or 17:**
@@ -141,11 +149,13 @@ Since you're on Windows, complete these for full Android development:
 3. **For iOS Development:** Requires a Mac with Xcode. Use a Mac VM or cloud service if needed.
 
 ### Running the App:
+
 - **On Android Phone:** After setup, connect phone (enable USB debugging), run `npx expo run:android --device`
 - **On iOS Phone:** On Mac, run `npx expo run:ios --device`
 - **With Expo Go:** Scan QR code from `expo start` (currently running) on your phone.
 
 ### VS Code Setup:
+
 - Install extensions: React Native Tools, Expo Tools, Prettier, ESLint.
 - Open the project folder in VS Code (already done).
 - Edit code in src for your app components.
@@ -171,6 +181,7 @@ I've set the necessary environment variables for Java and Android SDK:
 However, since environment variables are set at the system level, the current terminal session doesn't recognize them yet. **Restart VS Code (or at least close and reopen the terminal)** for the changes to take effect.
 
 ### After Restart:
+
 1. Open a new terminal in VS Code.
 2. Run `java -version` to verify Java.
 3. Run `adb version` to verify Android SDK.
@@ -182,13 +193,14 @@ If `adb version` still fails after restart, double-check the Android SDK install
 
 jmjoshi: Its working java and android studio is set
 
-GitHub Copilot: 
+GitHub Copilot:
 
 jmjoshi: where do I do development in VS code or android sudio for android phones and xcode for apple phone
 
 GitHub Copilot: For your DocsShelf React Native app, here's where to focus development based on the platform:
 
 ### Primary Development (Cross-Platform Code):
+
 - **VS Code**: This is your main IDE for writing, editing, and debugging the app's JavaScript/TypeScript code (e.g., components in src, navigation, state management). Use it for:
   - Coding React Native components.
   - Running the Expo development server (`npx expo start`).
@@ -196,6 +208,7 @@ GitHub Copilot: For your DocsShelf React Native app, here's where to focus devel
   - Version control (Git) and extensions like Prettier/ESLint.
 
 ### Android-Specific Development:
+
 - **Android Studio**: Use this for Android platform-specific tasks, not primary coding. It's essential for:
   - Managing emulators (AVD Manager).
   - Debugging native Android code (if you add custom modules).
@@ -204,6 +217,7 @@ GitHub Copilot: For your DocsShelf React Native app, here's where to focus devel
 - You don't need to code your app's UI/logic here—VS Code handles that. Android Studio is more for tooling and native integration.
 
 ### iOS-Specific Development:
+
 - **Xcode**: Required for iOS (on a Mac). Use it for:
   - Building and running on iOS simulators/devices.
   - Debugging iOS-specific issues.
@@ -211,6 +225,7 @@ GitHub Copilot: For your DocsShelf React Native app, here's where to focus devel
 - Again, primary coding is in VS Code; Xcode is for iOS builds and native tweaks.
 
 ### Workflow Summary:
+
 - **Start in VS Code**: Write code, run `npx expo start`, and test on devices/simulators.
 - **Switch to Android Studio**: Only for emulator management or Android-specific debugging.
 - **Switch to Xcode**: Only for iOS builds (if on Mac).
@@ -220,14 +235,7 @@ This keeps things efficient—VS Code for 90% of your work, with platform IDEs a
 
 jmjoshi: I still see reference to yumzoom project in mobile development guide, docsshelf is an independant project and has no dependancy on yumzoom. Review all the docs under docsshelf folder and remove any reference to yumzoom project use docsshelf reference instead
 
-GitHub Copilot: 
-```
-
-
-Made changes.
-
-
-```
+GitHub Copilot:
 
 ```
 
@@ -260,12 +268,22 @@ Made changes.
 
 
 ```
+
+```
+
+
+Made changes.
+
+
+```
+
 Perfect! I've reviewed and cleaned up all references to "yumzoom" in the documents under the `docsshelf` folder. Here's what was updated:
 
 ### Files Modified:
+
 1. **mobile_development_guide.md**: Replaced the clone command from `git clone https://github.com/jmjoshi/yumzoom.git` to `git clone <your-repository-url>` with a note to use your DocsShelf repo or skip if already in the workspace.
 
-2. **prompts5.md**: 
+2. **prompts5.md**:
    - Updated the user query to reference "DocsShelf repository" instead of "yumzoom repository".
    - Removed "yumzoom" from the response explanation.
 
@@ -274,17 +292,21 @@ Perfect! I've reviewed and cleaned up all references to "yumzoom" in the documen
 4. **prompts3.md**: Same replacement as prompts4.md.
 
 ### Verification:
+
 - Ran a new search across `documents/**` for "yumzoom"—**no matches found**.
 - All references now point to DocsShelf or use generic placeholders, ensuring the project is treated as fully independent.
 
 The DocsShelf project documentation is now clean and focused solely on your app. If you need any further adjustments or have other files to review, let me know!
 
-jmjoshi: Lets start building mobile MVP Features, refer to requirements documents from 
+jmjoshi: Lets start building mobile MVP Features, refer to requirements documents from
 documents/requirements folder and subfolder.
+
 ## 3. Phase 1: Project Setup and Foundation (Weeks 1-4)
+
 **Goal**: Establish the development environment, core architecture, and basic app structure.
 
 ### Next Steps:
+
 1. **Environment Setup**:
    - Install Node.js (v18+), React Native CLI, Android Studio, Xcode.
    - Initialize React Native project: `npx react-native init DocsShelf --template typescript`.
@@ -303,7 +325,6 @@ Made changes.
 
 Made changes.
 
-
 ```
 
 
@@ -311,7 +332,6 @@ Made changes.
 
 
 ```
-
 
 Continue to iterate?
 [object Object]
@@ -322,6 +342,15 @@ jmjoshi: @agent Continue: "Continue to iterate?"
 
 GitHub Copilot: Made changes.
 
+```
+
+
+Made changes.
+
+
+```
+
+Made changes.
 
 ```
 
@@ -331,22 +360,12 @@ Made changes.
 
 ```
 
-
-Made changes.
-
-
-```
-
-
-Made changes.
-
-
-```
 ## Phase 1: Project Setup and Foundation - Execution Summary
 
 I've executed the key steps from Phase 1 of the roadmap, adapting to your existing Expo bare workflow setup. Here's what was completed:
 
 ### ✅ Completed Steps:
+
 1. **Environment Setup:**
    - Node.js, Java JDK, Android Studio, and Expo CLI already configured.
    - Verified all tools are working.
@@ -383,11 +402,13 @@ I've executed the key steps from Phase 1 of the roadmap, adapting to your existi
    - Placeholder screens for Home, Documents, Settings, Auth.
 
 ### 🚀 Ready for Testing:
+
 - Expo development server is running (`npx expo start`).
 - You can now scan the QR code with Expo Go on your phone or run `npx expo run:android --device` for physical testing.
 - The app displays a "Welcome to DocsShelf" screen on the Home tab.
 
 ### 📋 Next Steps in Phase 1:
+
 - **Populate Screens:** Create components for Documents, Settings, Auth screens.
 - **Implement Authentication:** Add login/signup with biometric MFA.
 - **Database Setup:** Initialize SQLite with schemas for users, documents, categories.
@@ -401,6 +422,7 @@ jmjoshi: Check in the changes in the github repository with a summary, list of c
 **Goal**: Establish the development environment, core architecture, and basic app structure.
 
 ### Next Steps:
+
 1. **Environment Setup**:
    - Install Node.js (v18+), React Native CLI, Android Studio, Xcode.
    - Initialize React Native project: `npx react-native init DocsShelf --template typescript`.
@@ -412,9 +434,11 @@ GitHub Copilot: ## Commit and Push Summary
 I've successfully committed and pushed the changes to the GitHub repository (`docsshelf` on branch `master`). Here's the breakdown:
 
 ### Commit Details:
+
 - **Commit Hash**: `4288bf3`
 - **Files Changed**: 68 files, 19,304 insertions
 - **Commit Message**:
+
   ```
   Phase 1 Setup Complete: Established development environment, core architecture, and basic app structure.
 
@@ -446,6 +470,7 @@ I've successfully committed and pushed the changes to the GitHub repository (`do
   ```
 
 ### Key Components Added:
+
 - **Core App Structure**: App.tsx, index.js, navigation, Redux store
 - **TypeScript Setup**: tsconfig.json, types, strict mode
 - **Code Quality**: ESLint, Prettier configurations
@@ -453,6 +478,7 @@ I've successfully committed and pushed the changes to the GitHub repository (`do
 - **Documentation**: Updated guides and prompts
 
 ### Key Components Updated:
+
 - App.tsx: Integrated Redux Provider and PersistGate
 - package.json: User edits and new dependencies
 
