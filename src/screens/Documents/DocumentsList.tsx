@@ -3,11 +3,14 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, Card, Title, Paragraph, FAB } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { Document } from '../../types';
 
 export default function DocumentsListScreen() {
-  const documents = useSelector((state: RootState) => state.documents.documents);
+  const documents = useSelector(
+    (state: RootState) => state.documents.documents
+  );
 
-  const renderDocument = ({ item }: any) => (
+  const renderDocument = ({ item }: { item: Document }) => (
     <Card style={styles.card}>
       <Card.Content>
         <Title>{item.name}</Title>
@@ -20,7 +23,9 @@ export default function DocumentsListScreen() {
     <View style={styles.container}>
       <Title style={styles.title}>Your Documents</Title>
       {documents.length === 0 ? (
-        <Text style={styles.empty}>No documents yet. Start by uploading one!</Text>
+        <Text style={styles.empty}>
+          No documents yet. Start by uploading one!
+        </Text>
       ) : (
         <FlatList
           data={documents}

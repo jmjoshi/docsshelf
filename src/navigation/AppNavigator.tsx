@@ -2,7 +2,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { RootStackParamList, AuthStackParamList, MainTabParamList } from './types';
+import {
+  RootStackParamList,
+  AuthStackParamList,
+  MainTabParamList,
+} from './types';
 import HomeScreen from '../screens/Home';
 import DocumentsListScreen from '../screens/Documents/DocumentsList';
 import SettingsMainScreen from '../screens/Settings/SettingsMain';
@@ -28,27 +32,27 @@ function AuthNavigator() {
 function MainNavigator() {
   return (
     <MainTab.Navigator screenOptions={{ headerShown: false }}>
-      <MainTab.Screen 
-        name="Home" 
-        component={HomeScreen} 
+      <MainTab.Screen
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color={color} size={size} />
           ),
         }}
       />
-      <MainTab.Screen 
-        name="Documents" 
-        component={DocumentsListScreen} 
+      <MainTab.Screen
+        name="Documents"
+        component={DocumentsListScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="document" color={color} size={size} />
           ),
         }}
       />
-      <MainTab.Screen 
-        name="Settings" 
-        component={SettingsMainScreen} 
+      <MainTab.Screen
+        name="Settings"
+        component={SettingsMainScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" color={color} size={size} />
@@ -60,7 +64,9 @@ function MainNavigator() {
 }
 
 export default function AppNavigator() {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
   return (
     <NavigationContainer>

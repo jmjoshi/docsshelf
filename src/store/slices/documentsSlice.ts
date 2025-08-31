@@ -45,14 +45,24 @@ const documentsSlice = createSlice({
     addDocument: (state, action: PayloadAction<Document>) => {
       state.documents.push(action.payload);
     },
-    updateDocument: (state, action: PayloadAction<{ id: string; updates: Partial<Document> }>) => {
-      const index = state.documents.findIndex(doc => doc.id === action.payload.id);
+    updateDocument: (
+      state,
+      action: PayloadAction<{ id: string; updates: Partial<Document> }>
+    ) => {
+      const index = state.documents.findIndex(
+        (doc) => doc.id === action.payload.id
+      );
       if (index !== -1) {
-        state.documents[index] = { ...state.documents[index], ...action.payload.updates };
+        state.documents[index] = {
+          ...state.documents[index],
+          ...action.payload.updates,
+        };
       }
     },
     deleteDocument: (state, action: PayloadAction<string>) => {
-      state.documents = state.documents.filter(doc => doc.id !== action.payload);
+      state.documents = state.documents.filter(
+        (doc) => doc.id !== action.payload
+      );
     },
     setDocuments: (state, action: PayloadAction<Document[]>) => {
       state.documents = action.payload;
@@ -60,14 +70,24 @@ const documentsSlice = createSlice({
     addCategory: (state, action: PayloadAction<Category>) => {
       state.categories.push(action.payload);
     },
-    updateCategory: (state, action: PayloadAction<{ id: string; updates: Partial<Category> }>) => {
-      const index = state.categories.findIndex(cat => cat.id === action.payload.id);
+    updateCategory: (
+      state,
+      action: PayloadAction<{ id: string; updates: Partial<Category> }>
+    ) => {
+      const index = state.categories.findIndex(
+        (cat) => cat.id === action.payload.id
+      );
       if (index !== -1) {
-        state.categories[index] = { ...state.categories[index], ...action.payload.updates };
+        state.categories[index] = {
+          ...state.categories[index],
+          ...action.payload.updates,
+        };
       }
     },
     deleteCategory: (state, action: PayloadAction<string>) => {
-      state.categories = state.categories.filter(cat => cat.id !== action.payload);
+      state.categories = state.categories.filter(
+        (cat) => cat.id !== action.payload
+      );
     },
     setCategories: (state, action: PayloadAction<Category[]>) => {
       state.categories = action.payload;

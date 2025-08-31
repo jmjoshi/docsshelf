@@ -4,12 +4,21 @@ import { Text, TextInput, Button, Card, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../store/slices/authSlice';
 
-export default function RegisterScreen({ navigation }: any) {
+interface RegisterScreenProps {
+  navigation: {
+    navigate: (screen: string) => void;
+    goBack: () => void;
+  };
+}
+
+export default function RegisterScreen({ navigation }: RegisterScreenProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumbers, setPhoneNumbers] = useState([{ type: 'mobile', number: '' }]);
+  const [phoneNumbers, setPhoneNumbers] = useState([
+    { type: 'mobile', number: '' },
+  ]);
   const dispatch = useDispatch();
 
   const addPhoneNumber = () => {
@@ -29,13 +38,15 @@ export default function RegisterScreen({ navigation }: any) {
     }
 
     // Simulate registration
-    dispatch(loginSuccess({
-      id: Date.now().toString(),
-      email,
-      firstName,
-      lastName,
-      phoneNumbers: phoneNumbers.filter(p => p.number),
-    }));
+    dispatch(
+      loginSuccess({
+        id: Date.now().toString(),
+        email,
+        firstName,
+        lastName,
+        phoneNumbers: phoneNumbers.filter((p) => p.number),
+      })
+    );
 
     Alert.alert('Success', 'Account created successfully');
   };
@@ -78,25 +89,41 @@ export default function RegisterScreen({ navigation }: any) {
               <TextInput
                 label="Type (e.g., mobile)"
                 value={phone.type}
-                onChangeText={(value) => updatePhoneNumber(index, 'type', value)}
+                onChangeText={(value) =>
+                  updatePhoneNumber(index, 'type', value)
+                }
                 style={[styles.input, { flex: 1, marginRight: 10 }]}
               />
               <TextInput
                 label="Number"
                 value={phone.number}
-                onChangeText={(value) => updatePhoneNumber(index, 'number', value)}
+                onChangeText={(value) =>
+                  updatePhoneNumber(index, 'number', value)
+                }
                 keyboardType="phone-pad"
                 style={[styles.input, { flex: 2 }]}
               />
             </View>
           ))}
-          <Button mode="outlined" onPress={addPhoneNumber} style={styles.button}>
+          <Button
+            mode="outlined"
+            onPress={addPhoneNumber}
+            style={styles.button}
+          >
             Add Phone Number
           </Button>
-          <Button mode="contained" onPress={handleRegister} style={styles.button}>
+          <Button
+            mode="contained"
+            onPress={handleRegister}
+            style={styles.button}
+          >
             Register
           </Button>
-          <Button mode="text" onPress={() => navigation.goBack()} style={styles.button}>
+          <Button
+            mode="text"
+            onPress={() => navigation.goBack()}
+            style={styles.button}
+          >
             Back to Login
           </Button>
         </Card.Content>

@@ -1,0 +1,42 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:react_native)
+
+platform :react_native do
+  desc "Build Android app with Expo EAS"
+  lane :android do
+    # Build the Android app using Expo EAS
+    sh "npx eas build --platform android --profile production"
+  end
+
+  desc "Build iOS app with Expo EAS"
+  lane :ios do
+    # Build the iOS app using Expo EAS
+    sh "npx eas build --platform ios --profile production"
+  end
+
+  desc "Submit Android to Google Play"
+  lane :submit_android do
+    # Submit to Google Play (requires setup)
+    # upload_to_play_store
+  end
+
+  desc "Submit iOS to App Store"
+  lane :submit_ios do
+    # Submit to App Store (requires setup)
+    # upload_to_app_store
+  end
+end

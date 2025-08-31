@@ -1,7 +1,12 @@
 export interface User {
   id: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  phoneNumbers: Array<{
+    type: string;
+    number: string;
+  }>;
 }
 
 export interface Document {
@@ -9,11 +14,15 @@ export interface Document {
   name: string;
   path: string;
   category: string;
-  createdAt: Date;
-  updatedAt: Date;
+  folder: string;
+  size: number;
+  createdAt: string;
+  updatedAt: string;
+  ocrText?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
+  color: string;
 }

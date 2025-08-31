@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { Text, TextInput, Button, Card, Title } from 'react-native-paper';
+import { TextInput, Button, Card, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import { loginStart, loginSuccess, loginFailure } from '../../store/slices/authSlice';
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} from '../../store/slices/authSlice';
 
-export default function LoginScreen({ navigation }: any) {
+interface LoginScreenProps {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+}
+
+export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -20,13 +30,15 @@ export default function LoginScreen({ navigation }: any) {
     // Simulate login
     setTimeout(() => {
       if (email === 'test@example.com' && password === 'password') {
-        dispatch(loginSuccess({
-          id: '1',
-          email,
-          firstName: 'John',
-          lastName: 'Doe',
-          phoneNumbers: [{ type: 'mobile', number: '1234567890' }],
-        }));
+        dispatch(
+          loginSuccess({
+            id: '1',
+            email,
+            firstName: 'John',
+            lastName: 'Doe',
+            phoneNumbers: [{ type: 'mobile', number: '1234567890' }],
+          })
+        );
       } else {
         dispatch(loginFailure('Invalid credentials'));
         Alert.alert('Error', 'Invalid credentials');
@@ -57,7 +69,11 @@ export default function LoginScreen({ navigation }: any) {
           <Button mode="contained" onPress={handleLogin} style={styles.button}>
             Login
           </Button>
-          <Button mode="outlined" onPress={() => navigation.navigate('Register')} style={styles.button}>
+          <Button
+            mode="outlined"
+            onPress={() => navigation.navigate('Register')}
+            style={styles.button}
+          >
             Register
           </Button>
         </Card.Content>

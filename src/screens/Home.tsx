@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Title, Paragraph } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 
 export default function HomeScreen() {
   const user = useSelector((state: RootState) => state.auth.user);
-  const documentsCount = useSelector((state: RootState) => state.documents.documents.length);
+  const documentsCount = useSelector(
+    (state: RootState) => state.documents.documents.length
+  );
 
   return (
     <View style={styles.container}>

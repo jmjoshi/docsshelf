@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Card, Title, Paragraph, Switch } from 'react-native-paper';
+import { Card, Title, Paragraph, Switch } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { toggleTheme } from '../../store/slices/settingsSlice';
