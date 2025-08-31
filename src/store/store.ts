@@ -1,19 +1,29 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authReducer, documentsReducer, settingsReducer } from './slices';
 
-// Placeholder slices
-const authSlice = { reducer: (state = {}) => state };
-const documentsSlice = { reducer: (state = {}) => state };
+const authPersistConfig = {
+  key: 'auth',
+  storage: AsyncStorage,
+  whitelist: ['user', 'isAuthenticated'], // Only persist user data and auth state
+};
 
-const persistConfig = {
-  key: 'root',
+const documentsPersistConfig = {
+  key: 'documents',
+  storage: AsyncStorage,
+  whitelist: ['documents', 'categories'], // Persist documents and categories
+};
+
+const settingsPersistConfig = {
+  key: 'settings',
   storage: AsyncStorage,
 };
 
 const rootReducer = {
-  auth: persistReducer(persistConfig, authSlice.reducer),
-  documents: persistReducer(persistConfig, documentsSlice.reducer),
+  auth: persistReducer(authPersistConfig, authReducer),
+  documents: persistReducer(documentsPersistConfig, documentsReducer),
+  settings: persistReducer(settingsPersistConfig, settingsReducer),
 };
 
 export const store = configureStore({
@@ -21,7 +31,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
     }),
 });
