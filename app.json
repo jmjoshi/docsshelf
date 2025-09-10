@@ -4,30 +4,50 @@
     "slug": "docsshelf",
     "version": "1.0.0",
     "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icons/icon.png",
-    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pixel5.docsshelf",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "NSCameraUsageDescription": "DocsShelf needs camera access to scan documents and extract text.",
+        "NSPhotoLibraryUsageDescription": "DocsShelf needs photo library access to select and process documents.",
+        "NSDocumentsFolderUsageDescription": "DocsShelf needs access to save and organize your documents."
+      }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
-      ]
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.VIBRATE"
+      ],
+      "package": "com.pixel5.docsshelf",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "web": {
-      "favicon": "./assets/icons/favicon.png"
+      "favicon": "./assets/icons/favicon.png",
+      "bundler": "metro",
+      "name": "DocsShelf",
+      "shortName": "DocsShelf",
+      "description": "Secure document management and OCR scanning app",
+      "themeColor": "#ffffff",
+      "backgroundColor": "#ffffff"
     },
     "plugins": [
       [
@@ -36,7 +56,18 @@
           "photosPermission": "Allow DocsShelf to access your photos to upload documents.",
           "cameraPermission": "Allow DocsShelf to access your camera to scan documents."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow DocsShelf to access your camera to scan documents."
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
   }
 }

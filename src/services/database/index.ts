@@ -1,4 +1,5 @@
 // Database service for SQLite operations
+import { Platform } from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 
 export interface User {
@@ -168,6 +169,17 @@ export class DatabaseService {
   // Initialize SQLite database with migrations
   static async initDatabase(): Promise<void> {
     try {
+      // Check if we're running on web platform
+      if (Platform.OS === 'web') {
+        console.log('Web platform detected - using localStorage fallback');
+        // For web, we'll use a simple localStorage-based storage
+        // This is a temporary solution until we implement IndexedDB
+        this.db = null; // Set to null to indicate web mode
+        await this.initWebStorage();
+        console.log('Web storage initialized successfully');
+        return;
+      }
+
       this.db = await SQLite.openDatabase({
         name: this.DB_NAME,
         location: 'default',
@@ -177,6 +189,29 @@ export class DatabaseService {
       console.log('Database initialized successfully');
     } catch (error) {
       console.error('Failed to initialize database:', error);
+      throw error;
+    }
+  }
+
+  // Initialize web storage fallback
+  private static async initWebStorage(): Promise<void> {
+    try {
+      // Initialize basic storage structure in localStorage
+      if (!localStorage.getItem('docsshelf_users')) {
+        localStorage.setItem('docsshelf_users', JSON.stringify([]));
+      }
+      if (!localStorage.getItem('docsshelf_documents')) {
+        localStorage.setItem('docsshelf_documents', JSON.stringify([]));
+      }
+      if (!localStorage.getItem('docsshelf_categories')) {
+        localStorage.setItem('docsshelf_categories', JSON.stringify([]));
+      }
+      if (!localStorage.getItem('docsshelf_audit_logs')) {
+        localStorage.setItem('docsshelf_audit_logs', JSON.stringify([]));
+      }
+      console.log('Web storage structure initialized');
+    } catch (error) {
+      console.error('Failed to initialize web storage:', error);
       throw error;
     }
   }
@@ -258,8 +293,6 @@ export class DatabaseService {
   static async createUser(
     userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<User> {
-    if (!this.db) throw new Error('Database not initialized');
-
     const id = Date.now().toString();
     const now = new Date().toISOString();
 
@@ -271,6 +304,19 @@ export class DatabaseService {
     };
 
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const users = JSON.parse(
+          localStorage.getItem('docsshelf_users') || '[]'
+        );
+        users.push(user);
+        localStorage.setItem('docsshelf_users', JSON.stringify(users));
+        return user;
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       await this.db.executeSql(
         `INSERT INTO users (id, email, firstName, lastName, phoneNumbers, passwordHash, salt, createdAt, updatedAt)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -300,9 +346,18 @@ export class DatabaseService {
   }
 
   static async getUserByEmail(email: string): Promise<User | null> {
-    if (!this.db) throw new Error('Database not initialized');
-
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const users = JSON.parse(
+          localStorage.getItem('docsshelf_users') || '[]'
+        );
+        return users.find((user: User) => user.email === email) || null;
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       const [results] = await this.db.executeSql(
         'SELECT * FROM users WHERE email = ?',
         [email]
@@ -318,6 +373,29 @@ export class DatabaseService {
       return null;
     } catch (error) {
       console.error('Failed to get user:', error);
+      throw error;
+    }
+  }
+
+  static async getUserById(id: string): Promise<User | null> {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      const [results] = await this.db.executeSql(
+        'SELECT * FROM users WHERE id = ?',
+        [id]
+      );
+
+      if (results.rows.length > 0) {
+        const row = results.rows.item(0);
+        return {
+          ...row,
+          phoneNumbers: JSON.parse(row.phoneNumbers || '[]'),
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Failed to get user by ID:', error);
       throw error;
     }
   }
@@ -666,47 +744,97 @@ export class DatabaseService {
   }
 
   // Category operations
-  static async createCategory(
-    userId: string,
-    name: string,
-    color: string
-  ): Promise<string> {
+  static async createCategory(categoryData: {
+    userId: string;
+    name: string;
+    description?: string;
+    color: string;
+    icon?: string;
+  }): Promise<{
+    id: string;
+    name: string;
+    description?: string;
+    color: string;
+    icon?: string;
+    createdAt: string;
+  }> {
     if (!this.db) throw new Error('Database not initialized');
 
-    const id = Date.now().toString();
+    const { userId, name, description, color, icon } = categoryData;
+    const id = this.generateId();
     const now = new Date().toISOString();
 
     try {
+      // First ensure the table has the required columns
+      await this.ensureCategoryColumnsExist();
+
       await this.db.executeSql(
-        `INSERT INTO categories (id, name, color, userId, createdAt, updatedAt)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [id, name, color, userId, now, now]
+        `INSERT INTO categories (id, userId, name, description, color, icon, createdAt, updatedAt)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          id,
+          userId,
+          name,
+          description || null,
+          color,
+          icon || 'folder',
+          now,
+          now,
+        ]
       );
 
       await this.logAudit(
         userId,
         'CATEGORY_CREATED',
-        `Category ${name} created`
+        `Created category: ${name}`
       );
-      return id;
+
+      return { id, name, description, color, icon, createdAt: now };
     } catch (error) {
       console.error('Failed to create category:', error);
       throw error;
     }
   }
 
-  static async getCategoriesByUser(userId: string): Promise<Category[]> {
+  static async getCategoriesByUser(userId: string): Promise<
+    Array<{
+      id: string;
+      name: string;
+      description?: string;
+      color: string;
+      icon?: string;
+      documentCount: number;
+      createdAt: string;
+    }>
+  > {
     if (!this.db) throw new Error('Database not initialized');
 
     try {
+      await this.ensureCategoryColumnsExist();
+
       const [results] = await this.db.executeSql(
-        'SELECT * FROM categories WHERE userId = ? ORDER BY createdAt DESC',
+        `SELECT c.*, 
+                COUNT(d.id) as documentCount
+         FROM categories c
+         LEFT JOIN documents d ON c.id = d.category AND d.userId = c.userId
+         WHERE c.userId = ?
+         GROUP BY c.id
+         ORDER BY c.name`,
         [userId]
       );
 
-      const categories: Category[] = [];
+      const categories = [];
       for (let i = 0; i < results.rows.length; i++) {
-        categories.push(results.rows.item(i));
+        const row = results.rows.item(i);
+        categories.push({
+          id: row.id,
+          name: row.name,
+          description: row.description,
+          color: row.color,
+          icon: row.icon || 'folder',
+          documentCount: row.documentCount || 0,
+          createdAt: row.createdAt,
+        });
       }
       return categories;
     } catch (error) {
@@ -715,53 +843,117 @@ export class DatabaseService {
     }
   }
 
+  // Alias method for backward compatibility
+  static async getCategories(userId: string) {
+    return this.getCategoriesByUser(userId);
+  }
+
   static async updateCategory(
-    id: string,
-    userId: string,
-    updates: Partial<Pick<Category, 'name' | 'color'>>
+    categoryId: string,
+    updates: {
+      name?: string;
+      description?: string;
+      color?: string;
+      icon?: string;
+    }
   ): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
 
-    const now = new Date().toISOString();
-    const fields = [];
-    const values = [];
+    const fields: string[] = [];
+    const values: (string | number)[] = [];
 
     if (updates.name) {
       fields.push('name = ?');
       values.push(updates.name);
     }
+    if (updates.description !== undefined) {
+      fields.push('description = ?');
+      values.push(updates.description);
+    }
     if (updates.color) {
       fields.push('color = ?');
       values.push(updates.color);
     }
+    if (updates.icon) {
+      fields.push('icon = ?');
+      values.push(updates.icon);
+    }
+
+    if (fields.length === 0) return;
 
     fields.push('updatedAt = ?');
-    values.push(now);
-    values.push(id);
+    values.push(new Date().toISOString());
+    values.push(categoryId);
 
     try {
+      await this.ensureCategoryColumnsExist();
+
       await this.db.executeSql(
         `UPDATE categories SET ${fields.join(', ')} WHERE id = ?`,
         values
       );
-
-      await this.logAudit(userId, 'CATEGORY_UPDATED', `Category ${id} updated`);
     } catch (error) {
       console.error('Failed to update category:', error);
       throw error;
     }
   }
 
-  static async deleteCategory(id: string, userId: string): Promise<void> {
+  static async deleteCategory(
+    categoryId: string,
+    userId: string
+  ): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
 
     try {
-      await this.db.executeSql('DELETE FROM categories WHERE id = ?', [id]);
+      // Move documents in this category to uncategorized
+      await this.db.executeSql(
+        `UPDATE documents SET category = NULL, updatedAt = ? WHERE category = ?`,
+        [new Date().toISOString(), categoryId]
+      );
 
-      await this.logAudit(userId, 'CATEGORY_DELETED', `Category ${id} deleted`);
+      // Delete folders in this category if the table exists
+      try {
+        await this.db.executeSql('DELETE FROM folders WHERE categoryId = ?', [
+          categoryId,
+        ]);
+      } catch {
+        // Folders table might not exist yet
+      }
+
+      // Delete the category
+      await this.db.executeSql('DELETE FROM categories WHERE id = ?', [
+        categoryId,
+      ]);
+
+      await this.logAudit(
+        userId,
+        'CATEGORY_DELETED',
+        `Category ${categoryId} deleted`
+      );
     } catch (error) {
       console.error('Failed to delete category:', error);
       throw error;
+    }
+  }
+
+  // Ensure category table has all required columns
+  private static async ensureCategoryColumnsExist(): Promise<void> {
+    try {
+      // Check if description column exists, add if not
+      await this.db!.executeSql(`
+        ALTER TABLE categories ADD COLUMN description TEXT
+      `);
+    } catch {
+      // Column might already exist
+    }
+
+    try {
+      // Check if icon column exists, add if not
+      await this.db!.executeSql(`
+        ALTER TABLE categories ADD COLUMN icon TEXT DEFAULT 'folder'
+      `);
+    } catch {
+      // Column might already exist
     }
   }
 
@@ -866,5 +1058,133 @@ export class DatabaseService {
       await this.db.close();
       this.db = null;
     }
+  }
+  static async createFolder(folderData: {
+    categoryId: string;
+    name: string;
+    description?: string;
+  }): Promise<{
+    id: string;
+    categoryId: string;
+    name: string;
+    description?: string;
+    createdAt: string;
+  }> {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const { categoryId, name, description } = folderData;
+    const id = this.generateId();
+    const now = new Date().toISOString();
+
+    try {
+      // Ensure folders table exists
+      await this.ensureFoldersTableExists();
+
+      await this.db.executeSql(
+        `INSERT INTO folders (id, categoryId, name, description, createdAt, updatedAt)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [id, categoryId, name, description || null, now, now]
+      );
+
+      return { id, categoryId, name, description, createdAt: now };
+    } catch (error) {
+      console.error('Failed to create folder:', error);
+      throw error;
+    }
+  }
+
+  static async getFolders(categoryId: string): Promise<
+    Array<{
+      id: string;
+      categoryId: string;
+      name: string;
+      description?: string;
+      documentCount: number;
+      createdAt: string;
+    }>
+  > {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      await this.ensureFoldersTableExists();
+
+      const [results] = await this.db.executeSql(
+        `SELECT f.*, 
+                COUNT(d.id) as documentCount
+         FROM folders f
+         LEFT JOIN documents d ON f.id = d.folder
+         WHERE f.categoryId = ?
+         GROUP BY f.id
+         ORDER BY f.name`,
+        [categoryId]
+      );
+
+      const folders = [];
+      for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        folders.push({
+          id: row.id,
+          categoryId: row.categoryId,
+          name: row.name,
+          description: row.description,
+          documentCount: row.documentCount || 0,
+          createdAt: row.createdAt,
+        });
+      }
+      return folders;
+    } catch (error) {
+      console.error('Failed to get folders:', error);
+      throw error;
+    }
+  }
+
+  static async deleteFolder(folderId: string): Promise<void> {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      // Move documents in this folder to no folder
+      await this.db.executeSql(
+        `UPDATE documents SET folder = NULL, updatedAt = ? WHERE folder = ?`,
+        [new Date().toISOString(), folderId]
+      );
+
+      // Delete the folder
+      await this.db.executeSql('DELETE FROM folders WHERE id = ?', [folderId]);
+    } catch (error) {
+      console.error('Failed to delete folder:', error);
+      throw error;
+    }
+  }
+
+  // Ensure folders table exists
+  private static async ensureFoldersTableExists(): Promise<void> {
+    try {
+      await this.db!.executeSql(`
+        CREATE TABLE IF NOT EXISTS folders (
+          id TEXT PRIMARY KEY,
+          categoryId TEXT NOT NULL,
+          name TEXT NOT NULL,
+          description TEXT,
+          createdAt TEXT NOT NULL,
+          updatedAt TEXT NOT NULL,
+          FOREIGN KEY (categoryId) REFERENCES categories (id)
+        )
+      `);
+    } catch (error) {
+      console.error('Failed to ensure folders table exists:', error);
+    }
+  }
+
+  // Utility method to generate unique IDs
+  private static generateId(): string {
+    return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+  }
+
+  // Get database instance
+  static async getDatabase(): Promise<SQLite.SQLiteDatabase> {
+    if (!this.db) {
+      await this.initDatabase();
+    }
+    return this.db!;
   }
 }
