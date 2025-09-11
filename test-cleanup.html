@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Cleanup Test</title>
+</head>
+<body>
+    <h1>Storage Cleanup Test</h1>
+    
+    <div>
+        <button id="populateStorage">Populate Storage with Test Data</button>
+        <button id="checkStorage">Check Storage Usage</button>
+        <button id="testCleanup">Test Cleanup Function</button>
+        <button id="clearAll">Clear All Storage</button>
+    </div>
+    
+    <div id="output" style="margin-top: 20px; padding: 10px; background: #f5f5f5; white-space: pre-wrap;"></div>
+
+    <script type="module">
+        // Simple storage quota manager for testing
+        class StorageQuotaManager {
+            static MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+            static getStorageInfo() {
+                let used = 0;
+                const total = this.MAX_STORAGE_SIZE;
+
+                try {
+                    for (const key in localStorage) {
+                        if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
+                            const value = localStorage.getItem(key) || '';
+                            used += key.length + value.length;
+                        }
+                    }
+
+                    const remaining = Math.max(0, total - used);
+                    const usagePercent = used / total;
+
+                    return {
+                        used,
+                        remaining,
+                        total,
+                        usagePercent,
+                    };
+                } catch (error) {
+                    console.error('Failed to calculate storage info:', error);
+                    return {
+                        used: total,
+                        remaining: 0,
+                        total,
+                        usagePercent: 1,
+                    };
+                }
+            }
+
+            static formatBytes(bytes) {
+                if (bytes === 0) return '0 B';
+                
+                const k = 1024;
+                const sizes = ['B', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            static async cleanupOldDocuments() {
+                try {
+                    console.log('Starting storage cleanup...');
+                    const initialInfo = this.getStorageInfo();
+                    console.log(`Initial storage usage: ${this.formatBytes(initialInfo.used)} (${Math.round(initialInfo.usagePercent * 100)}%)`);
+
+                    // Log what's currently in localStorage
+                    console.log('Current localStorage keys:', Object.keys(localStorage));
+
+                    // Get all storage items
+                    const documentsData = localStorage.getItem('docsshelf_documents');
+                    const filesData = localStorage.getItem('docsshelf_files');
+                    const persistDocsData = localStorage.getItem('persist:documents');
+
+                    let cleaned = false;
+
+                    // Remove files data (largest items) - always remove if exists
+                    if (filesData) {
+                        const filesSize = filesData.length;
+                        localStorage.removeItem('docsshelf_files');
+                        cleaned = true;
+                        console.log(`Removed files data: ${this.formatBytes(filesSize)}`);
+                    } else {
+                        console.log('No files data found to remove');
+                    }
+
+                    // Clear Redux persist documents - always remove if exists
+                    if (persistDocsData) {
+                        const persistSize = persistDocsData.length;
+                        localStorage.removeItem('persist:documents');
+                        cleaned = true;
+                        console.log(`Removed persist data: ${this.formatBytes(persistSize)}`);
+                    } else {
+                        console.log('No persist documents found to remove');
+                    }
+
+                    // Clean up documents - be more aggressive
+                    if (documentsData) {
+                        try {
+                            const documents = JSON.parse(documentsData);
+                            console.log(`Found ${documents.length} documents to potentially clean`);
+                            
+                            if (documents.length > 2) {
+                                documents.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                                const documentsToKeep = documents.slice(0, 2);
+                                const newData = JSON.stringify(documentsToKeep);
+                                localStorage.setItem('docsshelf_documents', newData);
+                                cleaned = true;
+                                console.log(`Kept ${documentsToKeep.length} most recent documents, removed ${documents.length - documentsToKeep.length}`);
+                            } else {
+                                console.log(`Only ${documents.length} documents exist, not cleaning`);
+                            }
+                        } catch (parseError) {
+                            console.warn('Failed to parse documents data:', parseError);
+                            localStorage.removeItem('docsshelf_documents');
+                            cleaned = true;
+                            console.log('Removed corrupted documents data');
+                        }
+                    } else {
+                        console.log('No documents data found');
+                    }
+
+                    // Clear any other persist data
+                    const persistKeys = Object.keys(localStorage).filter(key => 
+                        key.startsWith('persist:') && key !== 'persist:auth' && key !== 'persist:settings'
+                    );
+
+                    if (persistKeys.length > 0) {
+                        persistKeys.forEach((key) => {
+                            const itemSize = localStorage.getItem(key)?.length || 0;
+                            localStorage.removeItem(key);
+                            cleaned = true;
+                            console.log(`Removed ${key}: ${this.formatBytes(itemSize)}`);
+                        });
+                    } else {
+                        console.log('No additional persist data to clean');
+                    }
+
+                    const finalInfo = this.getStorageInfo();
+                    const actualFreedSpace = initialInfo.used - finalInfo.used;
+
+                    console.log(`Cleanup completed: freed ${this.formatBytes(actualFreedSpace)}`);
+
+                    return {
+                        cleaned: actualFreedSpace > 0,
+                        freedSpace: actualFreedSpace,
+                    };
+                } catch (error) {
+                    console.error('Storage cleanup failed:', error);
+                    return {
+                        cleaned: false,
+                        freedSpace: 0,
+                        error: error.message,
+                    };
+                }
+            }
+        }
+
+        const output = document.getElementById('output');
+
+        function log(message) {
+            output.textContent += message + '\n';
+            console.log(message);
+        }
+
+        function clearLog() {
+            output.textContent = '';
+        }
+
+        document.getElementById('populateStorage').addEventListener('click', () => {
+            clearLog();
+            log('Populating storage with test data...');
+            
+            // Create some test documents
+            const testDocuments = [];
+            for (let i = 0; i < 5; i++) {
+                testDocuments.push({
+                    id: `doc-${i}`,
+                    title: `Test Document ${i}`,
+                    content: 'A'.repeat(1000), // 1KB of content
+                    createdAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(), // Different dates
+                });
+            }
+            localStorage.setItem('docsshelf_documents', JSON.stringify(testDocuments));
+            
+            // Create some test files data
+            const testFiles = [];
+            for (let i = 0; i < 3; i++) {
+                testFiles.push({
+                    id: `file-${i}`,
+                    name: `test-file-${i}.txt`,
+                    data: 'B'.repeat(5000), // 5KB of file data
+                });
+            }
+            localStorage.setItem('docsshelf_files', JSON.stringify(testFiles));
+            
+            // Create persist data
+            localStorage.setItem('persist:documents', JSON.stringify({
+                documents: JSON.stringify(testDocuments),
+                _persist: JSON.stringify({ version: -1, rehydrated: true })
+            }));
+            
+            localStorage.setItem('persist:someOtherData', JSON.stringify({
+                data: 'C'.repeat(2000) // 2KB
+            }));
+            
+            log('Test data populated!');
+            
+            // Show storage usage
+            const info = StorageQuotaManager.getStorageInfo();
+            log(`Storage usage: ${StorageQuotaManager.formatBytes(info.used)} (${Math.round(info.usagePercent * 100)}%)`);
+        });
+
+        document.getElementById('checkStorage').addEventListener('click', () => {
+            clearLog();
+            const info = StorageQuotaManager.getStorageInfo();
+            log(`Storage usage: ${StorageQuotaManager.formatBytes(info.used)} / ${StorageQuotaManager.formatBytes(info.total)}`);
+            log(`Usage percentage: ${Math.round(info.usagePercent * 100)}%`);
+            log(`Remaining: ${StorageQuotaManager.formatBytes(info.remaining)}`);
+            log('\\nCurrent localStorage keys:');
+            Object.keys(localStorage).forEach(key => {
+                const size = localStorage.getItem(key)?.length || 0;
+                log(`  ${key}: ${StorageQuotaManager.formatBytes(size)}`);
+            });
+        });
+
+        document.getElementById('testCleanup').addEventListener('click', async () => {
+            clearLog();
+            log('Testing cleanup function...');
+            
+            const result = await StorageQuotaManager.cleanupOldDocuments();
+            
+            log('\\nCleanup result:');
+            log(`  Cleaned: ${result.cleaned}`);
+            log(`  Freed space: ${StorageQuotaManager.formatBytes(result.freedSpace)}`);
+            if (result.error) {
+                log(`  Error: ${result.error}`);
+            }
+            
+            const info = StorageQuotaManager.getStorageInfo();
+            log(`\\nFinal storage usage: ${StorageQuotaManager.formatBytes(info.used)} (${Math.round(info.usagePercent * 100)}%)`);
+        });
+
+        document.getElementById('clearAll').addEventListener('click', () => {
+            clearLog();
+            localStorage.clear();
+            log('All localStorage cleared!');
+            
+            const info = StorageQuotaManager.getStorageInfo();
+            log(`Storage usage: ${StorageQuotaManager.formatBytes(info.used)} (${Math.round(info.usagePercent * 100)}%)`);
+        });
+    </script>
+</body>
+</html>

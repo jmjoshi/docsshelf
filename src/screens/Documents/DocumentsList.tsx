@@ -18,8 +18,12 @@ import { RootState } from '../../store/store';
 import { Document } from '../../types';
 import { DocumentService } from '../../services/documents';
 import { addDocument } from '../../store/slices/documentsSlice';
-import HapticFeedback from 'react-native-haptic-feedback';
+import HapticFeedback from '../../utils/haptic-feedback';
 import { PerformanceMonitor } from '../../utils/performance';
+import { StorageStatus } from '../../components/common/StorageStatus';
+import { StorageQuotaManager } from '../../utils/storageQuota';
+import { useStorageWarnings } from '../../hooks/useStorageManagement';
+import { QuotaExceededError } from '../../services/database';
 
 export default function DocumentsListScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,6 +46,18 @@ export default function DocumentsListScreen() {
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const dispatch = useDispatch();
   const theme = useTheme();
+
+  // Add storage warning hook
+  useStorageWarnings();
+
+  const showSnackbar = useCallback(
+    (message: string, type: 'success' | 'error' = 'success') => {
+      setSnackbarMessage(message);
+      setSnackbarType(type);
+      setSnackbarVisible(true);
+    },
+    []
+  );
 
   // Load initial documents
   const loadDocuments = useCallback(
@@ -80,15 +96,16 @@ export default function DocumentsListScreen() {
         setIsLoadingMore(false);
       }
     },
-    [userId]
+    [userId, showSnackbar]
   );
 
   // Load more documents for infinite scroll
   const loadMoreDocuments = useCallback(() => {
-    if (!isLoadingMore && hasMore && !isLoading) {
-      loadDocuments(currentPage + 1, true);
+    if (!isLoadingMore && hasMore && !isLoading && userId) {
+      const nextPage = currentPage + 1;
+      loadDocuments(nextPage, true);
     }
-  }, [currentPage, hasMore, isLoading, isLoadingMore, loadDocuments]);
+  }, [hasMore, isLoading, isLoadingMore, userId, currentPage, loadDocuments]);
 
   // Search documents with pagination
   const searchDocuments = useCallback(
@@ -103,22 +120,24 @@ export default function DocumentsListScreen() {
           PerformanceMonitor.startTimer(`Search: ${query}`);
         }
 
-        const result = await DocumentService.searchDocumentsPaginated(
-          userId,
-          query,
-          page,
-          PAGE_SIZE
-        );
+        const result = await DocumentService.searchDocuments(userId, query);
+        const startIndex = (page - 1) * PAGE_SIZE;
+        const endIndex = startIndex + PAGE_SIZE;
+        const paginatedResult = {
+          documents: result.slice(startIndex, endIndex),
+          totalCount: result.length,
+          hasMore: endIndex < result.length,
+        };
 
         if (isLoadMore) {
-          setDocuments((prev) => [...prev, ...result.documents]);
+          setDocuments((prev) => [...prev, ...paginatedResult.documents]);
         } else {
-          setDocuments(result.documents);
+          setDocuments(paginatedResult.documents);
           PerformanceMonitor.endTimer(`Search: ${query}`);
           PerformanceMonitor.logMemoryUsage('After Search');
         }
 
-        setHasMore(result.hasMore);
+        setHasMore(paginatedResult.hasMore);
         setCurrentPage(page);
       } catch (error) {
         console.error('Failed to search documents:', error);
@@ -128,37 +147,41 @@ export default function DocumentsListScreen() {
         setIsLoadingMore(false);
       }
     },
-    [userId]
+    [userId, showSnackbar]
   );
 
-  // Handle search query changes
+  // Handle search query changes with debouncing
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    searchTimeoutRef.current = setTimeout(() => {
+      if (!userId) return;
+
       if (searchQuery.trim()) {
         searchDocuments(searchQuery.trim());
       } else {
-        loadDocuments(1);
+        // Reset to first page and load documents using the centralized function
+        loadDocuments(1, false);
       }
     }, 300); // Debounce search
 
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, loadDocuments, searchDocuments]);
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery, userId, loadDocuments, searchDocuments]);
 
-  // Initial load
+  // Initial load - only when userId changes
   useEffect(() => {
     if (userId) {
-      loadDocuments(1);
+      loadDocuments(1, false);
     }
   }, [userId, loadDocuments]);
-
-  const showSnackbar = (
-    message: string,
-    type: 'success' | 'error' = 'success'
-  ) => {
-    setSnackbarMessage(message);
-    setSnackbarType(type);
-    setSnackbarVisible(true);
-  };
 
   const handleUpload = async () => {
     if (!userId) {
@@ -199,12 +222,61 @@ export default function DocumentsListScreen() {
           tags: [],
         };
         dispatch(addDocument(doc));
+
+        // Update local state immediately to prevent UI lag
+        setDocuments((prev) => [doc, ...prev]);
+
         showSnackbar('Document uploaded successfully');
         HapticFeedback.trigger('notificationSuccess');
       }
     } catch (error) {
       console.error('Upload failed:', error);
-      showSnackbar('Failed to upload document', 'error');
+      
+      if (error instanceof QuotaExceededError) {
+        showSnackbar(error.message, 'error');
+        Alert.alert(
+          'Storage Full',
+          `${error.message}\n\nWould you like to clean up old documents automatically?`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Clean Up',
+              onPress: async () => {
+                setIsUploading(true);
+                try {
+                  const result =
+                    await StorageQuotaManager.cleanupOldDocuments();
+
+                  if (result.cleaned) {
+                    // Refresh documents list after cleanup
+                    await loadDocuments(1, false);
+                    Alert.alert(
+                      'Cleanup Complete',
+                      `Successfully freed ${StorageQuotaManager.formatBytes(result.freedSpace)} of storage space. You can now try uploading again.`
+                    );
+                  } else {
+                    Alert.alert(
+                      'Cleanup Failed',
+                      result.error ||
+                        'No documents could be cleaned up. Please delete some documents manually.'
+                    );
+                  }
+                } catch (cleanupError) {
+                  console.error('Cleanup error:', cleanupError);
+                  Alert.alert(
+                    'Cleanup Error',
+                    'An error occurred during cleanup. Please try again.'
+                  );
+                } finally {
+                  setIsUploading(false);
+                }
+              },
+            },
+          ]
+        );
+      } else {
+        showSnackbar('Failed to upload document', 'error');
+      }
       HapticFeedback.trigger('notificationError');
     } finally {
       setIsUploading(false);
@@ -250,6 +322,10 @@ export default function DocumentsListScreen() {
           tags: [],
         };
         dispatch(addDocument(doc));
+
+        // Update local state immediately to prevent UI lag
+        setDocuments((prev) => [doc, ...prev]);
+
         showSnackbar('Document scanned successfully');
         HapticFeedback.trigger('notificationSuccess');
       }
@@ -295,6 +371,9 @@ export default function DocumentsListScreen() {
         Your Documents
       </Title>
 
+      {/* Storage Status Component */}
+      <StorageStatus showDetails={true} style={styles.storageStatus} />
+
       <Searchbar
         placeholder="Search documents..."
         onChangeText={setSearchQuery}
@@ -316,6 +395,23 @@ export default function DocumentsListScreen() {
           accessibilityHint="Select a file from your device to upload"
         >
           {isUploading ? 'Uploading...' : 'Upload Document'}
+        </Button>
+        <Button
+          mode="outlined"
+          onPress={async () => {
+            try {
+              const result = await StorageQuotaManager.cleanupOldDocuments();
+              Alert.alert('Debug Cleanup', JSON.stringify(result, null, 2));
+            } catch (error) {
+              Alert.alert(
+                'Debug Error',
+                error instanceof Error ? error.message : String(error)
+              );
+            }
+          }}
+          style={[styles.button, { backgroundColor: '#FFE0B2' }]}
+        >
+          Test Cleanup
         </Button>
         <Button
           mode="contained"
@@ -428,6 +524,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 20,
+  },
+  storageStatus: {
+    marginBottom: 15,
   },
   searchbar: {
     marginBottom: 10,
