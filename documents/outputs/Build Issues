@@ -1,0 +1,104 @@
+PS C:\Users\Jayant\Documents\projects\docsshelf> npx expo-doctor
+Unexpected error while running 'Check for issues with Metro config' check:
+Error: Cannot find module 'metro/src/ModuleGraph/worker/importLocationsPlugin'
+Require stack:
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\@expo\metro-config\build\serializer\reconcileTransformSerializerPlugin.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\@expo\metro-config\build\serializer\withExpoSerializers.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\@expo\metro-config\build\ExpoMetroConfig.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\expo\metro-config.js
+- C:\Users\Jayant\Documents\projects\docsshelf\metro.config.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\cosmiconfig\node_modules\import-fresh\index.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\cosmiconfig\dist\loaders.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\cosmiconfig\dist\createExplorer.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\cosmiconfig\dist\index.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\metro-config\src\loadConfig.js
+- C:\Users\Jayant\Documents\projects\docsshelf\node_modules\metro-config\src\index.js
+- C:\Users\Jayant\AppData\Local\npm-cache\_npx\c15e4b19a90d9797\node_modules\expo-doctor\build\index.js
+8/17 checks passed. 9 checks failed. Possible issues detected: 
+Use the --verbose flag to see more details about passed checks.
+
+✖ Check for common project setup issues
+The .expo directory is not ignored by Git. It contains machine-specific device history and development server settings and should not be committed.  
+Advice:
+Add ".expo/" to your .gitignore to avoid committing local Expo state.
+
+✖ Check for issues with Metro config
+✖ Check for legacy global CLI installed locally
+EAS CLI should not be installed in your project. Instead, install it globally or use "npx", "pnpx", or "bunx" depending on your preferred package manager.
+Advice:
+Remove eas-cli from your project dependencies.
+
+✖ Check dependencies for packages that should not be installed directly
+The package  "@types/react-native" should not be installed directly in your project, as types are included with the "react-native" package.
+Advice:
+Remove these packages from your package.json.
+
+✖ Check that required peer dependencies are installed
+Missing peer dependency: react-native-gesture-handler
+Required by: @react-navigation/drawer, @react-navigation/stack
+Missing peer dependency: react-native-reanimated
+Required by: @react-navigation/drawer
+Advice:
+Install missing required peer dependencies with "npx expo install react-native-gesture-handler react-native-reanimated"
+Your app may crash outside of Expo Go without these dependencies. Native module peer dependencies must be installed directly.
+
+✖ Check that native modules use compatible support package versions for installed Expo SDK
+Expected package @expo/config-plugins@~10.1.1
+Found invalid:
+  @expo/config-plugins@9.0.12
+  @expo/config-plugins@7.9.2
+  (for more info, run: npm why @expo/config-plugins)
+Expected package @expo/prebuild-config@~9.0.0
+Found invalid:
+  @expo/prebuild-config@8.0.17
+  (for more info, run: npm why @expo/prebuild-config)
+Expected package metro@^0.82.0
+Found invalid:
+  metro@0.80.12
+  (for more info, run: npm why metro)
+Expected package metro-resolver@^0.82.0
+Found invalid:
+  metro-resolver@0.80.12
+  (for more info, run: npm why metro-resolver)
+Expected package metro-config@^0.82.0
+Found invalid:
+  metro-config@0.80.12
+  (for more info, run: npm why metro-config)
+Advice:
+Upgrade dependencies that are using the invalid package versions.
+
+✖ Check for app config fields that may not be synced in a non-CNG project
+This project contains native project folders but also has native configuration properties in app.json, indicating it is configured to use Prebuild. When the android/ios folders are present, if you don't run prebuild in your build pipeline, the following properties will not be synced: orientation, 
+userInterfaceStyle, ios, android, plugins.
+
+
+✖ Validate packages against React Native Directory package metadata
+The following issues were found when validating your dependencies against React Native Directory:
+  Untested on New Architecture: @react-native-ml-kit/text-recognition, react-native-sqlite-storage
+  Unmaintained: react-native-sqlite-storage, redux-persist
+  No metadata available: react-native-biometrics, react-native-vector-icons
+Advice:
+Use libraries that are actively maintained and support the New Architecture. Find alternative libraries with https://reactnative.directory.
+Add packages to expo.doctor.reactNativeDirectoryCheck.exclude in package.json to selectively skip validations, if the warning is not relevant.       
+Update React Native Directory to include metadata for unknown packages. Alternatively, set expo.doctor.reactNativeDirectoryCheck.listUnknownPackages 
+in package.json to false to skip warnings about packages with no metadata, if the warning is not relevant.
+
+✖ Check that packages match versions required by installed Expo SDK
+The following packages should be updated for best compatibility with the installed expo version:
+  @react-native-async-storage/async-storage@1.21.0 - expected version: 2.1.2
+  expo-camera@14.1.3 - expected version: ~16.1.11
+  expo-dev-client@3.3.12 - expected version: ~5.2.4
+  expo-file-system@16.0.9 - expected version: ~18.1.11
+  expo-image-picker@14.7.1 - expected version: ~16.1.4
+  expo-status-bar@1.11.1 - expected version: ~2.2.3
+  react@18.3.1 - expected version: 19.0.0
+  react-native@0.73.6 - expected version: 0.79.5
+  react-native-safe-area-context@4.8.2 - expected version: 5.4.0
+  react-native-screens@4.15.4 - expected version: ~4.11.1
+  @types/react@18.2.79 - expected version: ~19.0.10
+  typescript@5.9.2 - expected version: ~5.8.3
+Your project may not work correctly until you install the expected versions of the packages.
+Found outdated dependencies
+Advice:
+Use 'npx expo install --check' to review and upgrade your dependencies.
+To ignore specific packages, add them to "expo.install.exclude" in package.json. Learn more: https://expo.fyi/dependency-validation

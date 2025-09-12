@@ -8,7 +8,7 @@
       callback.apply(null, args);
     }, 0);
   }
-  
+
   function clearImmediatePolyfill(id) {
     return clearTimeout(id);
   }
@@ -22,13 +22,13 @@
     global.setImmediate = setImmediateFn;
     global.clearImmediate = clearImmediateFn;
   }
-  
+
   // Set in window scope (Browser)
   if (typeof window !== 'undefined') {
     window.setImmediate = setImmediateFn;
     window.clearImmediate = clearImmediateFn;
   }
-  
+
   // Set in self scope (Web Workers)
   if (typeof self !== 'undefined') {
     self.setImmediate = setImmediateFn;

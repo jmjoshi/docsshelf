@@ -1,5 +1,6 @@
 // Storage service for file operations with encryption
 import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
 import { EncryptionService } from '../encryption';
 import { DatabaseService } from '../database';
 
@@ -9,6 +10,11 @@ export class StorageService {
 
   // Initialize storage directories
   static async initStorage(): Promise<void> {
+    if (Platform.OS === 'web') {
+      // Web storage doesn't need initialization
+      return Promise.resolve();
+    }
+
     try {
       const dirInfo = await FileSystem.getInfoAsync(this.DOCUMENTS_DIR);
       if (!dirInfo.exists) {
@@ -32,6 +38,11 @@ export class StorageService {
     category?: string,
     folder?: string
   ): Promise<string> {
+    if (Platform.OS === 'web') {
+      // For web, just return a mock path for now
+      return Promise.resolve(`web-${userId}-${fileName}`);
+    }
+
     try {
       // Encrypt the file data
       const encryptedData = await EncryptionService.encryptFile(

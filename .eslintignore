@@ -1,0 +1,9 @@
+# ESLint ignore file
+node_modules/
+coverage/
+build/
+dist/
+*.backup
+scripts/fix-vector-icons.js
+webpack.config.js
+polyfills/

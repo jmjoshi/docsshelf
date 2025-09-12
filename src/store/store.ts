@@ -13,7 +13,7 @@ const authPersistConfig = {
 const documentsPersistConfig = {
   key: 'documents',
   storage: AsyncStorage,
-  whitelist: ['documents', 'categories'], // Persist documents and categories
+  whitelist: ['categories'], // Only persist categories, not documents (they're in database)
 };
 
 const settingsPersistConfig = {
@@ -34,7 +34,13 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
+      // Reduce middleware overhead in development
+      immutableCheck: {
+        warnAfter: 64, // Increase warning threshold
+      },
     }).concat(syncMiddleware),
+  // Enable Redux DevTools only in development
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const persistor = persistStore(store);

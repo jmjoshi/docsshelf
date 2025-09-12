@@ -9,8 +9,11 @@ import {
   Surface,
 } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import type { NavigationProp } from '@react-navigation/native';
 import { RootState } from '../store/store';
-import HapticFeedback from 'react-native-haptic-feedback';
+import { MainTabParamList } from '../navigation/types';
+import HapticFeedback from '../utils/haptic-feedback';
 
 const { width, height } = Dimensions.get('window');
 const isLandscape = width > height;
@@ -21,11 +24,25 @@ export default function HomeScreen() {
     (state: RootState) => state.documents.documents.length
   );
   const theme = useTheme();
+  const navigation = useNavigation<NavigationProp<MainTabParamList>>();
 
   const handleQuickAction = (action: string) => {
     HapticFeedback.trigger('impactLight');
-    // Navigate to respective screen
     console.log(`Navigating to ${action}`);
+
+    switch (action) {
+      case 'Upload':
+        // Navigate to Documents tab which should handle document upload
+        navigation.navigate('Documents');
+        break;
+      case 'Scan':
+        // For now, also navigate to Documents tab
+        // In the future, this could navigate to a specific scan screen
+        navigation.navigate('Documents');
+        break;
+      default:
+        console.log(`No navigation defined for action: ${action}`);
+    }
   };
 
   return (

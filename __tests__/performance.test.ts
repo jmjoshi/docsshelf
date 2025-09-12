@@ -20,19 +20,19 @@ jest.mock('expo-image-picker', () => ({
   requestMediaLibraryPermissionsAsync: jest.fn(),
   MediaTypeOptions: {
     All: 'All',
-    Images: 'Images'
-  }
+    Images: 'Images',
+  },
 }));
 jest.mock('expo-file-system', () => ({
   readAsStringAsync: jest.fn(),
   EncodingType: {
-    Base64: 'base64'
-  }
+    Base64: 'base64',
+  },
 }));
 jest.mock('expo-camera', () => ({
   Camera: {
-    requestCameraPermissionsAsync: jest.fn()
-  }
+    requestCameraPermissionsAsync: jest.fn(),
+  },
 }));
 
 describe('Performance Benchmarks', () => {
@@ -54,7 +54,7 @@ describe('Performance Benchmarks', () => {
       PerformanceMonitor.startTimer('App Launch');
 
       // Simulate app initialization
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Simulate database initialization
       (DatabaseService.initDatabase as jest.Mock).mockResolvedValue(undefined);
@@ -77,7 +77,7 @@ describe('Performance Benchmarks', () => {
       const testFile = {
         name: 'test.pdf',
         size: 1024 * 1024, // 1MB file
-        type: 'application/pdf'
+        type: 'application/pdf',
       };
 
       PerformanceMonitor.startTimer('Document Upload');
@@ -86,13 +86,13 @@ describe('Performance Benchmarks', () => {
         async () => {
           // Simulate upload time based on file size
           const uploadTime = (testFile.size / (1024 * 1024)) * 500; // 500ms per MB
-          await new Promise(resolve => setTimeout(resolve, uploadTime));
+          await new Promise((resolve) => setTimeout(resolve, uploadTime));
           return {
             id: 'test-doc-id',
             name: testFile.name,
             path: '/test/path',
             size: testFile.size,
-            mimeType: testFile.type
+            mimeType: testFile.type,
           };
         }
       );
@@ -112,30 +112,35 @@ describe('Performance Benchmarks', () => {
         name: `document${i}.pdf`,
         category: i % 2 === 0 ? 'Work' : 'Personal',
         size: 1024 * 100, // 100KB each
-        tags: [`tag${i % 10}`]
+        tags: [`tag${i % 10}`],
       }));
 
       PerformanceMonitor.startTimer('Search 1000 Documents');
 
-      (DocumentService.searchDocumentsPaginated as jest.Mock).mockImplementation(
+      (DocumentService.getDocumentsPaginated as jest.Mock).mockImplementation(
         async (userId, query, page, pageSize) => {
           // Simulate search time
-          await new Promise(resolve => setTimeout(resolve, 50)); // 50ms search time
-          const filtered = mockDocuments.filter(doc =>
-            doc.name.toLowerCase().includes(query.toLowerCase()) ||
-            doc.category.toLowerCase().includes(query.toLowerCase())
+          await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms search time
+          const filtered = mockDocuments.filter(
+            (doc) =>
+              doc.name.toLowerCase().includes(query.toLowerCase()) ||
+              doc.category.toLowerCase().includes(query.toLowerCase())
           );
           const start = (page - 1) * pageSize;
           const end = start + pageSize;
           return {
             documents: filtered.slice(start, end),
             totalCount: filtered.length,
-            hasMore: end < filtered.length
+            hasMore: end < filtered.length,
           };
         }
       );
 
-      const result = await DocumentService.searchDocumentsPaginated('user123', 'work', 1, 50);
+      const result = await DocumentService.getDocumentsPaginated(
+        'user123',
+        1,
+        50
+      );
 
       PerformanceMonitor.endTimer('Search 1000 Documents');
       PerformanceMonitor.logMemoryUsage('After Search');
@@ -149,7 +154,7 @@ describe('Performance Benchmarks', () => {
         name: `bulk_doc_${i}.pdf`,
         path: `/path/bulk_doc_${i}.pdf`,
         size: 1024 * 50, // 50KB each
-        tags: []
+        tags: [],
       }));
 
       PerformanceMonitor.startTimer('Bulk Insert 100 Documents');
@@ -157,8 +162,12 @@ describe('Performance Benchmarks', () => {
       (DatabaseService.bulkInsertDocuments as jest.Mock).mockImplementation(
         async (userId, documents) => {
           // Simulate bulk insert time (10ms per document)
-          await new Promise(resolve => setTimeout(resolve, documents.length * 10));
-          return documents.map((_, index) => `bulk_id_${index}`);
+          await new Promise((resolve) =>
+            setTimeout(resolve, documents.length * 10)
+          );
+          return documents.map(
+            (_: unknown, index: number) => `bulk_id_${index}`
+          );
         }
       );
 
@@ -167,28 +176,32 @@ describe('Performance Benchmarks', () => {
       PerformanceMonitor.endTimer('Bulk Insert 100 Documents');
       PerformanceMonitor.logMemoryUsage('After Bulk Insert');
 
-      expect(DatabaseService.bulkInsertDocuments).toHaveBeenCalledWith('user123', bulkDocuments);
+      expect(DatabaseService.bulkInsertDocuments).toHaveBeenCalledWith(
+        'user123',
+        bulkDocuments
+      );
     });
   });
 
   describe('Authentication Performance', () => {
     test('Login performance', async () => {
-      const credentials = { email: 'test@example.com', password: 'StrongPass123!' };
+      const credentials = {
+        email: 'test@example.com',
+        password: 'StrongPass123!',
+      };
 
       PerformanceMonitor.startTimer('User Login');
 
-      (AuthService.login as jest.Mock).mockImplementation(
-        async (creds) => {
-          // Simulate authentication time
-          await new Promise(resolve => setTimeout(resolve, 200)); // 200ms auth time
-          return {
-            id: 'user123',
-            email: creds.email,
-            firstName: 'Test',
-            lastName: 'User'
-          };
-        }
-      );
+      (AuthService.login as jest.Mock).mockImplementation(async (creds) => {
+        // Simulate authentication time
+        await new Promise((resolve) => setTimeout(resolve, 200)); // 200ms auth time
+        return {
+          id: 'user123',
+          email: creds.email,
+          firstName: 'Test',
+          lastName: 'User',
+        };
+      });
 
       await AuthService.login(credentials);
 
@@ -203,7 +216,7 @@ describe('Performance Benchmarks', () => {
       (AuthService.authenticateWithBiometrics as jest.Mock).mockImplementation(
         async () => {
           // Simulate biometric auth time
-          await new Promise(resolve => setTimeout(resolve, 150)); // 150ms biometric time
+          await new Promise((resolve) => setTimeout(resolve, 150)); // 150ms biometric time
           return true;
         }
       );
@@ -223,13 +236,13 @@ describe('Performance Benchmarks', () => {
       // Simulate memory-intensive operations
       const largeDataSet = Array.from({ length: 10000 }, (_, i) => ({
         id: `item${i}`,
-        data: 'A'.repeat(1000) // 1KB per item = 10MB total
+        data: 'A'.repeat(1000), // 1KB per item = 10MB total
       }));
 
       // Process the data
-      const processed = largeDataSet.map(item => ({
+      const processed = largeDataSet.map((item) => ({
         ...item,
-        processed: item.data.toUpperCase()
+        processed: item.data.toUpperCase(),
       }));
 
       PerformanceMonitor.endTimer('Memory Test');
@@ -245,7 +258,7 @@ describe('Performance Benchmarks', () => {
       PerformanceMonitor.startTimer('Large File Encryption');
 
       // Simulate encryption time for 1MB file
-      await new Promise(resolve => setTimeout(resolve, 300)); // 300ms encryption time
+      await new Promise((resolve) => setTimeout(resolve, 300)); // 300ms encryption time
 
       PerformanceMonitor.endTimer('Large File Encryption');
       PerformanceMonitor.logMemoryUsage('After Large File Encryption');
@@ -258,40 +271,48 @@ describe('Performance Benchmarks', () => {
     test('Database query performance', async () => {
       PerformanceMonitor.startTimer('Database Query');
 
-      (DatabaseService.getDocumentsByUserPaginated as jest.Mock).mockImplementation(
-        async (userId, page, pageSize) => {
-          // Simulate database query time
-          await new Promise(resolve => setTimeout(resolve, 30)); // 30ms query time
-          return {
-            documents: Array.from({ length: pageSize }, (_, i) => ({
-              id: `doc${page * pageSize + i}`,
-              name: `document${page * pageSize + i}.pdf`
-            })),
-            totalCount: 1000,
-            hasMore: (page * pageSize) < 1000
-          };
-        }
-      );
+      (
+        DatabaseService.getDocumentsByUserPaginated as jest.Mock
+      ).mockImplementation(async (userId, page, pageSize) => {
+        // Simulate database query time
+        await new Promise((resolve) => setTimeout(resolve, 30)); // 30ms query time
+        return {
+          documents: Array.from({ length: pageSize }, (_, i) => ({
+            id: `doc${page * pageSize + i}`,
+            name: `document${page * pageSize + i}.pdf`,
+          })),
+          totalCount: 1000,
+          hasMore: page * pageSize < 1000,
+        };
+      });
 
       await DatabaseService.getDocumentsByUserPaginated('user123', 1, 50);
 
       PerformanceMonitor.endTimer('Database Query');
 
-      expect(DatabaseService.getDocumentsByUserPaginated).toHaveBeenCalledWith('user123', 1, 50);
+      expect(DatabaseService.getDocumentsByUserPaginated).toHaveBeenCalledWith(
+        'user123',
+        1,
+        50
+      );
     });
 
     test('Audit logging performance', async () => {
       const auditEntries = Array.from({ length: 100 }, (_, i) => ({
         userId: 'user123',
         action: `TEST_ACTION_${i}`,
-        details: `Test audit entry ${i}`
+        details: `Test audit entry ${i}`,
       }));
 
       PerformanceMonitor.startTimer('Bulk Audit Logging');
 
       for (const entry of auditEntries) {
         (DatabaseService.logAudit as jest.Mock).mockResolvedValue(undefined);
-        await DatabaseService.logAudit(entry.userId, entry.action, entry.details);
+        await DatabaseService.logAudit(
+          entry.userId,
+          entry.action,
+          entry.details
+        );
       }
 
       PerformanceMonitor.endTimer('Bulk Audit Logging');
@@ -307,14 +328,19 @@ describe('Performance Benchmarks', () => {
       PerformanceMonitor.startTimer('File Storage');
 
       (StorageService.saveEncryptedFile as jest.Mock).mockImplementation(
-        async (data, name, userId, key) => {
+        async (data: string, name: string, userId: string) => {
           // Simulate storage time
-          await new Promise(resolve => setTimeout(resolve, 100)); // 100ms storage time
+          await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms storage time
           return `/documents/${userId}/${name}`;
         }
       );
 
-      await StorageService.saveEncryptedFile(testData, 'test.txt', 'user123', 'encryptionKey');
+      await StorageService.saveEncryptedFile(
+        testData,
+        'test.txt',
+        'user123',
+        'encryptionKey'
+      );
 
       PerformanceMonitor.endTimer('File Storage');
 
@@ -322,15 +348,18 @@ describe('Performance Benchmarks', () => {
     });
 
     test('File listing performance', async () => {
-      const fileList = Array.from({ length: 1000 }, (_, i) => `user123_${i}_file.pdf`);
+      const fileList = Array.from(
+        { length: 1000 },
+        (_, i) => `user123_${i}_file.pdf`
+      );
 
       PerformanceMonitor.startTimer('File Listing');
 
       (StorageService.listUserFiles as jest.Mock).mockImplementation(
-        async (userId) => {
+        async () => {
           // Simulate file listing time
-          await new Promise(resolve => setTimeout(resolve, 80)); // 80ms listing time
-          return fileList.map(file => `/documents/${file}`);
+          await new Promise((resolve) => setTimeout(resolve, 80)); // 80ms listing time
+          return fileList.map((file) => `/documents/${file}`);
         }
       );
 
@@ -352,21 +381,25 @@ describe('Performance Benchmarks', () => {
         name: 'workflow.pdf',
         path: '/path/workflow.pdf',
         size: 1024 * 1024,
-        mimeType: 'application/pdf'
+        mimeType: 'application/pdf',
       });
 
       // Step 2: Search for document
-      (DocumentService.searchDocuments as jest.Mock).mockResolvedValue([{
-        id: 'workflow-doc',
-        name: 'workflow.pdf'
-      }]);
+      (DocumentService.searchDocuments as jest.Mock).mockResolvedValue([
+        {
+          id: 'workflow-doc',
+          name: 'workflow.pdf',
+        },
+      ]);
 
       // Step 3: Get document details
-      (DatabaseService.getDocumentsByUser as jest.Mock).mockResolvedValue([{
-        id: 'workflow-doc',
-        name: 'workflow.pdf',
-        category: 'Test'
-      }]);
+      (DatabaseService.getDocumentsByUser as jest.Mock).mockResolvedValue([
+        {
+          id: 'workflow-doc',
+          name: 'workflow.pdf',
+          category: 'Test',
+        },
+      ]);
 
       // Execute workflow
       await DocumentService.uploadFromDevice('user123', 'key');

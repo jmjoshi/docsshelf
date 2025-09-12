@@ -1,0 +1,82 @@
+jmjoshi: Create a comprehensive document to test application end to end with step by step instructions for both android and apple phones. Create separate instructions to test on simulator versus physical devices, make sure every step including starting application, packaging app for both android and apple phones, deploying app on simulators and physical devices etc.
+
+GitHub Copilot: Made changes.
+
+I've created a comprehensive End-to-End Testing Guide for the DocsShelf mobile app. The document is now available at e2e_testing_guide.md and includes:
+
+## Key Sections Covered:
+
+1. **Prerequisites** - System requirements and project setup
+2. **Detox Configuration** - Complete setup with config files, Jest configuration, and initialization
+3. **Sample E2E Test** - Example test cases for core app functionality
+4. **Simulator Testing**:
+   - Android Emulator setup and testing
+   - iOS Simulator setup and testing
+   - Both with Detox and Expo alternatives
+5. **Physical Device Testing**:
+   - Android device setup, connection, and testing
+   - iOS device setup, code signing, and testing
+   - Installation procedures for both platforms
+6. **App Packaging**:
+   - Building APKs and AABs for Android
+   - Building IPAs for iOS
+   - Signing and distribution preparation
+7. **Automated Test Suite** - Script for running tests across all configurations
+8. **Troubleshooting** - Common issues and solutions
+9. **Best Practices** - Recommendations for test coverage and maintenance
+
+The guide provides step-by-step instructions for every aspect of E2E testing, from initial setup through deployment on both simulators and physical devices for Android and iOS platforms. It includes both Detox-specific commands and Expo alternatives where applicable, ensuring compatibility with your Expo-based React Native project.
+
+Similar code found with 1 license type
+
+jmjoshi: Create step by step instructions to add this app on android and apple store. It should also include detailed step by step instructions to create app package for andriod and apple store for production. It should include in details the process to add this app to both android and app stores.
+
+GitHub Copilot: Made changes.
+
+I've created a comprehensive App Store Deployment Guide for DocsShelf at app_store_deployment_guide.md. The guide includes:
+
+## Key Sections:
+
+### 1. **Prerequisites**
+- Google Play Console and Apple Developer Program setup
+- Expo and EAS CLI configuration
+- Required app information and assets
+
+### 2. **Building Production Packages**
+- **EAS Build** (recommended): Cloud-based building for both platforms
+- **Local Builds**: Alternative for advanced users
+- Configuration files (`eas.json`, app.json)
+- Build commands for Android AAB and iOS IPA
+
+### 3. **Store Assets Preparation**
+- Screenshots specifications for different device types
+- App icons and graphics requirements
+- Metadata preparation (descriptions, keywords, URLs)
+
+### 4. **Google Play Store Deployment**
+- Step-by-step app creation in Play Console
+- Store listing setup with screenshots and descriptions
+- AAB upload and signing configuration
+- Review and publication process
+
+### 5. **Apple App Store Deployment**
+- App creation in App Store Connect
+- App information and pricing setup
+- TestFlight beta testing (recommended)
+- Build upload and submission for review
+- Review process and common issues
+
+### 6. **Post-Deployment**
+- Monitoring apps in both stores
+- Version update procedures
+- Marketing and ASO strategies
+- User feedback management
+
+### 7. **Troubleshooting**
+- Common build failures
+- Store submission issues
+- Support resources and best practices
+
+The guide provides detailed, actionable steps for both platforms, including specific commands, configuration examples, and timelines. It emphasizes using Expo Application Services (EAS) for cloud builds, which simplifies the process for Expo-based React Native apps like DocsShelf. The document also includes troubleshooting sections and best practices to ensure successful deployment.
+
+Similar code found with 2 license types

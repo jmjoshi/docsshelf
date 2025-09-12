@@ -12,31 +12,49 @@ export const syncMiddleware: Middleware = (store) => (next) => (action) => {
 
   if (!userId) return result;
 
-  // Handle document actions
+  // Handle document actions (but ignore bulk sync actions to prevent loops)
   if (
     action &&
     typeof action === 'object' &&
     'type' in action &&
     action.type &&
     typeof action.type === 'string' &&
-    action.type.startsWith('documents/')
+    action.type.startsWith('documents/') &&
+    // Ignore bulk sync actions to prevent infinite loops
+    action.type !== 'documents/setDocuments' &&
+    action.type !== 'documents/setCategories'
   ) {
+    // Add a flag to prevent sync loops
+    const actionWithMeta = action as any;
+    if (actionWithMeta.meta?.skipSync) {
+      return result;
+    }
+
     switch (action.type) {
       case 'documents/addDocument':
-        SyncService.handleDocumentChange('add', (action as any).payload);
+        // Use setTimeout to avoid blocking the main thread
+        setTimeout(() => {
+          SyncService.handleDocumentChange('add', (action as any).payload);
+        }, 0);
         break;
       case 'documents/updateDocument':
-        SyncService.handleDocumentChange('update', (action as any).payload);
+        setTimeout(() => {
+          SyncService.handleDocumentChange('update', (action as any).payload);
+        }, 0);
         break;
       case 'documents/deleteDocument':
         // For delete, we need to get the document from state before deletion
         // This is a limitation - we might need to modify the action to include the full document
         break;
       case 'documents/addCategory':
-        SyncService.handleCategoryChange('add', (action as any).payload);
+        setTimeout(() => {
+          SyncService.handleCategoryChange('add', (action as any).payload);
+        }, 0);
         break;
       case 'documents/updateCategory':
-        SyncService.handleCategoryChange('update', (action as any).payload);
+        setTimeout(() => {
+          SyncService.handleCategoryChange('update', (action as any).payload);
+        }, 0);
         break;
       case 'documents/deleteCategory':
         // Similar issue with delete

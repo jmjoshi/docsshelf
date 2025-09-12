@@ -1,9 +1,12 @@
 // Document service for upload, scanning, and management
+import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { Camera } from 'expo-camera';
+// import { Camera } from 'expo-camera'; // Temporarily disabled due to build issues
 import { StorageService } from '../storage';
-import { DatabaseService, Document } from '../database';
+import { DatabaseService, Document, QuotaExceededError } from '../database';
+import { StorageQuotaManager } from '../../utils/storageQuota';
 
 export interface UploadResult {
   id: string;
@@ -19,14 +22,33 @@ export class DocumentService {
     camera: boolean;
     mediaLibrary: boolean;
   }> {
-    const cameraPermission = await Camera.requestCameraPermissionsAsync();
-    const mediaLibraryPermission =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (Platform.OS === 'web') {
+      // Web doesn't need explicit permissions for file input
+      return {
+        camera: true,
+        mediaLibrary: true,
+      };
+    }
 
-    return {
-      camera: cameraPermission.granted,
-      mediaLibrary: mediaLibraryPermission.granted,
-    };
+    // Temporarily disabled camera permissions due to build issues
+    // const cameraPermission = await Camera.requestCameraPermissionsAsync();
+    const cameraPermission = { granted: false }; // Mock response
+
+    try {
+      const mediaLibraryPermission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      return {
+        camera: cameraPermission.granted,
+        mediaLibrary: mediaLibraryPermission.granted,
+      };
+    } catch (error) {
+      console.warn('Failed to request permissions:', error);
+      return {
+        camera: false,
+        mediaLibrary: false,
+      };
+    }
   }
 
   // Upload document from device
@@ -34,11 +56,214 @@ export class DocumentService {
     userId: string,
     encryptionKey: string
   ): Promise<UploadResult | null> {
+    if (Platform.OS === 'web') {
+      return await this.uploadFromDeviceWeb(userId, encryptionKey);
+    }
+
     try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: '*/*',
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) {
+        return null;
+      }
+
+      const asset = result.assets[0];
+      const fileName = asset.name;
+      const mimeType = asset.mimeType || 'application/octet-stream';
+
+      // Read file data
+      const fileData = await FileSystem.readAsStringAsync(asset.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Save encrypted file
+      const filePath = await StorageService.saveEncryptedFile(
+        fileData,
+        fileName,
+        userId,
+        encryptionKey,
+        mimeType,
+        undefined, // category
+        undefined // folder
+      );
+
+      // Get file info
+      const fileInfo = await StorageService.getFileInfo(filePath);
+
+      return {
+        id: filePath.split('/').pop() || '',
+        name: fileName,
+        path: filePath,
+        size: fileInfo.size,
+        mimeType,
+      };
+    } catch (error) {
+      console.error('Failed to upload from device:', error);
+      throw error;
+    }
+  }
+
+  // Upload document from device (Web version)
+  static async uploadFromDeviceWeb(
+    userId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _encryptionKey: string // Future: implement web-based encryption
+  ): Promise<UploadResult | null> {
+    return new Promise((resolve, reject) => {
+      // Create a file input element
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '*/*';
+      fileInput.style.display = 'none';
+
+      fileInput.addEventListener('change', async (event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
+
+        if (!file) {
+          resolve(null);
+          return;
+        }
+
+        try {
+          // Read file as base64
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            try {
+              const base64Data = (e.target?.result as string).split(',')[1];
+              const fileName = file.name;
+              const mimeType = file.type || 'application/octet-stream';
+
+              // Calculate storage requirements
+              const fileDataSize = base64Data.length;
+              const metadataSize = JSON.stringify({
+                name: fileName,
+                size: file.size,
+                mimeType,
+              }).length;
+              const totalSize = fileDataSize + metadataSize;
+
+              // Check storage quota before saving
+              if (!StorageQuotaManager.hasSpaceFor(totalSize)) {
+                const quotaStatus = StorageQuotaManager.checkQuotaStatus();
+                
+                if (quotaStatus === 'critical') {
+                  // Try to free space automatically
+                  const spaceFreed =
+                    await StorageQuotaManager.ensureSpaceFor(totalSize);
+                  if (!spaceFreed) {
+                    throw new QuotaExceededError(
+                      'Storage full! Please delete some documents before uploading new ones.'
+                    );
+                  }
+                } else {
+                  throw new QuotaExceededError(
+                    'Not enough storage space. Please delete some documents first.'
+                  );
+                }
+              }
+
+              // Save file using storage service (simulate encryption)
+              const id = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${Math.random().toString(36).substr(2, 5)}`;
+
+              // For web demo, we'll just save to localStorage
+              const fileData = {
+                id,
+                name: fileName,
+                data: base64Data,
+                size: file.size,
+                mimeType,
+                userId,
+                createdAt: new Date().toISOString(),
+              };
+
+              // Save to localStorage (simulate encrypted storage)
+              const existingFiles = JSON.parse(
+                localStorage.getItem('docsshelf_files') || '[]'
+              );
+              existingFiles.push(fileData);
+              localStorage.setItem(
+                'docsshelf_files',
+                JSON.stringify(existingFiles)
+              );
+
+              // Also save metadata to database
+              await DatabaseService.saveDocumentMetadata(
+                userId,
+                fileName,
+                `web-storage://${id}`, // Virtual path for web storage
+                file.size,
+                mimeType,
+                'General',
+                'Uploads'
+              );
+
+              resolve({
+                id,
+                name: fileName,
+                path: `web-storage://${id}`,
+                size: file.size,
+                mimeType,
+              });
+            } catch (error) {
+              if (error instanceof QuotaExceededError) {
+                // Show user-friendly error message
+                const storageInfo = StorageQuotaManager.getStorageInfo();
+                alert(
+                  `Upload failed: ${error.message}\n\nStorage info:\n${StorageQuotaManager.formatBytes(storageInfo.used)} used of ${StorageQuotaManager.formatBytes(storageInfo.total)} available.`
+                );
+              }
+              reject(error);
+            }
+          };
+
+          reader.onerror = () => {
+            reject(new Error('Failed to read file'));
+          };
+
+          reader.readAsDataURL(file);
+        } catch (error) {
+          reject(error);
+        } finally {
+          // Clean up
+          document.body.removeChild(fileInput);
+        }
+      });
+
+      fileInput.addEventListener('cancel', () => {
+        document.body.removeChild(fileInput);
+        resolve(null);
+      });
+
+      // Add to DOM and trigger click
+      document.body.appendChild(fileInput);
+      fileInput.click();
+    });
+  }
+
+  // Upload image from gallery
+  static async uploadImage(
+    userId: string,
+    encryptionKey: string
+  ): Promise<UploadResult | null> {
+    if (Platform.OS === 'web') {
+      // Web functionality temporarily disabled
+      throw new Error('Image upload not available on web platform');
+    }
+
+    try {
+      // Request permission
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      // Pick image
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        quality: 1,
+        aspect: [4, 3],
+        quality: 0.8,
       });
 
       if (result.canceled) {
@@ -79,61 +304,21 @@ export class DocumentService {
         mimeType,
       };
     } catch (error) {
-      console.error('Failed to upload from device:', error);
+      console.error('Failed to upload image:', error);
       throw error;
     }
   }
 
   // Scan document using camera
   static async scanWithCamera(
-    userId: string,
-    encryptionKey: string
+    userId: string, // eslint-disable-line @typescript-eslint/no-unused-vars
+    encryptionKey: string // eslint-disable-line @typescript-eslint/no-unused-vars
   ): Promise<UploadResult | null> {
-    try {
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (result.canceled) {
-        return null;
-      }
-
-      const asset = result.assets[0];
-      const fileName = `scan_${Date.now()}.jpg`;
-      const mimeType = 'image/jpeg';
-
-      // Read file data
-      const fileData = await FileSystem.readAsStringAsync(asset.uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-
-      // Save encrypted file
-      const filePath = await StorageService.saveEncryptedFile(
-        fileData,
-        fileName,
-        userId,
-        encryptionKey,
-        mimeType,
-        undefined, // category
-        undefined // folder
-      );
-
-      // Get file info
-      const fileInfo = await StorageService.getFileInfo(filePath);
-
-      return {
-        id: filePath.split('/').pop() || '',
-        name: fileName,
-        path: filePath,
-        size: fileInfo.size,
-        mimeType,
-      };
-    } catch (error) {
-      console.error('Failed to scan with camera:', error);
-      throw error;
-    }
+    // Temporarily disabled due to build issues
+    throw new Error(
+      'Camera functionality is temporarily disabled due to build issues. ' +
+        'Please use upload from device instead.'
+    );
   }
 
   // Get documents by category
@@ -194,58 +379,32 @@ export class DocumentService {
     }
   }
 
-  // Search documents with pagination
-  static async searchDocumentsPaginated(
-    userId: string,
-    query: string,
-    page: number = 1,
-    pageSize: number = 50
-  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
-    try {
-      return await DatabaseService.searchDocumentsPaginated(
-        userId,
-        query,
-        page,
-        pageSize
-      );
-    } catch (error) {
-      console.error('Failed to search documents paginated:', error);
-      throw error;
-    }
-  }
-
-  // Create category
-  static async createCategory(
-    userId: string,
-    name: string,
-    color: string = '#007AFF' // eslint-disable-line @typescript-eslint/no-unused-vars
-  ): Promise<string> {
-    try {
-      // For now, categories are not stored in DB, just return id
-      // TODO: Implement category storage in DB with color: ${color}
-      const id = Date.now().toString();
-      return id;
-    } catch (error) {
-      console.error('Failed to create category:', error);
-      throw error;
-    }
-  }
-
-  // Update document category
-  static async updateDocumentCategory(
+  // Delete document
+  static async deleteDocument(
     documentId: string,
-    category: string,
     userId: string
-  ): Promise<void> {
+  ): Promise<boolean> {
     try {
-      // TODO: Implement update in DB
-      await DatabaseService.logAudit(
-        userId,
-        'DOCUMENT_CATEGORY_UPDATED',
-        `Document ${documentId} category updated to ${category}`
-      );
+      await DatabaseService.deleteDocument(documentId, userId);
+      // Also delete the file from storage
+      await StorageService.deleteFile(documentId, userId);
+      return true;
     } catch (error) {
-      console.error('Failed to update document category:', error);
+      console.error('Failed to delete document:', error);
+      throw error;
+    }
+  }
+
+  // Update document
+  static async updateDocument(
+    documentId: string,
+    updates: Partial<Document>
+  ): Promise<boolean> {
+    try {
+      await DatabaseService.updateDocument(documentId, updates);
+      return true;
+    } catch (error) {
+      console.error('Failed to update document:', error);
       throw error;
     }
   }

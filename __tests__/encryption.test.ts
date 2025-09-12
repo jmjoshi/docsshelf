@@ -42,8 +42,9 @@ describe('EncryptionService', () => {
       const derivedKey = EncryptionService.deriveKey(password, salt);
 
       expect(derivedKey).toBeDefined();
-      expect(typeof derivedKey).toBe('string');
-      expect(derivedKey.length).toBeGreaterThan(0);
+      expect(typeof derivedKey).toBe('object');
+      expect(derivedKey.key).toBeDefined();
+      expect(derivedKey.key.length).toBeGreaterThan(0);
     });
 
     it('should generate different keys for different passwords', () => {
@@ -86,8 +87,14 @@ describe('EncryptionService', () => {
       const originalData = 'Hello, World! This is a test message.';
       const key = 'testKey12345678901234567890123456789012'; // 32 bytes
 
-      const encryptedData = await EncryptionService.encryptData(originalData, key);
-      const decryptedData = await EncryptionService.decryptData(encryptedData, key);
+      const encryptedData = await EncryptionService.encryptData(
+        originalData,
+        key
+      );
+      const decryptedData = await EncryptionService.decryptData(
+        encryptedData,
+        key
+      );
 
       expect(encryptedData).toBeDefined();
       expect(typeof encryptedData).toBe('string');
@@ -111,10 +118,16 @@ describe('EncryptionService', () => {
       const correctKey = 'correctKey123456789012345678901234567890';
       const wrongKey = 'wrongKey12345678901234567890123456789012';
 
-      const encryptedData = await EncryptionService.encryptData(data, correctKey);
+      const encryptedData = await EncryptionService.encryptData(
+        data,
+        correctKey
+      );
 
       // This should return empty or corrupted data with wrong key
-      const result = await EncryptionService.decryptData(encryptedData, wrongKey);
+      const result = await EncryptionService.decryptData(
+        encryptedData,
+        wrongKey
+      );
       expect(result).toBe(''); // Wrong key results in empty decryption
     });
   });
@@ -124,30 +137,38 @@ describe('EncryptionService', () => {
       const testKey = 'testEncryptionKey123';
       const service = 'testService';
 
-      (require('react-native-keychain').setGenericPassword as jest.Mock).mockResolvedValue(undefined);
-      (require('react-native-keychain').getGenericPassword as jest.Mock).mockResolvedValue({
+      (
+        require('react-native-keychain').setGenericPassword as jest.Mock
+      ).mockResolvedValue(undefined);
+      (
+        require('react-native-keychain').getGenericPassword as jest.Mock
+      ).mockResolvedValue({
         username: 'encryption-key',
-        password: testKey
+        password: testKey,
       });
 
       await EncryptionService.storeKey(testKey, service);
       const retrievedKey = await EncryptionService.getKey(service);
 
-      expect(require('react-native-keychain').setGenericPassword).toHaveBeenCalledWith(
-        'encryption-key',
-        testKey,
-        {
-          service,
-          accessControl: require('react-native-keychain').ACCESS_CONTROL.BIOMETRY_ANY,
-          accessible: require('react-native-keychain').ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
-        }
-      );
-      expect(require('react-native-keychain').getGenericPassword).toHaveBeenCalledWith({ service });
+      expect(
+        require('react-native-keychain').setGenericPassword
+      ).toHaveBeenCalledWith('encryption-key', testKey, {
+        service,
+        accessControl: require('react-native-keychain').ACCESS_CONTROL
+          .BIOMETRY_ANY,
+        accessible: require('react-native-keychain').ACCESSIBLE
+          .WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      });
+      expect(
+        require('react-native-keychain').getGenericPassword
+      ).toHaveBeenCalledWith({ service });
       expect(retrievedKey).toBe(testKey);
     });
 
     it('should return null when key not found', async () => {
-      (require('react-native-keychain').getGenericPassword as jest.Mock).mockResolvedValue(false);
+      (
+        require('react-native-keychain').getGenericPassword as jest.Mock
+      ).mockResolvedValue(false);
 
       const result = await EncryptionService.getKey('nonexistentService');
 
@@ -159,11 +180,15 @@ describe('EncryptionService', () => {
     it('should delete key successfully', async () => {
       const service = 'testService';
 
-      (require('react-native-keychain').resetGenericPassword as jest.Mock).mockResolvedValue(undefined);
+      (
+        require('react-native-keychain').resetGenericPassword as jest.Mock
+      ).mockResolvedValue(undefined);
 
       await EncryptionService.deleteKey(service);
 
-      expect(require('react-native-keychain').resetGenericPassword).toHaveBeenCalledWith({ service });
+      expect(
+        require('react-native-keychain').resetGenericPassword
+      ).toHaveBeenCalledWith({ service });
     });
   });
 
@@ -173,7 +198,10 @@ describe('EncryptionService', () => {
       const key = 'fileKey12345678901234567890123456789012';
 
       const encryptedFile = await EncryptionService.encryptFile(fileData, key);
-      const decryptedFile = await EncryptionService.decryptFile(encryptedFile, key);
+      const decryptedFile = await EncryptionService.decryptFile(
+        encryptedFile,
+        key
+      );
 
       expect(encryptedFile).toBeDefined();
       expect(typeof encryptedFile).toBe('string');
@@ -206,7 +234,10 @@ describe('EncryptionService', () => {
       const testCases = [
         { password: 'weak', shouldWork: true }, // deriveKey doesn't validate, just processes
         { password: 'StrongPass123!', shouldWork: true },
-        { password: 'VeryLongPasswordWithNumbers123456789!@#$%^&*()', shouldWork: true }
+        {
+          password: 'VeryLongPasswordWithNumbers123456789!@#$%^&*()',
+          shouldWork: true,
+        },
       ];
 
       testCases.forEach(({ password, shouldWork }) => {
@@ -230,10 +261,14 @@ describe('EncryptionService', () => {
     });
 
     it('should handle special characters', async () => {
-      const dataWithSpecialChars = 'Data with special chars: àáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ';
+      const dataWithSpecialChars =
+        'Data with special chars: àáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ';
       const key = 'specialKey123456789012345678901234567890';
 
-      const encrypted = await EncryptionService.encryptData(dataWithSpecialChars, key);
+      const encrypted = await EncryptionService.encryptData(
+        dataWithSpecialChars,
+        key
+      );
       const decrypted = await EncryptionService.decryptData(encrypted, key);
 
       expect(decrypted).toBe(dataWithSpecialChars);

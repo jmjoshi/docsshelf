@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 // Comprehensive Test Runner for DocsShelf
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 class TestRunner {
   constructor() {

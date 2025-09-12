@@ -1,14 +1,13 @@
 // Sync service for bidirectional synchronization between Redux and database
-declare const setInterval: (callback: () => void, delay: number) => number;
-declare const clearInterval: (id: number) => void;
 
 import { store } from '../../store/store';
 import { DatabaseService, Document, Category } from '../database';
-import { setDocuments, setCategories } from '../../store/slices/documentsSlice';
+import { setCategories } from '../../store/slices/documentsSlice';
 
 class SyncServiceClass {
-  private syncInterval: number | null = null;
+  private syncInterval: NodeJS.Timeout | null = null;
   private isOnline = true;
+  private isSyncing = false; // Prevent overlapping syncs
 
   // Initialize sync service
   initialize() {
@@ -16,13 +15,13 @@ class SyncServiceClass {
     this.setupOnlineOfflineListeners();
   }
 
-  // Start periodic sync every 30 seconds
+  // Start periodic sync every 5 minutes (increased from 30 seconds to reduce load)
   private startPeriodicSync() {
     this.syncInterval = setInterval(() => {
-      if (this.isOnline) {
+      if (this.isOnline && !this.isSyncing) {
         this.sync();
       }
-    }, 30000);
+    }, 300000); // 5 minutes instead of 30 seconds
   }
 
   // Setup online/offline listeners
@@ -34,19 +33,35 @@ class SyncServiceClass {
 
   // Main sync function
   async sync() {
+    if (this.isSyncing) {
+      console.log('Sync already in progress, skipping...');
+      return;
+    }
+
+    this.isSyncing = true;
+    
     try {
       const state = store.getState();
       const userId = state.auth.user?.id;
 
-      if (!userId) return;
+      if (!userId) {
+        this.isSyncing = false;
+        return;
+      }
+
+      console.log('Starting sync...');
 
       // Sync documents
       await this.syncDocuments(userId);
 
       // Sync categories
       await this.syncCategories(userId);
+
+      console.log('Sync completed successfully');
     } catch (error) {
       console.error('Sync failed:', error);
+    } finally {
+      this.isSyncing = false;
     }
   }
 
@@ -59,34 +74,47 @@ class SyncServiceClass {
       // Get documents from Redux
       const reduxDocuments = store.getState().documents.documents;
 
-      // Find documents that need to be synced to Redux
-      const documentsToAdd = dbDocuments.filter(
-        (dbDoc) => !reduxDocuments.some((reduxDoc) => reduxDoc.id === dbDoc.id)
-      );
-
-      // Find documents that need to be synced to database
-      const documentsToSync = reduxDocuments.filter(
-        (reduxDoc) => !reduxDoc.isSynced && reduxDoc.userId === userId
-      );
-
-      // Add new documents to Redux
-      if (documentsToAdd.length > 0) {
-        store.dispatch(setDocuments(dbDocuments));
+      // Only sync on initial load (when Redux is completely empty)
+      // This prevents the infinite loop by avoiding unnecessary Redux updates
+      if (reduxDocuments.length === 0 && dbDocuments.length > 0) {
+        console.log(
+          `Syncing ${dbDocuments.length} documents from database to Redux`
+        );
+        store.dispatch({
+          type: 'documents/setDocuments',
+          payload: dbDocuments,
+          meta: { skipSync: true }, // Flag to prevent sync middleware from triggering
+        });
+        return;
       }
 
-      // Sync unsynced documents to database
+      // Find documents that exist in Redux but not in database (need to be saved)
+      const documentsToSync = reduxDocuments.filter(
+        (reduxDoc) =>
+          reduxDoc.userId === userId &&
+          (!reduxDoc.isSynced ||
+            !dbDocuments.some((dbDoc) => dbDoc.id === reduxDoc.id))
+      );
+
+      // Sync unsynced documents to database (without triggering Redux updates)
       for (const doc of documentsToSync) {
-        await DatabaseService.saveDocumentMetadata(
-          doc.userId,
-          doc.name,
-          doc.path,
-          doc.size,
-          doc.mimeType,
-          doc.category,
-          doc.folder,
-          doc.tags,
-          doc.ocrText
-        );
+        try {
+          await DatabaseService.saveDocumentMetadata(
+            doc.userId,
+            doc.name,
+            doc.path,
+            doc.size,
+            doc.mimeType,
+            doc.category,
+            doc.folder,
+            doc.tags,
+            doc.ocrText,
+            doc.id // Use existing ID to prevent duplicates
+          );
+          console.log(`Synced document ${doc.name} to database`);
+        } catch (error) {
+          console.error(`Failed to sync document ${doc.name}:`, error);
+        }
       }
     } catch (error) {
       console.error('Document sync failed:', error);
@@ -109,7 +137,15 @@ class SyncServiceClass {
 
       // Add new categories to Redux
       if (categoriesToAdd.length > 0) {
-        store.dispatch(setCategories(dbCategories));
+        const transformedCategories = dbCategories.map((cat) => ({
+          id: cat.id,
+          name: cat.name,
+          color: cat.color,
+          userId: userId,
+          createdAt: cat.createdAt,
+          updatedAt: cat.createdAt, // Use createdAt as fallback for updatedAt
+        }));
+        store.dispatch(setCategories(transformedCategories));
       }
     } catch (error) {
       console.error('Category sync failed:', error);
@@ -141,20 +177,33 @@ class SyncServiceClass {
       if (!userId) return;
 
       switch (action) {
-        case 'add':
-          // Document is already added to Redux, mark as synced in database
-          await DatabaseService.saveDocumentMetadata(
-            userId,
-            document.name,
-            document.path,
-            document.size,
-            document.mimeType,
-            document.category,
-            document.folder,
-            document.tags,
-            document.ocrText
-          );
+        case 'add': {
+          // Check if document already exists in database to avoid duplicates
+          const existingDocs = await DatabaseService.getDocumentsByUser(userId);
+          const docExists = existingDocs.some((doc) => doc.id === document.id);
+          
+          if (!docExists) {
+            // Document is already added to Redux, now save to database with existing ID
+            await DatabaseService.saveDocumentMetadata(
+              userId,
+              document.name,
+              document.path,
+              document.size,
+              document.mimeType,
+              document.category,
+              document.folder,
+              document.tags,
+              document.ocrText,
+              document.id // Pass the existing document ID
+            );
+            console.log(`Document ${document.name} synced to database`);
+          } else {
+            console.log(
+              `Document ${document.name} already exists in database, skipping`
+            );
+          }
           break;
+        }
         case 'update':
           // Update document in database
           await DatabaseService.updateDocument(document.id, {
@@ -169,6 +218,7 @@ class SyncServiceClass {
       }
     } catch (error) {
       console.error('Failed to handle document change:', error);
+      // Don't rethrow to avoid breaking the app
     }
   }
 
@@ -186,15 +236,15 @@ class SyncServiceClass {
       switch (action) {
         case 'add':
           // Category is already added to Redux, create in database
-          await DatabaseService.createCategory(
+          await DatabaseService.createCategory({
             userId,
-            category.name,
-            category.color
-          );
+            name: category.name,
+            color: category.color,
+          });
           break;
         case 'update':
           // Update category in database
-          await DatabaseService.updateCategory(category.id, userId, {
+          await DatabaseService.updateCategory(category.id, {
             name: category.name,
             color: category.color,
           });

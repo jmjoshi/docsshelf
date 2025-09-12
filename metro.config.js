@@ -8,19 +8,22 @@ config.resolver.platforms = ['web', 'native', 'ios', 'android'];
 
 // Ensure polyfills are loaded first for web
 if (config.serializer) {
-  const originalGetModulesRunBeforeMainModule = config.serializer.getModulesRunBeforeMainModule;
+  const originalGetModulesRunBeforeMainModule =
+    config.serializer.getModulesRunBeforeMainModule;
   config.serializer.getModulesRunBeforeMainModule = (entryFilePath) => {
-    const modules = originalGetModulesRunBeforeMainModule ? originalGetModulesRunBeforeMainModule(entryFilePath) : [];
+    const modules = originalGetModulesRunBeforeMainModule
+      ? originalGetModulesRunBeforeMainModule(entryFilePath)
+      : [];
     return [
       require.resolve(path.resolve(__dirname, 'polyfills.js')),
-      ...modules
+      ...modules,
     ];
   };
 } else {
   config.serializer = {
-    getModulesRunBeforeMainModule: (entryFilePath) => {
+    getModulesRunBeforeMainModule: () => {
       return [require.resolve(path.resolve(__dirname, 'polyfills.js'))];
-    }
+    },
   };
 }
 

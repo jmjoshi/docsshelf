@@ -15,7 +15,7 @@ import {
   loginFailure,
 } from '../../store/slices/authSlice';
 import { AuthService } from '../../services/auth';
-import HapticFeedback from 'react-native-haptic-feedback';
+import HapticFeedback from '../../utils/haptic-feedback';
 
 interface LoginScreenProps {
   navigation: {

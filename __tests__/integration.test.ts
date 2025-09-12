@@ -21,19 +21,19 @@ jest.mock('expo-image-picker', () => ({
   requestMediaLibraryPermissionsAsync: jest.fn(),
   MediaTypeOptions: {
     All: 'All',
-    Images: 'Images'
-  }
+    Images: 'Images',
+  },
 }));
 jest.mock('expo-file-system', () => ({
   readAsStringAsync: jest.fn(),
   EncodingType: {
-    Base64: 'base64'
-  }
+    Base64: 'base64',
+  },
 }));
 jest.mock('expo-camera', () => ({
   Camera: {
-    requestCameraPermissionsAsync: jest.fn()
-  }
+    requestCameraPermissionsAsync: jest.fn(),
+  },
 }));
 
 describe('Integration Tests', () => {
@@ -48,11 +48,13 @@ describe('Integration Tests', () => {
         id: 'user123',
         email: 'test@example.com',
         firstName: 'John',
-        lastName: 'Doe'
+        lastName: 'Doe',
       };
 
       (AuthService.register as jest.Mock).mockResolvedValue(mockUser);
-      (AuthService.getUserEncryptionKey as jest.Mock).mockResolvedValue('encryptionKey123');
+      (AuthService.getUserEncryptionKey as jest.Mock).mockResolvedValue(
+        'encryptionKey123'
+      );
 
       // Mock document upload
       const mockDocument = {
@@ -60,11 +62,15 @@ describe('Integration Tests', () => {
         name: 'test.pdf',
         path: '/documents/test.pdf',
         size: 1024,
-        mimeType: 'application/pdf'
+        mimeType: 'application/pdf',
       };
 
-      (DocumentService.uploadFromDevice as jest.Mock).mockResolvedValue(mockDocument);
-      (StorageService.saveEncryptedFile as jest.Mock).mockResolvedValue('/documents/test.pdf');
+      (DocumentService.uploadFromDevice as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
+      (StorageService.saveEncryptedFile as jest.Mock).mockResolvedValue(
+        '/documents/test.pdf'
+      );
 
       // Execute workflow
       const user = await AuthService.register({
@@ -72,17 +78,26 @@ describe('Integration Tests', () => {
         lastName: 'Doe',
         email: 'test@example.com',
         password: 'StrongPass123!',
-        phoneNumbers: []
+        phoneNumbers: [],
       });
 
       const encryptionKey = await AuthService.getUserEncryptionKey(user.id);
-      const document = await DocumentService.uploadFromDevice(user.id, encryptionKey);
+      if (!encryptionKey) {
+        throw new Error('Encryption key not found');
+      }
+      const document = await DocumentService.uploadFromDevice(
+        user.id,
+        encryptionKey
+      );
 
       // Verify workflow
       expect(user.id).toBe('user123');
       expect(encryptionKey).toBe('encryptionKey123');
-      expect(document.id).toBe('doc123');
-      expect(document.name).toBe('test.pdf');
+      expect(document).not.toBeNull();
+      if (document) {
+        expect(document.id).toBe('doc123');
+        expect(document.name).toBe('test.pdf');
+      }
     });
   });
 
@@ -90,10 +105,12 @@ describe('Integration Tests', () => {
     test('User login with biometric fallback', async () => {
       const mockUser = {
         id: 'user123',
-        email: 'test@example.com'
+        email: 'test@example.com',
       };
 
-      (AuthService.authenticateWithBiometrics as jest.Mock).mockResolvedValue(false); // Biometric fails
+      (AuthService.authenticateWithBiometrics as jest.Mock).mockResolvedValue(
+        false
+      ); // Biometric fails
       (AuthService.login as jest.Mock).mockResolvedValue(mockUser); // Password login succeeds
 
       // Try biometric first
@@ -103,7 +120,7 @@ describe('Integration Tests', () => {
       // Fall back to password
       const loginResult = await AuthService.login({
         email: 'test@example.com',
-        password: 'StrongPass123!'
+        password: 'StrongPass123!',
       });
 
       expect(loginResult).toEqual(mockUser);
@@ -116,21 +133,33 @@ describe('Integration Tests', () => {
         id: 'doc123',
         name: 'important.pdf',
         category: 'Work',
-        tags: ['important', 'work']
+        tags: ['important', 'work'],
       };
 
       // Mock upload
-      (DocumentService.uploadFromDevice as jest.Mock).mockResolvedValue(mockDocument);
+      (DocumentService.uploadFromDevice as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       // Mock search
-      (DocumentService.searchDocuments as jest.Mock).mockResolvedValue([mockDocument]);
+      (DocumentService.searchDocuments as jest.Mock).mockResolvedValue([
+        mockDocument,
+      ]);
 
       // Mock retrieval
-      (DatabaseService.getDocumentsByUser as jest.Mock).mockResolvedValue([mockDocument]);
+      (DatabaseService.getDocumentsByUser as jest.Mock).mockResolvedValue([
+        mockDocument,
+      ]);
 
       // Execute workflow
-      const uploadedDoc = await DocumentService.uploadFromDevice('user123', 'key');
-      const searchResults = await DocumentService.searchDocuments('user123', 'important');
+      const uploadedDoc = await DocumentService.uploadFromDevice(
+        'user123',
+        'key'
+      );
+      const searchResults = await DocumentService.searchDocuments(
+        'user123',
+        'important'
+      );
       const allDocs = await DatabaseService.getDocumentsByUser('user123');
 
       expect(uploadedDoc).toEqual(mockDocument);
@@ -144,8 +173,12 @@ describe('Integration Tests', () => {
       const originalData = 'Sensitive document content';
       const key = 'encryptionKey123';
 
-      (EncryptionService.encryptData as jest.Mock).mockResolvedValue('encryptedData');
-      (EncryptionService.decryptData as jest.Mock).mockResolvedValue(originalData);
+      (EncryptionService.encryptData as jest.Mock).mockResolvedValue(
+        'encryptedData'
+      );
+      (EncryptionService.decryptData as jest.Mock).mockResolvedValue(
+        originalData
+      );
 
       // Encrypt data
       const encrypted = await EncryptionService.encryptData(originalData, key);
@@ -162,8 +195,12 @@ describe('Integration Tests', () => {
       const userId = 'user123';
       const key = 'encryptionKey';
 
-      (StorageService.saveEncryptedFile as jest.Mock).mockResolvedValue('/encrypted/path/test.pdf');
-      (StorageService.readEncryptedFile as jest.Mock).mockResolvedValue(fileData);
+      (StorageService.saveEncryptedFile as jest.Mock).mockResolvedValue(
+        '/encrypted/path/test.pdf'
+      );
+      (StorageService.readEncryptedFile as jest.Mock).mockResolvedValue(
+        fileData
+      );
 
       // Save encrypted file
       const savedPath = await StorageService.saveEncryptedFile(
@@ -175,7 +212,10 @@ describe('Integration Tests', () => {
       );
 
       // Read and decrypt file
-      const retrievedData = await StorageService.readEncryptedFile(savedPath, key);
+      const retrievedData = await StorageService.readEncryptedFile(
+        savedPath,
+        key
+      );
 
       expect(savedPath).toBe('/encrypted/path/test.pdf');
       expect(retrievedData).toBe(fileData);
@@ -188,16 +228,24 @@ describe('Integration Tests', () => {
         name: 'test.pdf',
         path: '/path/test.pdf',
         size: 1024,
-        tags: ['test']
+        tags: ['test'],
       };
 
-      (DatabaseService.saveDocumentMetadata as jest.Mock).mockResolvedValue('doc123');
-      (DatabaseService.getDocumentsByUser as jest.Mock).mockResolvedValue([{
-        id: 'doc123',
-        ...document
-      }]);
-      (DatabaseService.updateDocument as jest.Mock).mockResolvedValue(undefined);
-      (DatabaseService.deleteDocument as jest.Mock).mockResolvedValue(undefined);
+      (DatabaseService.saveDocumentMetadata as jest.Mock).mockResolvedValue(
+        'doc123'
+      );
+      (DatabaseService.getDocumentsByUser as jest.Mock).mockResolvedValue([
+        {
+          id: 'doc123',
+          ...document,
+        },
+      ]);
+      (DatabaseService.updateDocument as jest.Mock).mockResolvedValue(
+        undefined
+      );
+      (DatabaseService.deleteDocument as jest.Mock).mockResolvedValue(
+        undefined
+      );
 
       // Create
       const docId = await DatabaseService.saveDocumentMetadata(
@@ -225,24 +273,31 @@ describe('Integration Tests', () => {
 
   describe('Error Handling', () => {
     test('Handles service failures gracefully', async () => {
-      (AuthService.login as jest.Mock).mockRejectedValue(new Error('Network error'));
-      (DocumentService.uploadFromDevice as jest.Mock).mockRejectedValue(new Error('Upload failed'));
+      (AuthService.login as jest.Mock).mockRejectedValue(
+        new Error('Network error')
+      );
+      (DocumentService.uploadFromDevice as jest.Mock).mockRejectedValue(
+        new Error('Upload failed')
+      );
 
       // Test login failure
-      await expect(AuthService.login({
-        email: 'test@example.com',
-        password: 'wrong'
-      })).rejects.toThrow('Network error');
+      await expect(
+        AuthService.login({
+          email: 'test@example.com',
+          password: 'wrong',
+        })
+      ).rejects.toThrow('Network error');
 
       // Test upload failure
-      await expect(DocumentService.uploadFromDevice('user123', 'key'))
-        .rejects.toThrow('Upload failed');
+      await expect(
+        DocumentService.uploadFromDevice('user123', 'key')
+      ).rejects.toThrow('Upload failed');
     });
 
     test('Handles permission denials', async () => {
       (DocumentService.requestPermissions as jest.Mock).mockResolvedValue({
         camera: false,
-        mediaLibrary: false
+        mediaLibrary: false,
       });
 
       const permissions = await DocumentService.requestPermissions();
@@ -259,11 +314,11 @@ describe('Integration Tests', () => {
       // Mock a service call with delay
       (DocumentService.getDocumentsPaginated as jest.Mock).mockImplementation(
         async () => {
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
           return {
             documents: [],
             totalCount: 0,
-            hasMore: false
+            hasMore: false,
           };
         }
       );

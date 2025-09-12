@@ -1,6 +1,14 @@
 // Database service for SQLite operations
 import { Platform } from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
+import { StorageQuotaManager } from '../../utils/storageQuota';
+
+export class QuotaExceededError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'QuotaExceededError';
+  }
+}
 
 export interface User {
   id: string;
@@ -452,12 +460,31 @@ export class DatabaseService {
     details: string,
     ipAddress?: string
   ): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
-
     const id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
     const timestamp = new Date().toISOString();
 
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const auditLog: AuditLog = {
+          id,
+          userId,
+          action,
+          details,
+          timestamp,
+          ipAddress,
+        };
+        const auditLogs = JSON.parse(
+          localStorage.getItem('docsshelf_audit_logs') || '[]'
+        );
+        auditLogs.push(auditLog);
+        localStorage.setItem('docsshelf_audit_logs', JSON.stringify(auditLogs));
+        return;
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       await this.db.executeSql(
         'INSERT INTO audit_logs (id, userId, action, details, timestamp, ipAddress) VALUES (?, ?, ?, ?, ?, ?)',
         [id, userId, action, details, timestamp, ipAddress || null]
@@ -501,14 +528,67 @@ export class DatabaseService {
     category?: string,
     folder?: string,
     tags?: string[],
-    ocrText?: string
+    ocrText?: string,
+    existingId?: string // Add optional existing ID parameter
   ): Promise<string> {
-    if (!this.db) throw new Error('Database not initialized');
-
-    const id = Date.now().toString();
+    const id =
+      existingId ||
+      `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${Math.random().toString(36).substr(2, 5)}`;
     const now = new Date().toISOString();
 
+    const document: Document = {
+      id,
+      userId,
+      name,
+      path,
+      size,
+      mimeType,
+      category,
+      folder,
+      tags: tags || [],
+      createdAt: now,
+      updatedAt: now,
+      ocrText,
+      isSynced: false,
+    };
+
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const documentJson = JSON.stringify(document);
+        const documentSize = documentJson.length;
+
+        // Check storage quota before saving
+        if (!StorageQuotaManager.hasSpaceFor(documentSize)) {
+          const quotaStatus = StorageQuotaManager.checkQuotaStatus();
+          
+          if (quotaStatus === 'critical') {
+            // Try to free space
+            const spaceFreed =
+              await StorageQuotaManager.ensureSpaceFor(documentSize);
+            if (!spaceFreed) {
+              throw new QuotaExceededError(
+                'Storage quota exceeded and cleanup failed. Please manually delete some documents.'
+              );
+            }
+          } else {
+            throw new QuotaExceededError(
+              'Storage quota exceeded. Please delete some documents to free space.'
+            );
+          }
+        }
+
+        const documents = JSON.parse(
+          localStorage.getItem('docsshelf_documents') || '[]'
+        );
+        documents.push(document);
+        localStorage.setItem('docsshelf_documents', JSON.stringify(documents));
+        return id;
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       await this.db.executeSql(
         `INSERT INTO documents (id, userId, name, path, size, mimeType, category, folder, tags, ocrText, createdAt, updatedAt, isSynced)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -542,9 +622,23 @@ export class DatabaseService {
   }
 
   static async getDocumentsByUser(userId: string): Promise<Document[]> {
-    if (!this.db) throw new Error('Database not initialized');
-
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const documents = JSON.parse(
+          localStorage.getItem('docsshelf_documents') || '[]'
+        );
+        return documents
+          .filter((doc: Document) => doc.userId === userId)
+          .sort(
+            (a: Document, b: Document) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       const [results] = await this.db.executeSql(
         'SELECT * FROM documents WHERE userId = ? ORDER BY createdAt DESC',
         [userId]
@@ -572,9 +666,30 @@ export class DatabaseService {
     page: number = 1,
     pageSize: number = 50
   ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
-    if (!this.db) throw new Error('Database not initialized');
-
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const allDocuments = JSON.parse(
+          localStorage.getItem('docsshelf_documents') || '[]'
+        );
+        const userDocuments = allDocuments
+          .filter((doc: Document) => doc.userId === userId)
+          .sort(
+            (a: Document, b: Document) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+
+        const totalCount = userDocuments.length;
+        const offset = (page - 1) * pageSize;
+        const documents = userDocuments.slice(offset, offset + pageSize);
+        const hasMore = offset + documents.length < totalCount;
+
+        return { documents, totalCount, hasMore };
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       // Get total count
       const [countResult] = await this.db.executeSql(
         'SELECT COUNT(*) as total FROM documents WHERE userId = ?',
@@ -615,9 +730,41 @@ export class DatabaseService {
     page: number = 1,
     pageSize: number = 50
   ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
-    if (!this.db) throw new Error('Database not initialized');
-
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const allDocuments = JSON.parse(
+          localStorage.getItem('docsshelf_documents') || '[]'
+        );
+        const lowerQuery = query.toLowerCase();
+
+        const filteredDocuments = allDocuments
+          .filter((doc: Document) => {
+            if (doc.userId !== userId) return false;
+            return (
+              doc.name.toLowerCase().includes(lowerQuery) ||
+              (doc.category || '').toLowerCase().includes(lowerQuery) ||
+              doc.tags.some((tag: string) =>
+                tag.toLowerCase().includes(lowerQuery)
+              )
+            );
+          })
+          .sort(
+            (a: Document, b: Document) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+
+        const totalCount = filteredDocuments.length;
+        const offset = (page - 1) * pageSize;
+        const documents = filteredDocuments.slice(offset, offset + pageSize);
+        const hasMore = offset + documents.length < totalCount;
+
+        return { documents, totalCount, hasMore };
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       const lowerQuery = query.toLowerCase();
       const searchPattern = `%${lowerQuery}%`;
 
@@ -807,9 +954,34 @@ export class DatabaseService {
       createdAt: string;
     }>
   > {
-    if (!this.db) throw new Error('Database not initialized');
-
     try {
+      // Handle web storage
+      if (Platform.OS === 'web') {
+        const categories = JSON.parse(
+          localStorage.getItem('docsshelf_categories') || '[]'
+        );
+        const documents = JSON.parse(
+          localStorage.getItem('docsshelf_documents') || '[]'
+        );
+
+        return categories
+          .filter((cat: Category) => cat.userId === userId)
+          .map((cat: Category) => {
+            const documentCount = documents.filter(
+              (doc: Document) =>
+                doc.category === cat.id && doc.userId === userId
+            ).length;
+            return {
+              ...cat,
+              documentCount,
+            };
+          })
+          .sort((a: Category, b: Category) => a.name.localeCompare(b.name));
+      }
+
+      // Handle SQLite (mobile)
+      if (!this.db) throw new Error('Database not initialized');
+
       await this.ensureCategoryColumnsExist();
 
       const [results] = await this.db.executeSql(

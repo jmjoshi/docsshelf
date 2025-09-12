@@ -13,7 +13,7 @@ describe('DatabaseService', () => {
     jest.clearAllMocks();
     mockDb = {
       executeSql: jest.fn(),
-      close: jest.fn()
+      close: jest.fn(),
     };
     (DatabaseService as any).db = mockDb;
   });
@@ -25,7 +25,9 @@ describe('DatabaseService', () => {
   describe('initDatabase', () => {
     it('should initialize database successfully', async () => {
       const mockOpenDatabase = jest.fn().mockReturnValue(mockDb);
-      (require('react-native-sqlite-storage').openDatabase as jest.Mock).mockImplementation(mockOpenDatabase);
+      (
+        require('react-native-sqlite-storage').openDatabase as jest.Mock
+      ).mockImplementation(mockOpenDatabase);
 
       // Mock successful migration
       mockDb.executeSql.mockImplementation((query: string) => {
@@ -33,16 +35,20 @@ describe('DatabaseService', () => {
           return Promise.resolve([{ rows: { length: 0 } }]);
         }
         if (query.includes('migrations')) {
-          return Promise.resolve([{ rows: { item: () => ({ currentVersion: 0 }) } }]);
+          return Promise.resolve([
+            { rows: { item: () => ({ currentVersion: 0 }) } },
+          ]);
         }
         return Promise.resolve([]);
       });
 
       await DatabaseService.initDatabase();
 
-      expect(require('react-native-sqlite-storage').openDatabase).toHaveBeenCalledWith({
+      expect(
+        require('react-native-sqlite-storage').openDatabase
+      ).toHaveBeenCalledWith({
         name: 'DocsShelf.db',
-        location: 'default'
+        location: 'default',
       });
       expect(mockDb.executeSql).toHaveBeenCalled();
     });
@@ -56,7 +62,7 @@ describe('DatabaseService', () => {
         lastName: 'Doe',
         phoneNumbers: [{ type: 'mobile', number: '1234567890' }],
         passwordHash: 'hashedPassword',
-        salt: 'salt123'
+        salt: 'salt123',
       };
 
       mockDb.executeSql.mockResolvedValue([]);
@@ -71,7 +77,7 @@ describe('DatabaseService', () => {
         ...userData,
         id: expect.any(String),
         createdAt: expect.any(String),
-        updatedAt: expect.any(String)
+        updatedAt: expect.any(String),
       });
     });
   });
@@ -87,30 +93,36 @@ describe('DatabaseService', () => {
         passwordHash: 'hash',
         salt: 'salt',
         createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z'
+        updatedAt: '2023-01-01T00:00:00.000Z',
       };
 
-      mockDb.executeSql.mockResolvedValue([{
-        rows: {
-          length: 1,
-          item: () => mockUser
-        }
-      }]);
+      mockDb.executeSql.mockResolvedValue([
+        {
+          rows: {
+            length: 1,
+            item: () => mockUser,
+          },
+        },
+      ]);
 
       const result = await DatabaseService.getUserByEmail('test@example.com');
 
       expect(result).toEqual({
         ...mockUser,
-        phoneNumbers: [{ type: 'mobile', number: '1234567890' }]
+        phoneNumbers: [{ type: 'mobile', number: '1234567890' }],
       });
     });
 
     it('should return null when user not found', async () => {
-      mockDb.executeSql.mockResolvedValue([{
-        rows: { length: 0 }
-      }]);
+      mockDb.executeSql.mockResolvedValue([
+        {
+          rows: { length: 0 },
+        },
+      ]);
 
-      const result = await DatabaseService.getUserByEmail('nonexistent@example.com');
+      const result = await DatabaseService.getUserByEmail(
+        'nonexistent@example.com'
+      );
 
       expect(result).toBe(null);
     });
@@ -155,78 +167,103 @@ describe('DatabaseService', () => {
           tags: '["tag1","tag2"]',
           createdAt: '2023-01-01T00:00:00.000Z',
           updatedAt: '2023-01-01T00:00:00.000Z',
-          isSynced: 0
-        }
+          isSynced: 0,
+        },
       ];
 
-      mockDb.executeSql.mockResolvedValue([{
-        rows: {
-          length: 1,
-          item: (index: number) => mockDocs[index]
-        }
-      }]);
+      mockDb.executeSql.mockResolvedValue([
+        {
+          rows: {
+            length: 1,
+            item: (index: number) => mockDocs[index],
+          },
+        },
+      ]);
 
       const result = await DatabaseService.getDocumentsByUser('user123');
 
-      expect(result).toEqual([{
-        ...mockDocs[0],
-        tags: ['tag1', 'tag2'],
-        isSynced: false
-      }]);
+      expect(result).toEqual([
+        {
+          ...mockDocs[0],
+          tags: ['tag1', 'tag2'],
+          isSynced: false,
+        },
+      ]);
     });
   });
 
   describe('getDocumentsByUserPaginated', () => {
     it('should return paginated documents', async () => {
-      const mockDocs = [{
-        id: 'doc1',
-        userId: 'user123',
-        name: 'doc1.pdf',
-        tags: '[]',
-        isSynced: 0
-      }];
+      const mockDocs = [
+        {
+          id: 'doc1',
+          userId: 'user123',
+          name: 'doc1.pdf',
+          tags: '[]',
+          isSynced: 0,
+        },
+      ];
 
       mockDb.executeSql
         .mockResolvedValueOnce([{ rows: { item: () => ({ total: 25 }) } }]) // Count query
-        .mockResolvedValueOnce([{ rows: { length: 1, item: () => mockDocs[0] } }]); // Data query
+        .mockResolvedValueOnce([
+          { rows: { length: 1, item: () => mockDocs[0] } },
+        ]); // Data query
 
-      const result = await DatabaseService.getDocumentsByUserPaginated('user123', 1, 10);
+      const result = await DatabaseService.getDocumentsByUserPaginated(
+        'user123',
+        1,
+        10
+      );
 
       expect(result).toEqual({
-        documents: [{
-          ...mockDocs[0],
-          tags: [],
-          isSynced: false
-        }],
+        documents: [
+          {
+            ...mockDocs[0],
+            tags: [],
+            isSynced: false,
+          },
+        ],
         totalCount: 25,
-        hasMore: true
+        hasMore: true,
       });
     });
   });
 
   describe('searchDocumentsPaginated', () => {
     it('should search documents with pagination', async () => {
-      const mockDocs = [{
-        id: 'doc1',
-        name: 'work_report.pdf',
-        tags: '[]',
-        isSynced: 0
-      }];
+      const mockDocs = [
+        {
+          id: 'doc1',
+          name: 'work_report.pdf',
+          tags: '[]',
+          isSynced: 0,
+        },
+      ];
 
       mockDb.executeSql
         .mockResolvedValueOnce([{ rows: { item: () => ({ total: 5 }) } }])
-        .mockResolvedValueOnce([{ rows: { length: 1, item: () => mockDocs[0] } }]);
+        .mockResolvedValueOnce([
+          { rows: { length: 1, item: () => mockDocs[0] } },
+        ]);
 
-      const result = await DatabaseService.searchDocumentsPaginated('user123', 'work', 1, 10);
+      const result = await DatabaseService.searchDocumentsPaginated(
+        'user123',
+        'work',
+        1,
+        10
+      );
 
       expect(result).toEqual({
-        documents: [{
-          ...mockDocs[0],
-          tags: [],
-          isSynced: false
-        }],
+        documents: [
+          {
+            ...mockDocs[0],
+            tags: [],
+            isSynced: false,
+          },
+        ],
         totalCount: 5,
-        hasMore: true
+        hasMore: true,
       });
     });
   });
@@ -237,7 +274,7 @@ describe('DatabaseService', () => {
 
       await DatabaseService.updateDocument('doc123', {
         name: 'updated.pdf',
-        category: 'Updated'
+        category: 'Updated',
       });
 
       expect(mockDb.executeSql).toHaveBeenCalledWith(
@@ -275,21 +312,25 @@ describe('DatabaseService', () => {
 
   describe('getAuditLogs', () => {
     it('should return audit logs', async () => {
-      const mockLogs = [{
-        id: 'log1',
-        userId: 'user123',
-        action: 'LOGIN_SUCCESS',
-        details: 'User logged in',
-        timestamp: '2023-01-01T00:00:00.000Z',
-        ipAddress: null
-      }];
+      const mockLogs = [
+        {
+          id: 'log1',
+          userId: 'user123',
+          action: 'LOGIN_SUCCESS',
+          details: 'User logged in',
+          timestamp: '2023-01-01T00:00:00.000Z',
+          ipAddress: null,
+        },
+      ];
 
-      mockDb.executeSql.mockResolvedValue([{
-        rows: {
-          length: 1,
-          item: () => mockLogs[0]
-        }
-      }]);
+      mockDb.executeSql.mockResolvedValue([
+        {
+          rows: {
+            length: 1,
+            item: () => mockLogs[0],
+          },
+        },
+      ]);
 
       const result = await DatabaseService.getAuditLogs('user123', 10);
 
@@ -301,7 +342,11 @@ describe('DatabaseService', () => {
     it('should create category successfully', async () => {
       mockDb.executeSql.mockResolvedValue([]);
 
-      const result = await DatabaseService.createCategory('user123', 'New Category', '#FF0000');
+      const result = await DatabaseService.createCategory({
+        userId: 'user123',
+        name: 'New Category',
+        color: '#FF0000',
+      });
 
       expect(mockDb.executeSql).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO categories'),
@@ -313,21 +358,25 @@ describe('DatabaseService', () => {
 
   describe('getCategoriesByUser', () => {
     it('should return user categories', async () => {
-      const mockCategories = [{
-        id: 'cat1',
-        name: 'Work',
-        color: '#FF0000',
-        userId: 'user123',
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z'
-      }];
+      const mockCategories = [
+        {
+          id: 'cat1',
+          name: 'Work',
+          color: '#FF0000',
+          userId: 'user123',
+          createdAt: '2023-01-01T00:00:00.000Z',
+          updatedAt: '2023-01-01T00:00:00.000Z',
+        },
+      ];
 
-      mockDb.executeSql.mockResolvedValue([{
-        rows: {
-          length: 1,
-          item: () => mockCategories[0]
-        }
-      }]);
+      mockDb.executeSql.mockResolvedValue([
+        {
+          rows: {
+            length: 1,
+            item: () => mockCategories[0],
+          },
+        },
+      ]);
 
       const result = await DatabaseService.getCategoriesByUser('user123');
 
@@ -339,7 +388,12 @@ describe('DatabaseService', () => {
     it('should bulk insert documents successfully', async () => {
       const documents = [
         { name: 'doc1.pdf', path: '/path/doc1.pdf', size: 1024, tags: [] },
-        { name: 'doc2.pdf', path: '/path/doc2.pdf', size: 2048, tags: ['test'] }
+        {
+          name: 'doc2.pdf',
+          path: '/path/doc2.pdf',
+          size: 2048,
+          tags: ['test'],
+        },
       ];
 
       mockDb.executeSql
@@ -348,7 +402,10 @@ describe('DatabaseService', () => {
         .mockResolvedValueOnce([]) // Second insert
         .mockResolvedValueOnce([]); // COMMIT
 
-      const result = await DatabaseService.bulkInsertDocuments('user123', documents);
+      const result = await DatabaseService.bulkInsertDocuments(
+        'user123',
+        documents
+      );
 
       expect(result).toHaveLength(2);
       expect(mockDb.executeSql).toHaveBeenCalledWith('BEGIN TRANSACTION');
@@ -356,15 +413,18 @@ describe('DatabaseService', () => {
     });
 
     it('should rollback on error', async () => {
-      const documents = [{ name: 'doc1.pdf', path: '/path/doc1.pdf', size: 1024, tags: [] }];
+      const documents = [
+        { name: 'doc1.pdf', path: '/path/doc1.pdf', size: 1024, tags: [] },
+      ];
 
       mockDb.executeSql
         .mockResolvedValueOnce([]) // BEGIN TRANSACTION
         .mockRejectedValueOnce(new Error('Insert failed')) // Insert fails
         .mockResolvedValueOnce([]); // ROLLBACK
 
-      await expect(DatabaseService.bulkInsertDocuments('user123', documents))
-        .rejects.toThrow('Insert failed');
+      await expect(
+        DatabaseService.bulkInsertDocuments('user123', documents)
+      ).rejects.toThrow('Insert failed');
 
       expect(mockDb.executeSql).toHaveBeenCalledWith('ROLLBACK');
     });

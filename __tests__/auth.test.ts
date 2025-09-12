@@ -26,12 +26,14 @@ describe('AuthService', () => {
         salt: 'salt123',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        phoneNumbers: []
+        phoneNumbers: [],
       };
 
       (DatabaseService.createUser as jest.Mock).mockResolvedValue(mockUser);
       (EncryptionService.generateKey as jest.Mock).mockReturnValue('salt123');
-      (EncryptionService.deriveKey as jest.Mock).mockReturnValue('hashedPassword');
+      (EncryptionService.deriveKey as jest.Mock).mockReturnValue(
+        'hashedPassword'
+      );
       (EncryptionService.storeKey as jest.Mock).mockResolvedValue(undefined);
 
       const userData = {
@@ -39,7 +41,7 @@ describe('AuthService', () => {
         lastName: 'Doe',
         email: 'test@example.com',
         password: 'StrongPass123!',
-        phoneNumbers: []
+        phoneNumbers: [],
       };
 
       const result = await AuthService.register(userData);
@@ -47,9 +49,12 @@ describe('AuthService', () => {
       expect(DatabaseService.createUser).toHaveBeenCalledWith({
         ...userData,
         passwordHash: 'hashedPassword',
-        salt: 'salt123'
+        salt: 'salt123',
       });
-      expect(EncryptionService.storeKey).toHaveBeenCalledWith('salt123', 'DocsShelf-user123');
+      expect(EncryptionService.storeKey).toHaveBeenCalledWith(
+        'salt123',
+        'DocsShelf-user123'
+      );
       expect(result).toEqual(mockUser);
     });
 
@@ -59,10 +64,12 @@ describe('AuthService', () => {
         lastName: 'Doe',
         email: 'test@example.com',
         password: 'weak',
-        phoneNumbers: []
+        phoneNumbers: [],
       };
 
-      await expect(AuthService.register(userData)).rejects.toThrow('Password must be at least 12 characters long');
+      await expect(AuthService.register(userData)).rejects.toThrow(
+        'Password must be at least 12 characters long'
+      );
     });
   });
 
@@ -77,25 +84,40 @@ describe('AuthService', () => {
         salt: 'salt123',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        phoneNumbers: []
+        phoneNumbers: [],
       };
 
       (DatabaseService.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
-      (EncryptionService.deriveKey as jest.Mock).mockReturnValue('hashedPassword');
+      (EncryptionService.deriveKey as jest.Mock).mockReturnValue(
+        'hashedPassword'
+      );
       (DatabaseService.logAudit as jest.Mock).mockResolvedValue(undefined);
 
-      const result = await AuthService.login({ email: 'test@example.com', password: 'StrongPass123!' });
+      const result = await AuthService.login({
+        email: 'test@example.com',
+        password: 'StrongPass123!',
+      });
 
-      expect(DatabaseService.getUserByEmail).toHaveBeenCalledWith('test@example.com');
-      expect(DatabaseService.logAudit).toHaveBeenCalledWith('user123', 'LOGIN_SUCCESS', 'User logged in');
+      expect(DatabaseService.getUserByEmail).toHaveBeenCalledWith(
+        'test@example.com'
+      );
+      expect(DatabaseService.logAudit).toHaveBeenCalledWith(
+        'user123',
+        'LOGIN_SUCCESS',
+        'User logged in'
+      );
       expect(result).toEqual(mockUser);
     });
 
     it('should throw error for invalid credentials', async () => {
       (DatabaseService.getUserByEmail as jest.Mock).mockResolvedValue(null);
 
-      await expect(AuthService.login({ email: 'invalid@example.com', password: 'password' }))
-        .rejects.toThrow('Invalid credentials');
+      await expect(
+        AuthService.login({
+          email: 'invalid@example.com',
+          password: 'password',
+        })
+      ).rejects.toThrow('Invalid credentials');
     });
 
     it('should throw error for wrong password', async () => {
@@ -103,17 +125,25 @@ describe('AuthService', () => {
         id: 'user123',
         email: 'test@example.com',
         passwordHash: 'correctHash',
-        salt: 'salt123'
+        salt: 'salt123',
       };
 
       (DatabaseService.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
       (EncryptionService.deriveKey as jest.Mock).mockReturnValue('wrongHash');
       (DatabaseService.logAudit as jest.Mock).mockResolvedValue(undefined);
 
-      await expect(AuthService.login({ email: 'test@example.com', password: 'wrongpassword' }))
-        .rejects.toThrow('Invalid credentials');
+      await expect(
+        AuthService.login({
+          email: 'test@example.com',
+          password: 'wrongpassword',
+        })
+      ).rejects.toThrow('Invalid credentials');
 
-      expect(DatabaseService.logAudit).toHaveBeenCalledWith('user123', 'LOGIN_FAILED', 'Invalid password');
+      expect(DatabaseService.logAudit).toHaveBeenCalledWith(
+        'user123',
+        'LOGIN_FAILED',
+        'Invalid password'
+      );
     });
   });
 
@@ -121,10 +151,12 @@ describe('AuthService', () => {
     it('should authenticate successfully when biometrics available', async () => {
       const mockBiometrics = {
         isSensorAvailable: jest.fn().mockResolvedValue({ available: true }),
-        simplePrompt: jest.fn().mockResolvedValue({ success: true })
+        simplePrompt: jest.fn().mockResolvedValue({ success: true }),
       };
 
-      (AuthService as any).biometrics = mockBiometrics;
+      (
+        AuthService as unknown as { biometrics: typeof mockBiometrics }
+      ).biometrics = mockBiometrics;
 
       const result = await AuthService.authenticateWithBiometrics();
 
@@ -132,16 +164,18 @@ describe('AuthService', () => {
       expect(mockBiometrics.isSensorAvailable).toHaveBeenCalled();
       expect(mockBiometrics.simplePrompt).toHaveBeenCalledWith({
         promptMessage: 'Authenticate to access DocsShelf',
-        cancelButtonText: 'Cancel'
+        cancelButtonText: 'Cancel',
       });
     });
 
     it('should return false when biometrics not available', async () => {
       const mockBiometrics = {
-        isSensorAvailable: jest.fn().mockResolvedValue({ available: false })
+        isSensorAvailable: jest.fn().mockResolvedValue({ available: false }),
       };
 
-      (AuthService as any).biometrics = mockBiometrics;
+      (
+        AuthService as unknown as { biometrics: typeof mockBiometrics }
+      ).biometrics = mockBiometrics;
 
       const result = await AuthService.authenticateWithBiometrics();
 
@@ -151,11 +185,15 @@ describe('AuthService', () => {
 
   describe('getUserEncryptionKey', () => {
     it('should retrieve encryption key successfully', async () => {
-      (EncryptionService.getKey as jest.Mock).mockResolvedValue('encryptionKey123');
+      (EncryptionService.getKey as jest.Mock).mockResolvedValue(
+        'encryptionKey123'
+      );
 
       const result = await AuthService.getUserEncryptionKey('user123');
 
-      expect(EncryptionService.getKey).toHaveBeenCalledWith('DocsShelf-user123');
+      expect(EncryptionService.getKey).toHaveBeenCalledWith(
+        'DocsShelf-user123'
+      );
       expect(result).toBe('encryptionKey123');
     });
 
@@ -174,7 +212,7 @@ describe('AuthService', () => {
         id: 'user123',
         email: 'test@example.com',
         passwordHash: 'oldHash',
-        salt: 'oldSalt'
+        salt: 'oldSalt',
       };
 
       (DatabaseService.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
@@ -184,13 +222,21 @@ describe('AuthService', () => {
       (DatabaseService.updateUser as jest.Mock).mockResolvedValue(undefined);
       (DatabaseService.logAudit as jest.Mock).mockResolvedValue(undefined);
 
-      await AuthService.changePassword('user123', 'OldPass123!', 'NewStrongPass123!');
+      await AuthService.changePassword(
+        'user123',
+        'OldPass123!',
+        'NewStrongPass123!'
+      );
 
       expect(DatabaseService.updateUser).toHaveBeenCalledWith('user123', {
         passwordHash: 'newHash',
-        salt: 'newSalt'
+        salt: 'newSalt',
       });
-      expect(DatabaseService.logAudit).toHaveBeenCalledWith('user123', 'PASSWORD_CHANGED', 'Password changed successfully');
+      expect(DatabaseService.logAudit).toHaveBeenCalledWith(
+        'user123',
+        'PASSWORD_CHANGED',
+        'Password changed successfully'
+      );
     });
 
     it('should throw error for incorrect current password', async () => {
@@ -198,14 +244,19 @@ describe('AuthService', () => {
         id: 'user123',
         email: 'test@example.com',
         passwordHash: 'correctHash',
-        salt: 'salt123'
+        salt: 'salt123',
       };
 
       (DatabaseService.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
       (EncryptionService.deriveKey as jest.Mock).mockReturnValue('wrongHash');
 
-      await expect(AuthService.changePassword('user123', 'wrongpassword', 'NewStrongPass123!'))
-        .rejects.toThrow('Current password is incorrect');
+      await expect(
+        AuthService.changePassword(
+          'user123',
+          'wrongpassword',
+          'NewStrongPass123!'
+        )
+      ).rejects.toThrow('Current password is incorrect');
     });
   });
 });

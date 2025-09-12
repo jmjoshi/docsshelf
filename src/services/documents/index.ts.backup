@@ -1,0 +1,297 @@
+// Document service for upload, scanning, and management
+import { Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+// import { Camera } from 'expo-camera'; // Temporarily disabled due to build issues
+import { StorageService } from '../storage';
+import { DatabaseService, Document } from '../database';
+
+export interface UploadResult {
+  id: string;
+  name: string;
+  path: string;
+  size: number;
+  mimeType: string;
+}
+
+export class DocumentService {
+  // Request permissions for camera and media library
+  static async requestPermissions(): Promise<{
+    camera: boolean;
+    mediaLibrary: boolean;
+  }> {
+    if (Platform.OS === 'web') {
+      // Web doesn't need explicit permissions for file input
+      return {
+        camera: true,
+        mediaLibrary: true,
+      };
+    }
+
+    // Temporarily disabled camera permissions due to build issues
+    // const cameraPermission = await Camera.requestCameraPermissionsAsync();
+    const cameraPermission = { granted: false }; // Mock response
+    
+    try {
+      const mediaLibraryPermission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      return {
+        camera: cameraPermission.granted,
+        mediaLibrary: mediaLibraryPermission.granted,
+      };
+    } catch (error) {
+      console.warn('Failed to request permissions:', error);
+      return {
+        camera: false,
+        mediaLibrary: false,
+      };
+    }
+  }
+
+  // Upload document from device
+  static async uploadFromDevice(
+    userId: string,
+    encryptionKey: string
+  ): Promise<UploadResult | null> {
+    if (Platform.OS === 'web') {
+      // Web-specific implementation using HTML file input
+      return new Promise((resolve) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '*/*';
+        input.onchange = async (event: Event) => {
+          const target = event.target as HTMLInputElement;
+          const file = target.files?.[0];
+          if (!file) {
+            resolve(null);
+            return;
+          }
+
+          try {
+            const reader = new FileReader();
+            reader.onload = async () => {
+              const base64Data = (reader.result as string).split(',')[1];
+              
+              // Save encrypted file
+              const filePath = await StorageService.saveEncryptedFile(
+                base64Data,
+                file.name,
+                userId,
+                encryptionKey,
+                file.type || 'application/octet-stream',
+                undefined, // category
+                undefined // folder
+              );
+
+              const result: UploadResult = {
+                id: filePath.split('/').pop() || '',
+                name: file.name,
+                path: filePath,
+                size: file.size,
+                mimeType: file.type || 'application/octet-stream',
+              };
+              resolve(result);
+            };
+            reader.readAsDataURL(file);
+          } catch (error) {
+            console.error('Failed to upload from device:', error);
+            resolve(null);
+          }
+        };
+        input.click();
+      });
+    }
+
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (result.canceled) {
+        return null;
+      }
+
+      const asset = result.assets[0];
+      const fileName = asset.uri.split('/').pop() || 'uploaded_file';
+      const mimeType =
+        asset.type === 'image'
+          ? 'image/jpeg'
+          : asset.type || 'application/octet-stream';
+
+      // Read file data
+      const fileData = await FileSystem.readAsStringAsync(asset.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Save encrypted file
+      const filePath = await StorageService.saveEncryptedFile(
+        fileData,
+        fileName,
+        userId,
+        encryptionKey,
+        mimeType,
+        undefined, // category
+        undefined // folder
+      );
+
+      // Get file info
+      const fileInfo = await StorageService.getFileInfo(filePath);
+
+      return {
+        id: filePath.split('/').pop() || '',
+        name: fileName,
+        path: filePath,
+        size: fileInfo.size,
+        mimeType,
+      };
+    } catch (error) {
+      console.error('Failed to upload from device:', error);
+      throw error;
+    }
+        undefined, // category
+        undefined // folder
+      );
+
+      // Get file info
+      const fileInfo = await StorageService.getFileInfo(filePath);
+
+      return {
+        id: filePath.split('/').pop() || '',
+        name: fileName,
+        path: filePath,
+        size: fileInfo.size,
+        mimeType,
+      };
+    } catch (error) {
+      console.error('Failed to upload from device:', error);
+      throw error;
+    }
+  }
+
+  // Scan document using camera
+  static async scanWithCamera(
+    userId: string, // eslint-disable-line @typescript-eslint/no-unused-vars
+    encryptionKey: string // eslint-disable-line @typescript-eslint/no-unused-vars
+  ): Promise<UploadResult | null> {
+    // Temporarily disabled due to build issues
+    throw new Error(
+      'Camera functionality is temporarily disabled due to build issues. ' +
+        'Please use upload from device instead.'
+    );
+  }
+
+  // Get documents by category
+  static async getDocumentsByCategory(
+    userId: string,
+    category?: string
+  ): Promise<Document[]> {
+    try {
+      const documents = await DatabaseService.getDocumentsByUser(userId);
+      if (category) {
+        return documents.filter((doc: Document) => doc.category === category);
+      }
+      return documents;
+    } catch (error) {
+      console.error('Failed to get documents by category:', error);
+      throw error;
+    }
+  }
+
+  // Get documents with pagination
+  static async getDocumentsPaginated(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
+    try {
+      return await DatabaseService.getDocumentsByUserPaginated(
+        userId,
+        page,
+        pageSize
+      );
+    } catch (error) {
+      console.error('Failed to get paginated documents:', error);
+      throw error;
+    }
+  }
+
+  // Search documents
+  static async searchDocuments(
+    userId: string,
+    query: string
+  ): Promise<Document[]> {
+    try {
+      const documents = await DatabaseService.getDocumentsByUser(userId);
+      const lowerQuery = query.toLowerCase();
+      return documents.filter(
+        (doc: Document) =>
+          doc.name.toLowerCase().includes(lowerQuery) ||
+          (doc.category && doc.category.toLowerCase().includes(lowerQuery)) ||
+          (doc.tags &&
+            doc.tags.some((tag: string) =>
+              tag.toLowerCase().includes(lowerQuery)
+            ))
+      );
+    } catch (error) {
+      console.error('Failed to search documents:', error);
+      throw error;
+    }
+  }
+
+  // Search documents with pagination
+  static async searchDocumentsPaginated(
+    userId: string,
+    query: string,
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<{ documents: Document[]; totalCount: number; hasMore: boolean }> {
+    try {
+      return await DatabaseService.searchDocumentsPaginated(
+        userId,
+        query,
+        page,
+        pageSize
+      );
+    } catch (error) {
+      console.error('Failed to search documents paginated:', error);
+      throw error;
+    }
+  }
+
+  // Create category
+  static async createCategory(
+    userId: string,
+    name: string,
+    color: string = '#007AFF'
+  ): Promise<string> {
+    try {
+      const id = await DatabaseService.createCategory(userId, name, color);
+      return id;
+    } catch (error) {
+      console.error('Failed to create category:', error);
+      throw error;
+    }
+  }
+
+  // Update document category
+  static async updateDocumentCategory(
+    documentId: string,
+    category: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      await DatabaseService.updateDocument(documentId, { category, userId });
+      await DatabaseService.logAudit(
+        userId,
+        'DOCUMENT_CATEGORY_UPDATED',
+        `Document ${documentId} category updated to ${category}`
+      );
+    } catch (error) {
+      console.error('Failed to update document category:', error);
+      throw error;
+    }
+  }
+}

@@ -32,7 +32,11 @@ export class AuthService {
 
       // Generate salt and hash password
       const salt = EncryptionService.generateKey().substring(0, 32);
-      const passwordHash = EncryptionService.deriveKey(userData.password, salt);
+      const passwordHashData = EncryptionService.deriveKey(
+        userData.password,
+        salt
+      );
+      const passwordHash = passwordHashData.key;
 
       // Create user in database
       const user = await DatabaseService.createUser({
@@ -61,10 +65,11 @@ export class AuthService {
       }
 
       // Verify password
-      const derivedHash = EncryptionService.deriveKey(
+      const derivedHashData = EncryptionService.deriveKey(
         credentials.password,
         user.salt
       );
+      const derivedHash = derivedHashData.key;
       if (derivedHash !== user.passwordHash) {
         await DatabaseService.logAudit(
           user.id,
@@ -172,16 +177,17 @@ export class AuthService {
     newPassword: string
   ): Promise<void> {
     try {
-      const user = await DatabaseService.getUserByEmail(''); // This needs user email, need to modify
-      if (!user || user.id !== userId) {
+      const user = await DatabaseService.getUserById(userId);
+      if (!user) {
         throw new Error('User not found');
       }
 
       // Verify current password
-      const currentHash = EncryptionService.deriveKey(
+      const currentHashData = EncryptionService.deriveKey(
         currentPassword,
         user.salt
       );
+      const currentHash = currentHashData.key;
       if (currentHash !== user.passwordHash) {
         throw new Error('Current password is incorrect');
       }
@@ -191,7 +197,11 @@ export class AuthService {
 
       // Generate new salt and hash
       const newSalt = EncryptionService.generateKey().substring(0, 32);
-      const newPasswordHash = EncryptionService.deriveKey(newPassword, newSalt);
+      const newPasswordHashData = EncryptionService.deriveKey(
+        newPassword,
+        newSalt
+      );
+      const newPasswordHash = newPasswordHashData.key;
 
       // Update user
       await DatabaseService.updateUser(userId, {

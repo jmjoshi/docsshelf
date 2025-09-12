@@ -1,8 +1,6 @@
-/// <reference types="jest" />
-
 // Component tests for React Native components
 import React from 'react';
-import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import DocumentsListScreen from '../src/screens/Documents/DocumentsList';
@@ -44,8 +42,8 @@ jest.mock('expo-camera', () => ({
   getCameraPermissionsAsync: jest.fn().mockResolvedValue({ granted: true }),
 }));
 
-// Mock react-native-haptic-feedback
-jest.mock('react-native-haptic-feedback', () => ({
+// Mock our haptic feedback utility
+jest.mock('../src/utils/haptic-feedback', () => ({
   trigger: jest.fn(),
   Types: {
     impactLight: 'impactLight',
@@ -71,22 +69,32 @@ jest.doMock('react-native-safe-area-context', () => ({
 // Mock react-native-paper minimally
 jest.doMock('react-native-paper', () => {
   const React = require('react');
-  
+
   return {
     Card: ({ children }: any) => React.createElement('View', null, children),
-    CardContent: ({ children }: any) => React.createElement('View', null, children),
+    CardContent: ({ children }: any) =>
+      React.createElement('View', null, children),
     Title: ({ children }: any) => React.createElement('Text', null, children),
-    Paragraph: ({ children }: any) => React.createElement('Text', null, children),
-    Button: ({ children, onPress, disabled, loading }: any) => 
-      React.createElement('TouchableOpacity', { onPress, disabled: disabled || loading }, children),
-    TextInput: ({ label, placeholder, ...props }: any) => 
-      React.createElement('TextInput', { placeholder: placeholder || label, ...props }),
-    Searchbar: ({ placeholder, ...props }: any) => 
+    Paragraph: ({ children }: any) =>
+      React.createElement('Text', null, children),
+    Button: ({ children, onPress, disabled, loading }: any) =>
+      React.createElement(
+        'TouchableOpacity',
+        { onPress, disabled: disabled || loading },
+        children
+      ),
+    TextInput: ({ label, placeholder, ...props }: any) =>
+      React.createElement('TextInput', {
+        placeholder: placeholder || label,
+        ...props,
+      }),
+    Searchbar: ({ placeholder, ...props }: any) =>
       React.createElement('TextInput', { placeholder, ...props }),
     Surface: ({ children }: any) => React.createElement('View', null, children),
     ActivityIndicator: () => React.createElement('View', null, 'Loading...'),
-    FAB: ({ onPress }: any) => React.createElement('TouchableOpacity', { onPress }, '+'),
-    Snackbar: ({ children, visible }: any) => 
+    FAB: ({ onPress }: any) =>
+      React.createElement('TouchableOpacity', { onPress }, '+'),
+    Snackbar: ({ children, visible }: any) =>
       visible ? React.createElement('View', null, children) : null,
     useTheme: () => ({
       colors: {
@@ -166,9 +174,11 @@ describe('DocumentsListScreen', () => {
       },
     ];
 
-    (DocumentService.getDocumentsPaginated as jest.MockedFunction<
-      typeof DocumentService.getDocumentsPaginated
-    >).mockResolvedValue({
+    (
+      DocumentService.getDocumentsPaginated as jest.MockedFunction<
+        typeof DocumentService.getDocumentsPaginated
+      >
+    ).mockResolvedValue({
       documents: mockDocuments,
       totalCount: 1,
       hasMore: false,
@@ -192,15 +202,19 @@ describe('DocumentsListScreen', () => {
   });
 
   it('handles upload document', async () => {
-    (DocumentService.requestPermissions as jest.MockedFunction<
-      typeof DocumentService.requestPermissions
-    >).mockResolvedValue({
+    (
+      DocumentService.requestPermissions as jest.MockedFunction<
+        typeof DocumentService.requestPermissions
+      >
+    ).mockResolvedValue({
       camera: true,
       mediaLibrary: true,
     });
-    (DocumentService.uploadFromDevice as jest.MockedFunction<
-      typeof DocumentService.uploadFromDevice
-    >).mockResolvedValue({
+    (
+      DocumentService.uploadFromDevice as jest.MockedFunction<
+        typeof DocumentService.uploadFromDevice
+      >
+    ).mockResolvedValue({
       id: 'newDoc',
       name: 'uploaded.pdf',
       path: '/path/uploaded.pdf',
@@ -228,15 +242,19 @@ describe('DocumentsListScreen', () => {
   });
 
   it('handles scan document', async () => {
-    (DocumentService.requestPermissions as jest.MockedFunction<
-      typeof DocumentService.requestPermissions
-    >).mockResolvedValue({
+    (
+      DocumentService.requestPermissions as jest.MockedFunction<
+        typeof DocumentService.requestPermissions
+      >
+    ).mockResolvedValue({
       camera: true,
       mediaLibrary: true,
     });
-    (DocumentService.scanWithCamera as jest.MockedFunction<
-      typeof DocumentService.scanWithCamera
-    >).mockResolvedValue({
+    (
+      DocumentService.scanWithCamera as jest.MockedFunction<
+        typeof DocumentService.scanWithCamera
+      >
+    ).mockResolvedValue({
       id: 'scanDoc',
       name: 'scan.jpg',
       path: '/path/scan.jpg',
@@ -276,7 +294,7 @@ describe('DocumentsListScreen', () => {
     fireEvent.changeText(searchInput, 'test query');
 
     await waitFor(() => {
-      expect(DocumentService.searchDocumentsPaginated).toHaveBeenCalledWith(
+      expect(DocumentService.getDocumentsPaginated).toHaveBeenCalledWith(
         'user123',
         'test query',
         1,
@@ -315,8 +333,8 @@ describe('LoginScreen', () => {
   });
 
   it('handles successful login', async () => {
-    const mockUser = { 
-      id: 'user123', 
+    const mockUser = {
+      id: 'user123',
       email: 'test@example.com',
       firstName: 'Test',
       lastName: 'User',
@@ -324,11 +342,11 @@ describe('LoginScreen', () => {
       passwordHash: 'hashedpassword',
       salt: 'salt123',
       createdAt: '2023-01-01T00:00:00Z',
-      updatedAt: '2023-01-01T00:00:00Z'
+      updatedAt: '2023-01-01T00:00:00Z',
     };
-    (AuthService.login as jest.MockedFunction<
-      typeof AuthService.login
-    >).mockResolvedValue(mockUser);
+    (
+      AuthService.login as jest.MockedFunction<typeof AuthService.login>
+    ).mockResolvedValue(mockUser);
 
     const { getByText, getByPlaceholderText } = render(
       <SafeAreaProvider>
@@ -372,9 +390,11 @@ describe('LoginScreen', () => {
   });
 
   it('handles biometric authentication', async () => {
-    (AuthService.authenticateWithBiometrics as jest.MockedFunction<
-      typeof AuthService.authenticateWithBiometrics
-    >).mockResolvedValue(true);
+    (
+      AuthService.authenticateWithBiometrics as jest.MockedFunction<
+        typeof AuthService.authenticateWithBiometrics
+      >
+    ).mockResolvedValue(true);
 
     const { getByText } = render(
       <SafeAreaProvider>
