@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../../store/store';
+import { loginUser } from '../../store/slices/authSlice';
 
 console.log('=== LOGIN SCREEN LOADING ===');
 
@@ -17,16 +17,8 @@ export default function LoginSimple({ navigation }: LoginScreenProps) {
   const dispatch = useDispatch();
 
   const handleTestLogin = () => {
-    console.log('[DEBUG] Test login pressed');
-    dispatch(
-      loginSuccess({
-        id: '1',
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User',
-        phoneNumbers: [],
-      })
-    );
+    console.log('[DEBUG] Test login pressed - navigating to Register');
+    navigation.navigate('Register');
   };
 
   return (
@@ -34,16 +26,20 @@ export default function LoginSimple({ navigation }: LoginScreenProps) {
       <Text style={styles.title}>DocsShelf Login</Text>
       <Text style={styles.subtitle}>Navigation Test</Text>
 
-      <Button mode="contained" onPress={handleTestLogin} style={styles.button}>
-        Test Login (Skip Auth)
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate('Register')}
+        style={styles.button}
+      >
+        🚀 Test Registration Feature
       </Button>
 
       <Button
         mode="outlined"
-        onPress={() => navigation.navigate('Register')}
+        onPress={handleTestLogin}
         style={styles.button}
       >
-        Go to Register
+        Quick Navigation Test
       </Button>
 
       <Text style={styles.debug}>✅ Navigation Working</Text>

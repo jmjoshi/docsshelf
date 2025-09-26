@@ -1,8 +1,8 @@
 // Document service for upload, scanning, and management
 import { Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from '../../mocks/expo-image-picker';
+import * as DocumentPicker from '../../mocks/expo-document-picker';
+import * as FileSystem from '../../mocks/expo-file-system';
 // import { Camera } from 'expo-camera'; // Temporarily disabled due to build issues
 import { StorageService } from '../storage';
 import { DatabaseService, Document, QuotaExceededError } from '../database';

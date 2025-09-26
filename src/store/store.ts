@@ -1,56 +1,24 @@
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/authSlice';
+import profileReducer from './slices/profileSlice';
+import documentsReducer from './slices/documentsSlice';
+import settingsReducer from './slices/settingsSlice';
 
-// Simplified auth state and slice
-interface AuthState {
-  user: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    phoneNumbers: { type: string; number: string }[];
-  } | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-}
-
-const initialAuthState: AuthState = {
-  user: null,
-  isAuthenticated: false,
-  isLoading: false,
-  error: null,
-};
-
-const authSlice = createSlice({
-  name: 'auth',
-  initialState: initialAuthState,
-  reducers: {
-    loginStart: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    loginSuccess: (state, action: PayloadAction<AuthState['user']>) => {
-      state.user = action.payload;
-      state.isAuthenticated = true;
-      state.isLoading = false;
-    },
-    loginFailure: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
-    logout: (state) => {
-      state.user = null;
-      state.isAuthenticated = false;
-    },
-  },
-});
-
-// Simple store without persistence
+// Enhanced store with our feature slices
 export const store = configureStore({
   reducer: {
-    auth: authSlice.reducer,
+    auth: authReducer,
+    profile: profileReducer,
+    documents: documentsReducer,
+    settings: settingsReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
 });
 
 // Create a mock persistor for compatibility
@@ -60,8 +28,6 @@ export const persistor = {
   pause: () => {},
   persist: () => {},
 };
-
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

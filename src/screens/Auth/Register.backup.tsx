@@ -1,31 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Alert, ScrollView } from 'react-native';
-import {
-  Text,
-  TextInput,
-  Button,
-  Card,
-  Title,
-  HelperText,
-  IconButton,
-} from 'react-native-paper';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm, Controller, useFieldArray, FieldErrors } from 'react-hook-form';
+import { Text, TextInput, Button, Card, Title, HelperText, IconButton } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-  registerUser,
-  selectIsLoading,
-  selectError,
-  selectRegistrationSuccess,
-  clearError,
-  clearRegistrationSuccess,
-} from '../../store/slices/authSlice';
-import { AppDispatch } from '../../store/store';
+import { loginSuccess } from '../../store/slices/authSlice';
+import { AuthService } from '../../services/auth';
 
 interface RegisterScreenProps {
   navigation: {
-    navigate: (screen: string, params?: { email?: string }) => void;
+    navigate: (screen: string) => void;
     goBack: () => void;
   };
 }
@@ -55,7 +40,7 @@ const registerSchema = yup.object().shape({
       /^[A-Za-z\s'-]+$/,
       'First name can only contain letters, spaces, hyphens, and apostrophes'
     ),
-
+  
   lastName: yup
     .string()
     .required('Last name is required')
@@ -65,28 +50,28 @@ const registerSchema = yup.object().shape({
       /^[A-Za-z\s'-]+$/,
       'Last name can only contain letters, spaces, hyphens, and apostrophes'
     ),
-
+  
   email: yup
     .string()
     .required('Email is required')
     .email('Please enter a valid email address')
     .lowercase('Email must be lowercase')
     .max(255, 'Email cannot exceed 255 characters'),
-
+  
   password: yup
     .string()
     .required('Password is required')
     .min(12, 'Password must be at least 12 characters long')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      'Password must contain uppercase, lowercase, number, and special character'
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
     ),
-
+  
   confirmPassword: yup
     .string()
     .required('Please confirm your password')
     .oneOf([yup.ref('password')], 'Passwords must match'),
-
+  
   phoneNumbers: yup
     .array()
     .of(
@@ -112,14 +97,10 @@ const registerSchema = yup.object().shape({
 });
 
 export default function RegisterScreen({ navigation }: RegisterScreenProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  
-  // Redux state
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
-  const registrationSuccess = useSelector(selectRegistrationSuccess);
+  const dispatch = useDispatch();
 
   // Initialize react-hook-form with validation schema
   const {
@@ -127,10 +108,8 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     handleSubmit,
     formState: { errors, isValid },
     watch,
-    getValues,
   } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
-    mode: 'onChange', // Validate on change for better UX
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -139,6 +118,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       confirmPassword: '',
       phoneNumbers: [{ type: 'mobile', number: '' }],
     },
+    mode: 'onChange', // Validate on change for better UX
   });
 
   // Use field array for dynamic phone numbers
@@ -162,74 +142,34 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
   };
 
   const onSubmit = async (data: RegisterFormData) => {
-    dispatch(clearError());
-    
+    setIsLoading(true);
     try {
-      await dispatch(registerUser({
-        firstName: data.firstName.trim(),
-        lastName: data.lastName.trim(),
-        email: data.email.trim().toLowerCase(),
+      const user = await AuthService.register({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
         password: data.password,
         phoneNumbers: data.phoneNumbers.filter((p) => p.number.trim()),
-      })).unwrap();
+      });
 
-      Alert.alert(
-        'Account Created Successfully!', 
-        'Please verify your email address to complete your registration.',
-        [
-          { 
-            text: 'Verify Email', 
-            onPress: () => {
-              dispatch(clearRegistrationSuccess());
-              navigation.navigate('EmailVerification', { 
-                email: data.email.trim().toLowerCase() 
-              });
-            }
-          },
-        ]
-      );
-    } catch (err) {
+      dispatch(loginSuccess(user));
+      Alert.alert('Success', 'Account created successfully!', [
+        { text: 'OK', onPress: () => navigation.navigate('Main') },
+      ]);
+    } catch (error) {
       Alert.alert(
         'Registration Failed',
-        err instanceof Error ? err.message : 'An unexpected error occurred'
+        error instanceof Error ? error.message : 'An unexpected error occurred'
       );
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // Handle registration success effect
-  useEffect(() => {
-    if (registrationSuccess) {
-      const formEmail = getValues('email');
-      Alert.alert(
-        'Account Created Successfully!', 
-        'Please verify your email address to complete your registration.',
-        [
-          { 
-            text: 'Verify Email', 
-            onPress: () => {
-              dispatch(clearRegistrationSuccess());
-              navigation.navigate('EmailVerification', { 
-                email: formEmail?.trim().toLowerCase() 
-              });
-            }
-          },
-        ]
-      );
-    }
-  }, [registrationSuccess, dispatch, navigation, getValues]);
-
-  // Handle registration error effect
-  useEffect(() => {
-    if (error) {
-      Alert.alert('Registration Failed', error);
-      dispatch(clearError());
-    }
-  }, [error, dispatch]);
 
   // Password strength indicator
   const getPasswordStrength = (pwd: string) => {
     if (!pwd) return { score: 0, text: '', color: '#ccc' };
-
+    
     let score = 0;
     if (pwd.length >= 12) score++;
     if (/[a-z]/.test(pwd)) score++;
@@ -256,7 +196,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       <Card style={styles.card}>
         <Card.Content>
           <Title style={styles.title}>Register for DocsShelf</Title>
-
+          
           {/* First Name */}
           <Controller
             control={control}
@@ -346,9 +286,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             {errors.password?.message}
           </HelperText>
           {password && (
-            <Text
-              style={[styles.passwordStrength, { color: strengthInfo.color }]}
-            >
+            <Text style={[styles.passwordStrength, { color: strengthInfo.color }]}>
               Password Strength: {strengthInfo.text}
             </Text>
           )}
@@ -393,7 +331,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    error={!!(errors.phoneNumbers as FieldErrors<PhoneNumber>[])?.[index]?.type}
+                    error={!!errors.phoneNumbers?.[index]?.type}
                     style={[styles.input, styles.phoneTypeInput]}
                   />
                 )}
@@ -407,7 +345,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    error={!!(errors.phoneNumbers as FieldErrors<PhoneNumber>[])?.[index]?.number}
+                    error={!!errors.phoneNumbers?.[index]?.number}
                     keyboardType="phone-pad"
                     style={[styles.input, styles.phoneNumberInput]}
                   />
@@ -423,7 +361,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               )}
             </View>
           ))}
-
+          
           <HelperText type="error" visible={!!errors.phoneNumbers}>
             {errors.phoneNumbers?.message}
           </HelperText>

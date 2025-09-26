@@ -3,9 +3,20 @@ export type RootStackParamList = {
   Main: undefined;
 };
 
+export type MainStackParamList = {
+  MainTabs: undefined;
+  Profile: undefined;
+  EditProfile: undefined;
+  EmailVerification: { email?: string };
+  AccountDeletion: undefined;
+  ContactSupport: undefined;
+};
+
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
+  EmailVerification: { email?: string };
+  ContactSupport: undefined;
 };
 
 export type MainTabParamList = {
@@ -24,6 +35,8 @@ export type DocumentsStackParamList = {
 export type SettingsStackParamList = {
   SettingsMain: undefined;
   Profile: undefined;
+  EditProfile: undefined;
   Security: undefined;
   Storage: undefined;
+  AccountDeletion: undefined;
 };

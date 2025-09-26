@@ -1,6 +1,6 @@
 // Database service for SQLite operations
 import { Platform } from 'react-native';
-import SQLite from 'react-native-sqlite-storage';
+import * as SQLite from 'expo-sqlite';
 import { StorageQuotaManager } from '../../utils/storageQuota';
 
 export class QuotaExceededError extends Error {
@@ -188,10 +188,7 @@ export class DatabaseService {
         return;
       }
 
-      this.db = await SQLite.openDatabase({
-        name: this.DB_NAME,
-        location: 'default',
-      });
+      this.db = await SQLite.openDatabaseAsync(this.DB_NAME);
 
       await this.runMigrations();
       console.log('Database initialized successfully');
@@ -429,7 +426,7 @@ export class DatabaseService {
     }
   }
 
-  static async updateUser(id: string, updates: Partial<User>): Promise<void> {
+  static async updateUser(id: string, updates: Partial<User>): Promise<User | null> {
     if (!this.db) throw new Error('Database not initialized');
 
     const now = new Date().toISOString();
@@ -468,6 +465,9 @@ export class DatabaseService {
       );
 
       await this.logAudit(id, 'USER_UPDATED', `User ${id} updated`);
+      
+      // Return the updated user
+      return await this.getUserById(id);
     } catch (error) {
       console.error('Failed to update user:', error);
       throw error;
@@ -1371,6 +1371,41 @@ export class DatabaseService {
   // Utility method to generate unique IDs
   private static generateId(): string {
     return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+  }
+
+  // Delete user and all associated data
+  static async deleteUser(userId: string): Promise<void> {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      // Delete user data in order (foreign key constraints)
+      const tables = [
+        'audit_logs',
+        'document_tags', 
+        'documents',
+        'folders',
+        'categories',
+        'users'
+      ];
+
+      for (const table of tables) {
+        await this.db.executeSql(
+          `DELETE FROM ${table} WHERE userId = ?`,
+          [userId]
+        );
+      }
+
+      // Also delete user record itself
+      await this.db.executeSql(
+        'DELETE FROM users WHERE id = ?',
+        [userId]
+      );
+
+      console.log('User and all associated data deleted:', userId);
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      throw error;
+    }
   }
 
   // Get database instance
