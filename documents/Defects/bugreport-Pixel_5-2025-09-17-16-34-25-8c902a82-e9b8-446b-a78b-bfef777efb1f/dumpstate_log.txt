@@ -1,0 +1,204 @@
+Module metadata package name: com.google.android.modulemetadata
+Launching async 'SERIALIZE PERFETTO TRACE'*** command 'DUMPSYS CRITICAL' timed out after 5386ms
+Duration of 'DUMPSYS CRITICAL': 5.43s
+Timed out adding from fd to zip entry proto/input_method_CRITICAL.proto:Bad file descriptor Timeout:500ms
+Timed out adding from fd to zip entry proto/window_CRITICAL.proto:Bad file descriptor Timeout:500ms
+Duration of 'DUMPSYS CRITICAL PROTO': 1.18s
+Duration of 'SYSTEM LOG': 5.40s
+Duration of 'EVENT LOG': 5.26s
+Duration of 'STATS LOG': 5.49s
+Duration of 'RADIO LOG': 5.33s
+logcat: Logcat read failure: No such file or directory
+*** command 'logcat -L -b all -v threadtime -v printable -v uid -d *:v' failed: exit code 1
+Start thread pool:1
+Adding dir /cache/recovery (recursive: 1)
+/cache/recovery: No such file or directory
+Adding dir /data/misc/recovery (recursive: 1)
+Adding dir /data/misc/update_engine_log (recursive: 1)
+Adding dir /data/misc/update_engine/prefs (recursive: 1)
+/data/misc/update_engine/prefs: No such file or directory
+Adding dir /data/misc/logd (recursive: 0)
+Adding dir /data/misc/profiles/cur (recursive: 1)
+Warning: no Dalvik processes found to dump stacks
+Duration of 'DUMP TRACES': 13.39s
+Duration of '/data/misc/profiles/cur': 30.47s
+Adding dir /data/misc/profiles/ref (recursive: 1)
+Duration of '/data/misc/profiles/ref': 10.05s
+open(/data/system/package-dex-usage.list): No such file or directory
+Adding dir /data/misc/prereboot (recursive: 0)
+Unable to read link for /proc/2169/ns/mnt: No such file or directory
+Unable to read link for /proc/2383/ns/mnt: No such file or directory
+Unable to read link for /proc/2600/ns/mnt: No such file or directory
+Unable to read link for /proc/2609/ns/mnt: No such file or directory
+Unable to read link for /proc/3003/ns/mnt: No such file or directory
+Unable to read link for /proc/3061/ns/mnt: No such file or directory
+Unable to read link for /proc/3527/ns/mnt: No such file or directory
+Unable to read link for /proc/3810/ns/mnt: No such file or directory
+Unable to read link for /proc/3886/ns/mnt: No such file or directory
+Unable to read link for /proc/4037/ns/mnt: No such file or directory
+Unable to read link for /proc/4073/ns/mnt: No such file or directory
+Unable to read link for /proc/4134/ns/mnt: No such file or directory
+Unable to read link for /proc/4147/ns/mnt: No such file or directory
+Unable to read link for /proc/4262/ns/mnt: No such file or directory
+Unable to read link for /proc/4303/ns/mnt: No such file or directory
+Unable to read link for /proc/4334/ns/mnt: No such file or directory
+Unable to read link for /proc/4351/ns/mnt: No such file or directory
+Unable to read link for /proc/4367/ns/mnt: No such file or directory
+Unable to read link for /proc/4382/ns/mnt: No such file or directory
+Unable to read link for /proc/4414/ns/mnt: No such file or directory
+Unable to read link for /proc/4437/ns/mnt: No such file or directory
+Unable to read link for /proc/4465/ns/mnt: No such file or directory
+Unable to read link for /proc/4493/ns/mnt: No such file or directory
+Unable to read link for /proc/4513/ns/mnt: No such file or directory
+Unable to read link for /proc/4549/ns/mnt: No such file or directory
+Unable to read link for /proc/4691/ns/mnt: No such file or directory
+Unable to read link for /proc/4750/ns/mnt: No such file or directory
+Unable to read link for /proc/4816/ns/mnt: No such file or directory
+Unable to read link for /proc/4840/ns/mnt: No such file or directory
+Unable to read link for /proc/4994/ns/mnt: No such file or directory
+Unable to read link for /proc/8532/ns/mnt: No such file or directory
+Duration of 'for_each_pid': 2.72s
+MOUNT INFO: 35 entries added to zip file
+Duration of 'MOUNT INFO': 2.72s
+Duration of 'IPTABLES': 1.26s
+*** command 'lpdump --all' timed out after 10.317s (killing pid 9392)
+Duration of 'LPDUMP': 10.33s
+Duration of 'DEVICE-MAPPER': 4.59s
+Adding dir /metadata/ota (recursive: 1)
+Duration of 'XFRM STATS': 1.67s
+Duration of 'DETAILED SOCKET STATE': 3.12s
+Duration of 'IOTOP': 2.05s
+Duration of 'Dmabuf dump': 5.59s
+Duration of 'SDK EXTENSIONS': 1.45s
+Adding dir /data/misc/apexdata/com.android.uwb/log (recursive: 1)
+shutdown thread pool
+Start thread pool:3
+Duration of 'DUMP NETSTATS PROTO': 1.10s
+section 1000 status 1
+Warning: Skipping "android.hardware.audio.effect@7.0::IEffectsFactory/default": debugging information cannot be retrieved: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+Warning: Skipping "android.hardware.audio.effect@7.0::IEffectsFactory/default": interfaceChain fails: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+Duration of 'DUMP BLOCK STAT': 4.02s
+section 1000 status 2
+section 1002 status 1
+section 1002 status 2
+section 1109 status 1
+Warning: Skipping "android.hardware.media.c2@1.0::IComponentStore/default": debugging information cannot be retrieved: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+Warning: Skipping "android.hardware.media.c2@1.0::IComponentStore/software": debugging information cannot be retrieved: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+section 1109 status 2
+section 1110 status 1
+Warning: Skipping "android.hardware.media.c2@1.0::IComponentStore/software": interfaceChain fails: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+section 1110 status 2
+section 1111 status 1
+section 1111 status 2
+section 1112 status 1
+Calling IDumpstateDevice implementation using path /data/user_de/0/com.android.shell/files/bugreports/dumpstate_board.txt
+Calling IDumpstateDevice implementation using path /data/user_de/0/com.android.shell/files/bugreports/dumpstate_board.bin
+Using IDumpstateDevice AIDL HALWarning: Skipping "android.hardware.media.c2@1.1::IComponentStore/software": debugging information cannot be retrieved: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+section 1112 status 2
+section 1113 status 1
+section 1113 status 2
+section 1114 status 1
+section 1114 status 2
+section 1115 status 1
+section 1115 status 2
+section 1116 status 1
+Ignoring empty dumpstate_board.bin
+Duration of 'dumpstate_board()': 6.29s
+Warning: Skipping "android.hardware.media.c2@1.1::IComponentStore/software": interfaceChain fails: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+Warning: Skipping "android.hardware.media.c2@1.2::IComponentStore/software": interfaceChain fails: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+Warning: Skipping "android.hidl.allocator@1.0::IAllocator/ashmem": debugging information cannot be retrieved: Status(EX_TRANSACTION_FAILED): 'TIMED_OUT: '
+*** command '/system/xbin/su root lshal --all --types=all' timed out after 10.615s (killing pid 9416)
+Duration of 'CPU INFO': 7.22s
+Duration of 'CHECKIN BATTERYSTATS': 8.21s
+Duration of 'HARDWARE HALS': 18.95s
+*** command '/system/xbin/su root bugreport_procdump' timed out after 10.246s (killing pid 9517)
+Duration of 'CHECKIN PROCSTATS': 9.00s
+*** command '/system/xbin/su root lshal debug -E android.hardware.media.c2@1.2::IComponentStore/software' timed out after 2.106s (killing pid 9538)
+Duration of 'CHECKIN USAGESTATS': 1.05s
+Duration of 'DUMP CHECKINS': 19.04s
+Duration of 'DUMP HALS': 27.18s
+Failed to read cmdline from: /proc/2609/cmdline
+could not kill command '/system/xbin/su root bugreport_procdump' (pid 9517) even with SIGKILL.
+Duration of 'BUGREPORT_PROCDUMP': 20.28s
+Failed to read cmdline from: /proc/3527/cmdline
+Failed to read cmdline from: /proc/4691/cmdline
+Failed to read cmdline from: /proc/4816/cmdline
+Duration of 'VISIBLE WINDOW VIEWS': 2.88s
+Failed to read cmdline from: /proc/9416/cmdline
+Failed to read cmdline from: /proc/9477/cmdline
+Duration of 'KERNEL CPUFREQ': 1.40s
+section 1116 status 2
+section 2001 status 1
+Duration of 'PROCESSES AND THREADS': 2.23s
+section 2001 status 2
+section 2002 status 1
+section 2002 status 2
+section 2003 status 1
+*** command 'incident -u' timed out after 46.895s (killing pid 9413)
+Duration of 'INCIDENT REPORT': 46.96s
+modinfo: libarc4: not found
+modinfo: can_dev: not found
+command '/system/xbin/su root sh -c cat /proc/modules | cut -d' ' -f1 |     while read MOD ; do echo modinfo:$MOD ; modinfo $MOD ; done': Error after 9.8878s (killing pid 9573)
+modinfo: btbcm: not found
+modinfo: bluetooth: not found
+modinfo: rfkill: not found
+modinfo: zram: not found
+modinfo: zsmalloc: not found
+modinfo: vmw_vsock_virtio_transport: not found
+modinfo: virtio_pci: not found
+modinfo: virtio_pci_legacy_dev: not found
+modinfo: virtio_pci_modern_dev: not found
+modinfo: virtio_console: not found
+modinfo: virtio_blk: not found
+modinfo: virtio_rng: not found
+modinfo: virtio_dma_buf: not found
+Duration of 'MODULES INFO': 12.11s
+Adding dir /system/etc/vintf/ (recursive: 1)
+Adding dir /vendor/etc/vintf/ (recursive: 1)
+Adding dir /system_ext/etc/vintf/ (recursive: 1)
+Duration of 'LIST OF OPEN FILES': 2.66s
+Adding dir /data/misc/nfc/logs (recursive: 1)
+AddAnrTraceDir(): dump_traces_file=/data/user_de/0/com.android.shell/files/bugreports/dumptrace_IeZdPb, anr_traces_dir=/data/anr
+Dumping current ANR traces (/data/user_de/0/com.android.shell/files/bugreports/dumptrace_IeZdPb) to the main bugreport entry
+No system traces found. Check for previously uploaded traces by looking for go/trace-uuid in logcatDuration of 'DUMP ROUTE TABLES': 1.11s
+Duration of 'DUMPSYS HIGH': 26.00s
+Duration of 'SERVICE HIGH connectivity': 5.30s
+Duration of 'ACONFIG FLAGS DUMP': 1.93s
+Adding dir /data/misc/snapshotctl_log (recursive: 0)
+su: failed to exec typec_connector_class: No such file or directory
+*** command '/system/xbin/su root typec_connector_class' failed: exit code 1
+Can't find service: android.hardware.cas.IMediaCasService/default
+Failed to start dump thread for service: android.hardware.cas.IMediaCasService/default, status: -2Can't find service: android.hardware.gatekeeper.IGatekeeper/default
+Failed to start dump thread for service: android.hardware.gatekeeper.IGatekeeper/default, status: -2Can't find service: android.hardware.radio.config.IRadioConfig/default
+Failed to start dump thread for service: android.hardware.radio.config.IRadioConfig/default, status: -2Can't find service: android.hardware.radio.data.IRadioData/slot1
+Failed to start dump thread for service: android.hardware.radio.data.IRadioData/slot1, status: -2Can't find service: android.hardware.radio.ims.IRadioIms/slot1
+Failed to start dump thread for service: android.hardware.radio.ims.IRadioIms/slot1, status: -2Can't find service: android.hardware.radio.ims.media.IImsMedia/default
+Failed to start dump thread for service: android.hardware.radio.ims.media.IImsMedia/default, status: -2Can't find service: android.hardware.radio.messaging.IRadioMessaging/slot1
+Failed to start dump thread for service: android.hardware.radio.messaging.IRadioMessaging/slot1, status: -2Can't find service: android.hardware.radio.modem.IRadioModem/slot1
+Failed to start dump thread for service: android.hardware.radio.modem.IRadioModem/slot1, status: -2Can't find service: android.hardware.radio.network.IRadioNetwork/slot1
+Failed to start dump thread for service: android.hardware.radio.network.IRadioNetwork/slot1, status: -2Can't find service: android.hardware.radio.sap.ISap/slot1
+Failed to start dump thread for service: android.hardware.radio.sap.ISap/slot1, status: -2Can't find service: android.hardware.radio.sim.IRadioSim/slot1
+Failed to start dump thread for service: android.hardware.radio.sim.IRadioSim/slot1, status: -2Can't find service: android.hardware.radio.voice.IRadioVoice/slot1
+Failed to start dump thread for service: android.hardware.radio.voice.IRadioVoice/slot1, status: -2Can't find service: android.hardware.security.sharedsecret.ISharedSecret/gatekeeper
+Failed to start dump thread for service: android.hardware.security.sharedsecret.ISharedSecret/gatekeeper, status: -2Can't find service: android.hardware.threadnetwork.IThreadChip/chip0
+Failed to start dump thread for service: android.hardware.threadnetwork.IThreadChip/chip0, status: -2Can't find service: android.hardware.usb.IUsb/default
+Failed to start dump thread for service: android.hardware.usb.IUsb/default, status: -2Can't find service: android.hardware.uwb.IUwb/default
+Failed to start dump thread for service: android.hardware.uwb.IUwb/default, status: -2Can't find service: android.hardware.wifi.supplicant.ISupplicant/default
+Failed to start dump thread for service: android.hardware.wifi.supplicant.ISupplicant/default, status: -2Can't find service: android.service.gatekeeper.IGateKeeperService
+Failed to start dump thread for service: android.service.gatekeeper.IGateKeeperService, status: -2Can't find service: android.system.vold.IVold/default
+Failed to start dump thread for service: android.system.vold.IVold/default, status: -2Error with service 'lpdump_service' while dumping: FAILED_TRANSACTION
+Can't find service: vold
+Failed to start dump thread for service: vold, status: -2Duration of 'DUMPSYS': 78.11s
+Adding dir /data/misc/bluetooth/logs (recursive: 1)
+Duration of 'APP SERVICES PLATFORM': 1.74s
+Duration of 'APP SERVICES NON-PLATFORM': 8.28s
+Duration of 'APP PROVIDERS NON-PLATFORM': 8.77s
+Adding dir /linkerconfig (recursive: 1)
+Adding frozen processes from /sys/fs/cgroup
+Adding dir /data/misc/wmtrace (recursive: 0)
+Duration of 'DUMPSTATE': 196.78s
+Adjusting max progress from 1845 to 2053
+Adding main entry (bugreport-sdk_gphone64_x86_64-BE2A.250530.026.F3-2025-09-17-16-12-17.txt) from /data/user_de/0/com.android.shell/files/bugreports/bugreport-sdk_gphone64_x86_64-BE2A.250530.026.F3-2025-09-17-16-12-17.tmp to .zip bugreport
+dumpstate id 2 finished around 2025/09/17 16:18:08 (351 s)
+Adding zip text entry main_entry.txt
+dumpstate_log.txt entry on zip file logged up to here

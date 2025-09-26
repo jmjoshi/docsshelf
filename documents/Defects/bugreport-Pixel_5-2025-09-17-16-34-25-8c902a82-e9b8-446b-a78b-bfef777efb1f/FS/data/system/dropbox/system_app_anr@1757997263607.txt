@@ -1,0 +1,290 @@
+SystemUptimeMs: 5382585
+Process: com.google.android.photopicker
+PID: 12401
+UID: 10215
+Frozen: false
+Timestamp: 2025-09-15 21:34:11.384-0700
+Flags: 0x20c83e45
+Package: com.google.android.photopicker v36 (16)
+Foreground: No
+Process-Runtime: 28451
+ErrorId: 76f111d9-a92e-46e9-9be9-26c5a2832e26
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=37.58 avg60=22.36 avg300=9.95 total=377029771
+full avg10=11.88 avg60=7.35 avg300=2.90 total=160135986
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=63.54 avg60=81.02 avg300=78.08 total=2128569143
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=77.41 avg60=75.62 avg300=55.80 total=1876478999
+full avg10=19.16 avg60=10.76 avg300=7.55 total=688035324
+----- End output from /proc/pressure/io -----
+
+CPU usage from 12401ms to 77ms ago (2025-09-15 21:34:10.057 to 2025-09-15 21:34:22.381):
+  35% 9774/system_server: 3.9% user + 31% kernel / faults: 4153 minor 42 major
+  15% 10650/com.google.android.gms.persistent: 1.7% user + 13% kernel / faults: 4564 minor 10 major
+  8.7% 47/kswapd0: 0% user + 8.7% kernel
+  6.9% 10780/com.google.android.apps.wellbeing: 1.7% user + 5.1% kernel / faults: 2137 minor 2 major
+  5.4% 10225/com.android.systemui: 2.2% user + 3.1% kernel / faults: 1912 minor 11 major
+  4.8% 12413/com.android.phone: 0.7% user + 4.1% kernel / faults: 1488 minor 52 major
+  4.2% 12266/com.google.android.gms.ui: 1.3% user + 2.9% kernel / faults: 1287 minor 8 major
+  3.7% 12286/com.google.android.bluetooth: 0.3% user + 3.4% kernel / faults: 1044 minor 47 major
+  3.5% 11529/com.google.android.gms: 2.3% user + 1.1% kernel / faults: 1551 minor 8 major
+  3.3% 507/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 3.1% kernel
+100% TOTAL: 11% user + 62% kernel + 25% iowait + 1% softirq
+Data File: /data/anr/anr_2025-09-15-21-34-22-480
+Subject: Process ProcessRecord{27faf93 12401:com.google.android.photopicker/u0a215} failed to complete startup
+RssHwmKb: 95412
+RssKb: 95412
+RssAnonKb: 35636
+RssShmemKb: 640
+VmSwapKb: 20884
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1757996985622
+  anr <
+    pid: 10548
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Process ProcessRecord{f1016 10548:com.android.settings/1000} failed to complete startup"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1757997004132
+  anr <
+    pid: 10575
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{b0253fa 10575:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1757997014575
+  anr <
+    pid: 10604
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 10604:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997028153
+  half_watchdog <
+    subject: "Blocked in handler on ActivityManager (ActivityManager) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757997092278
+  anr <
+    pid: 10845
+    process: "com.google.android.googlequicksearchbox:interactor"
+    process_class: 2
+    subject: "executing service com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService, waited 22580ms"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1757997103723
+  anr <
+    pid: 10820
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{50c2a7b 10820:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1757997106846
+  anr <
+    pid: 10903
+    process: "com.google.android.apps.messaging:rcs"
+    process_class: 2
+    subject: "Process ProcessRecord{e8b05eb 10903:com.google.android.apps.messaging:rcs/u0a145} failed to complete startup"
+    uid: 10145
+  >
+>
+events <
+  timestamp_ms: 1757997112520
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757997115071
+  anr <
+    pid: 10997
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "Process ProcessRecord{c863ebc 10997:com.google.android.gms/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1757997122584
+  anr <
+    pid: 10755
+    process: "com.android.phone"
+    process_class: 2
+    subject: "executing service com.android.phone/com.android.internal.telephony.data.CellularDataService, waited 21086ms"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997154896
+  anr <
+    pid: 11291
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 11291:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997161925
+  anr <
+    pid: 11364
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{1a867dd 11364:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1757997176260
+  anr <
+    pid: 11532
+    process: "com.google.android.dialer"
+    process_class: 2
+    subject: "Process ProcessRecord{a5206b5 11532:com.google.android.dialer/u0a135} failed to complete startup"
+    uid: 10135
+  >
+>
+events <
+  timestamp_ms: 1757997178297
+  anr <
+    pid: 11301
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "executing service com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiSuperpacksService, waited 20034ms"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1757997184551
+  anr <
+    pid: 11623
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 11623:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997200477
+  anr <
+    pid: 11760
+    process: "com.google.android.dialer"
+    process_class: 2
+    subject: "Process ProcessRecord{c67b3bb 11760:com.google.android.dialer/u0a135} failed to complete startup"
+    uid: 10135
+  >
+>
+events <
+  timestamp_ms: 1757997201680
+  native_crash <
+    pid: 11384
+    process: "com.google.android.bluetooth"
+    process_class: 2
+    uid: 1002
+  >
+>
+events <
+  timestamp_ms: 1757997210880
+  anr <
+    pid: 11828
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 11828:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997232724
+  anr <
+    pid: 12073
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 12073:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997250122
+  anr <
+    pid: 12375
+    process: "com.google.android.tts"
+    process_class: 2
+    subject: "Process ProcessRecord{3ace899 12375:com.google.android.tts/u0a150} failed to complete startup"
+    uid: 10150
+  >
+>
+timestamp_ms: 1757997262463
+window_ms: 300000
+
+----- dumping pid: 12401 at 5370399
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 12401 at 2025-09-15 21:34:11.422306700-0700 -----
+Cmd line: com.google.android.photopicker
+
+sysTid=12401     folio_wait_bit_common
+sysTid=12403     do_sigtimedwait
+sysTid=12404     pipe_read
+sysTid=12405     futex_wait_queue
+sysTid=12406     futex_wait_queue
+sysTid=12407     futex_wait_queue
+sysTid=12408     futex_wait_queue
+sysTid=12409     futex_wait_queue
+sysTid=12410     binder_ioctl_write_read
+sysTid=12411     binder_ioctl_write_read
+sysTid=12423     binder_ioctl_write_read
+sysTid=12545     futex_wait_queue
+
+----- end 12401 -----
+
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 12401 at 2025-09-15 21:34:21.468582000-0700 -----
+Cmd line: com.google.android.photopicker
+
+sysTid=12401     do_epoll_wait
+sysTid=12403     folio_wait_bit_common
+sysTid=12404     pipe_read
+sysTid=12405     futex_wait_queue
+sysTid=12406     futex_wait_queue
+sysTid=12407     futex_wait_queue
+sysTid=12408     futex_wait_queue
+sysTid=12409     futex_wait_queue
+sysTid=12410     futex_wait_queue
+sysTid=12411     binder_ioctl_write_read
+sysTid=12423     binder_ioctl_write_read
+sysTid=12545     futex_wait_queue
+
+----- end 12401 -----
+
+DurationsV5: 5370367,0,27,11047,21,0,2,0,13,0,0,0,0,0,0,2,12134,29,2,1071,4,1,0,0,0
+
+----- dumping ended at 5382556
+End Data File

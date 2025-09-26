@@ -19,6 +19,7 @@ __tests__/
 ## Test Categories
 
 ### 1. Unit Tests
+
 - **AuthService**: User registration, login, biometric authentication, password changes
 - **DocumentService**: File upload, scanning, search, categorization
 - **StorageService**: Encrypted file storage, retrieval, deletion
@@ -26,18 +27,21 @@ __tests__/
 - **DatabaseService**: SQLite operations, migrations, audit logging
 
 ### 2. Integration Tests
+
 - Complete user workflows (registration → document upload → search)
 - Service interactions and data flow
 - Error handling and recovery
 - Authentication and authorization flows
 
 ### 3. Component Tests
+
 - React Native component rendering
 - User interaction handling
 - Navigation flows
 - Form validation and error states
 
 ### 4. Performance Tests
+
 - App launch time (< 2 seconds)
 - Document search performance (< 500ms for 1k documents)
 - Memory usage (< 80MB)
@@ -47,11 +51,13 @@ __tests__/
 ## Running Tests
 
 ### Run All Tests
+
 ```bash
 npm run test:all
 ```
 
 ### Run Specific Test Categories
+
 ```bash
 # Unit tests only
 npm run test:unit
@@ -70,7 +76,9 @@ npm run test:coverage
 ```
 
 ### Test Results
+
 The test runner will:
+
 - Execute all test suites in sequence
 - Generate combined coverage reports
 - Validate against 80% coverage target
@@ -89,18 +97,22 @@ The test suite validates the following coverage targets:
 ## Performance Benchmarks
 
 ### App Launch
+
 - Target: < 2 seconds
 - Measured: Database initialization + service setup
 
 ### Document Search
+
 - Target: < 500ms for 1,000 documents
 - Measured: Full-text search with pagination
 
 ### Memory Usage
+
 - Target: < 80MB during operations
 - Measured: Heap usage during bulk operations
 
 ### File Operations
+
 - Upload: < 1 second per MB
 - Encryption: < 500ms per MB
 - Search: < 100ms for metadata queries
@@ -108,6 +120,7 @@ The test suite validates the following coverage targets:
 ## Test Data
 
 Tests use mock data and services to ensure:
+
 - Consistent test results
 - Fast execution
 - No external dependencies
@@ -131,6 +144,7 @@ The test suite is designed for CI/CD pipelines:
 ## Test Maintenance
 
 ### Adding New Tests
+
 1. Create test file in `__tests__/` directory
 2. Follow naming convention: `*.test.ts` or `*.test.tsx`
 3. Mock external dependencies
@@ -138,6 +152,7 @@ The test suite is designed for CI/CD pipelines:
 5. Add performance assertions where applicable
 
 ### Updating Performance Benchmarks
+
 1. Modify performance test expectations
 2. Update documentation
 3. Validate on target devices
@@ -148,20 +163,24 @@ The test suite is designed for CI/CD pipelines:
 ### Common Issues
 
 **Tests failing due to mocks**
+
 - Ensure all external dependencies are properly mocked
 - Check jest configuration for module mocking
 
 **Performance tests timing out**
+
 - Increase timeout in jest config
 - Check for infinite loops in test code
 - Validate async operations complete
 
 **Coverage below target**
+
 - Add missing test cases
 - Review uncovered code paths
 - Consider if code is actually testable
 
 **Component tests failing**
+
 - Install missing testing library dependencies
 - Mock React Navigation properly
 - Ensure proper component setup
@@ -169,6 +188,7 @@ The test suite is designed for CI/CD pipelines:
 ## Dependencies
 
 The test suite requires these dev dependencies:
+
 - `jest`: Test runner
 - `@testing-library/react-native`: Component testing
 - `@testing-library/jest-native`: Jest matchers
@@ -178,6 +198,7 @@ The test suite requires these dev dependencies:
 ## Contributing
 
 When adding new features:
+
 1. Write tests first (TDD approach)
 2. Ensure 80%+ coverage for new code
 3. Add performance tests for critical paths
@@ -187,6 +208,7 @@ When adding new features:
 ## Test Reports
 
 After running tests, check:
+
 - `coverage/combined/index.html`: HTML coverage report
 - `coverage/unit/`: Unit test coverage
 - `coverage/integration/`: Integration test coverage

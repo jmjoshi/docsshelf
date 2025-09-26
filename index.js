@@ -1,23 +1,5 @@
-// Load critical polyfills FIRST - before any other imports
-if (typeof setImmediate === 'undefined') {
-  global.setImmediate = function (callback, ...args) {
-    return setTimeout(() => callback.apply(null, args), 0);
-  };
-  global.clearImmediate = function (id) {
-    return clearTimeout(id);
-  };
-  if (typeof window !== 'undefined') {
-    window.setImmediate = global.setImmediate;
-    window.clearImmediate = global.clearImmediate;
-  }
-}
-
-import './polyfills';
 import { registerRootComponent } from 'expo';
 
 import App from './App';
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
 registerRootComponent(App);

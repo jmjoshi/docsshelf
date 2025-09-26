@@ -1,0 +1,55 @@
+SystemUptimeMs: 79081251
+Process: com.google.android.ext.services
+PID: 22241
+UID: 10196
+Frozen: false
+Timestamp: 2025-09-16 18:00:40.959-0700
+Flags: 0x20c8be45
+Package: com.google.android.ext.services v360527520 (frc_360527520)
+Foreground: No
+Process-Runtime: 5341720
+ErrorId: d734fa82-c5e8-4b27-95b6-1ad004bde050
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=0.99 avg60=0.56 avg300=0.29 total=927197862
+full avg10=0.00 avg60=0.00 avg300=0.03 total=341101346
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=96.70 avg60=70.86 avg300=34.33 total=9463392325
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=18.80 avg60=10.81 avg300=4.31 total=3232659788
+full avg10=0.17 avg60=0.52 avg300=0.74 total=971197703
+----- End output from /proc/pressure/io -----
+
+CPU usage from 47499ms to 99344ms later (2025-09-16 18:01:27.722 to 2025-09-16 18:02:19.567):
+  47% 21497/system_server: 3.9% user + 43% kernel / faults: 644 minor 47 major
+  30% 22258/com.android.settings: 1.4% user + 28% kernel / faults: 63 minor 203 major
+  18% 22874/com.android.localtransport: 0.3% user + 18% kernel
+  14% 23435/com.android.dynsystem:dynsystem: 0.4% user + 13% kernel
+  13% 22241/com.google.android.ext.services: 6.1% user + 7.5% kernel / faults: 40 minor 13 major
+  12% 503/android.hardware.sensors-service.multihal: 0% user + 12% kernel
+  11% 23403/com.android.dynsystem: 0.2% user + 11% kernel
+  10% 23248/com.android.keychain: 0.1% user + 9.9% kernel
+  3% 305/jbd2/dm-55-8: 0% user + 3% kernel
+  6.2% 28356/kworker/0:1-virtio_vsock: 0% user + 6.2% kernel
+100% TOTAL: 1.9% user + 93% kernel + 0% iowait + 4.8% softirq
+Data File: /data/anr/anr_2025-09-16-18-01-02-851
+Subject: executing service com.google.android.ext.services/android.ext.services.storage.CacheQuotaServiceImpl, waited 20234ms
+RssHwmKb: 107000
+RssKb: 71164
+RssAnonKb: 32256
+RssShmemKb: 512
+VmSwapKb: 22912
+
+
+--- CriticalEventLog ---
+capacity: 20
+timestamp_ms: 1758070854207
+window_ms: 300000
+
+End Data File

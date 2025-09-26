@@ -1,49 +1,67 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { authReducer, documentsReducer, settingsReducer } from './slices';
-import { syncMiddleware } from './middleware/syncMiddleware';
+import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const authPersistConfig = {
-  key: 'auth',
-  storage: AsyncStorage,
-  whitelist: ['user', 'isAuthenticated'], // Only persist user data and auth state
+// Simplified auth state and slice
+interface AuthState {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    phoneNumbers: { type: string; number: string }[];
+  } | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+}
+
+const initialAuthState: AuthState = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
+  error: null,
 };
 
-const documentsPersistConfig = {
-  key: 'documents',
-  storage: AsyncStorage,
-  whitelist: ['categories'], // Only persist categories, not documents (they're in database)
-};
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: initialAuthState,
+  reducers: {
+    loginStart: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    loginSuccess: (state, action: PayloadAction<AuthState['user']>) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+      state.isLoading = false;
+    },
+    loginFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+      state.isLoading = false;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+    },
+  },
+});
 
-const settingsPersistConfig = {
-  key: 'settings',
-  storage: AsyncStorage,
-};
-
-const rootReducer = {
-  auth: persistReducer(authPersistConfig, authReducer),
-  documents: persistReducer(documentsPersistConfig, documentsReducer),
-  settings: persistReducer(settingsPersistConfig, settingsReducer),
-};
-
+// Simple store without persistence
 export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-      },
-      // Reduce middleware overhead in development
-      immutableCheck: {
-        warnAfter: 64, // Increase warning threshold
-      },
-    }).concat(syncMiddleware),
-  // Enable Redux DevTools only in development
+  reducer: {
+    auth: authSlice.reducer,
+  },
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-export const persistor = persistStore(store);
+// Create a mock persistor for compatibility
+export const persistor = {
+  purge: () => Promise.resolve(),
+  flush: () => Promise.resolve(),
+  pause: () => {},
+  persist: () => {},
+};
+
+export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

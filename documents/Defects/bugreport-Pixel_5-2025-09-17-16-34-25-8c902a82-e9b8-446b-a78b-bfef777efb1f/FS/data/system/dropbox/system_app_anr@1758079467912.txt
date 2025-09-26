@@ -1,0 +1,61 @@
+SystemUptimeMs: 87581592
+Process: com.google.android.permissioncontroller
+PID: 23939
+UID: 10192
+Frozen: false
+Timestamp: 2025-09-16 20:23:18.035-0700
+Flags: 0x20c83e05
+Package: com.google.android.permissioncontroller v360527520 (frc_360527520)
+Foreground: No
+Process-Runtime: 13539946
+ErrorId: 1256f5ae-76f5-445b-ad95-61321932fdbe
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=60.17 avg60=26.44 avg300=17.81 total=1462220273
+full avg10=19.31 avg60=8.50 avg300=5.97 total=558935436
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=89.81 avg60=89.69 avg300=70.72 total=12079698915
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=31.95 avg60=38.74 avg300=21.17 total=4027605011
+full avg10=0.00 avg60=0.00 avg300=0.12 total=1075419279
+----- End output from /proc/pressure/io -----
+
+CPU usage from 75ms to 51703ms later (2025-09-16 20:23:05.430 to 2025-09-16 20:23:57.058):
+  40% 22229/com.google.android.apps.nexuslauncher: 3.5% user + 36% kernel / faults: 373 minor 87 major
+  39% 47/kswapd0: 0% user + 39% kernel
+  27% 23870/com.google.android.apps.wallpaper: 0.3% user + 27% kernel / faults: 52 minor 232 major
+  25% 21497/system_server: 1.6% user + 24% kernel / faults: 608 minor 58 major
+  22% 503/android.hardware.sensors-service.multihal: 0% user + 22% kernel
+  11% 29044/com.google.android.gms.persistent: 0.8% user + 10% kernel / faults: 154 minor
+  7.9% 23939/com.google.android.permissioncontroller: 0.3% user + 7.6% kernel / faults: 40 minor 167 major
+  5.8% 30808/<pre-initialized>: 0% user + 5.7% kernel / faults: 257 minor
+  2.5% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 2.5% kernel
+  1.7% 541/surfaceflinger: 0% user + 1.7% kernel / faults: 2 minor
+100% TOTAL: 2.6% user + 92% kernel + 0.1% iowait + 5% softirq
+Data File: /data/anr/anr_2025-09-16-20-23-24-377
+Subject: executing service com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionEventCleanupJobService, waited 26693ms
+RssHwmKb: 148424
+RssKb: 70392
+RssAnonKb: 23428
+RssShmemKb: 640
+VmSwapKb: 36188
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758079144424
+  half_watchdog <
+    subject: "Blocked in monitor com.android.server.wm.WindowManagerService on monitor thread (watchdog.monitor) for 15s"
+  >
+>
+timestamp_ms: 1758079401973
+window_ms: 300000
+
+End Data File

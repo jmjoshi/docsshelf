@@ -1,0 +1,159 @@
+SystemUptimeMs: 5100105
+Process: com.google.android.permissioncontroller
+PID: 10486
+UID: 10192
+Frozen: false
+Timestamp: 2025-09-15 21:29:25.465-0700
+Flags: 0x20c83e05
+Package: com.google.android.permissioncontroller v360527520 (frc_360527520)
+Foreground: No
+Process-Runtime: 39739
+ErrorId: 6bf7159e-e131-4fdb-b995-6add1984ef97
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=0.02 avg60=0.68 avg300=5.28 total=349098074
+full avg10=0.00 avg60=0.09 avg300=1.39 total=154188503
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=85.17 avg60=83.48 avg300=68.81 total=1878326136
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=65.19 avg60=44.34 avg300=45.55 total=1698142970
+full avg10=5.29 avg60=4.00 avg300=6.85 total=668671238
+----- End output from /proc/pressure/io -----
+
+CPU usage from 0ms to 14605ms later (2025-09-15 21:29:26.180 to 2025-09-15 21:29:40.785):
+  65% 9774/system_server: 6.9% user + 58% kernel / faults: 4146 minor 1 major
+  15% 243/vold: 1.8% user + 13% kernel / faults: 16 minor 9 major
+  6.4% 541/surfaceflinger: 0.2% user + 6.2% kernel / faults: 41 minor 9 major
+  5.3% 10397/com.google.android.apps.nexuslauncher: 1.3% user + 3.9% kernel / faults: 1552 minor
+  3.1% 503/android.hardware.sensors-service.multihal: 0% user + 3.1% kernel
+  2.3% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 2.3% kernel
+  1.6% 9613/audioserver: 0% user + 1.6% kernel / faults: 5 minor
+  1.7% 10506/com.android.phone: 1.7% user + 0% kernel / faults: 968 minor 1 major
+  1.7% 587/logcat: 0% user + 1.7% kernel
+  1% 10486/com.google.android.permissioncontroller: 0.4% user + 0.5% kernel / faults: 238 minor 4 major
+100% TOTAL: 5.1% user + 44% kernel + 49% iowait + 0.7% softirq
+Data File: /data/anr/anr_2025-09-15-21-29-26-215
+Subject: Process ProcessRecord{94fcfa7 10486:com.google.android.permissioncontroller/u0a192} failed to complete startup
+RssHwmKb: 118404
+RssKb: 118404
+RssAnonKb: 57824
+RssShmemKb: 768
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1757996814341
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757996886391
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757996909536
+  anr <
+    pid: 10225
+    process: "com.android.systemui"
+    process_class: 2
+    subject: "Process ProcessRecord{1cca20a 10225:com.android.systemui/u0a186} failed to complete startup"
+    uid: 10186
+  >
+>
+events <
+  timestamp_ms: 1757996916110
+  system_server_started <
+  >
+>
+events <
+  timestamp_ms: 1757996942964
+  anr <
+    pid: 10393
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 10393:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757996953817
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757996961140
+  anr <
+    pid: 10468
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Process ProcessRecord{313cef7 10468:com.android.settings/1000} failed to complete startup"
+    uid: 1000
+  >
+>
+timestamp_ms: 1757996966189
+window_ms: 300000
+
+----- dumping pid: 10486 at 5084452
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 10486 at 2025-09-15 21:29:25.470825000-0700 -----
+Cmd line: com.google.android.permissioncontroller
+
+sysTid=10486     folio_wait_bit_common
+sysTid=10488     do_sigtimedwait
+sysTid=10489     pipe_read
+sysTid=10490     futex_wait_queue
+sysTid=10491     futex_wait_queue
+sysTid=10492     futex_wait_queue
+sysTid=10493     futex_wait_queue
+sysTid=10494     futex_wait_queue
+sysTid=10495     binder_ioctl_write_read
+sysTid=10496     binder_ioctl_write_read
+sysTid=10500     binder_ioctl_write_read
+sysTid=10507     futex_wait_queue
+
+----- end 10486 -----
+
+
+
+----- pid 10486 at 2025-09-15 21:29:40.063612900-0700 -----
+Cmd line: com.google.android.permissioncontroller
+ABI: 'x86_64'
+
+"ssioncontroller" sysTid=10486
+libdebuggerd_client: poll timeout expired
+
+----- Waiting Channels: pid 10486 at 2025-09-15 21:29:38.448243100-0700 -----
+Cmd line: com.google.android.permissioncontroller
+
+sysTid=10486     folio_wait_bit_common
+sysTid=10488     0
+sysTid=10489     pipe_read
+sysTid=10490     futex_wait_queue
+sysTid=10491     futex_wait_queue
+sysTid=10492     futex_wait_queue
+sysTid=10493     futex_wait_queue
+sysTid=10494     futex_wait_queue
+sysTid=10495     binder_ioctl_write_read
+sysTid=10496     binder_ioctl_write_read
+sysTid=10500     binder_ioctl_write_read
+sysTid=10507     futex_wait_queue
+
+----- end 10486 -----
+
+DurationsV5: 5084446,0,5,59,687,67,7,0,14,0,0,0,0,0,0,5,15188,5,1,14439,4,1,0,0,0
+
+----- dumping ended at 5099644
+End Data File

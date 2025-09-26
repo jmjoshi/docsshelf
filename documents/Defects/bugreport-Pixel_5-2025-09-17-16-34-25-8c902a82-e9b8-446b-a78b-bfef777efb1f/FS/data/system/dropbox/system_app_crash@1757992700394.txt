@@ -1,0 +1,20 @@
+Process: com.google.android.gms.persistent
+PID: 3549
+UID: 10144
+Package: com.google.android.gms v252635038 (25.26.35 (260800-783060121))
+Foreground: No
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+DD-EDD: 134217728
+
+eebn: 29505: No config packages for log source, or config package not registered
+	at eeeh.f(:com.google.android.gms@252635038@25.26.35 (260800-783060121):77)
+	at ayry.e(:com.google.android.gms@252635038@25.26.35 (260800-783060121):197)
+	at ayry.a(:com.google.android.gms@252635038@25.26.35 (260800-783060121):60)
+	at ayrv.a(:com.google.android.gms@252635038@25.26.35 (260800-783060121):561)
+	at ayqd.b(:com.google.android.gms@252635038@25.26.35 (260800-783060121):1)
+	at ayqf.call(:com.google.android.gms@252635038@25.26.35 (260800-783060121):5)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+	at java.lang.Thread.run(Thread.java:1119)
+	Suppressed: com.google.android.gms.DiagnosticNonRestartCrashException: This did not crash.

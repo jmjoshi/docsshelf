@@ -1,10 +1,12 @@
 # Android Build Issues - Final Resolution Strategy
 
 ## Problem Summary
+
 The Android build is failing due to D8 dexing errors with androidx.fragment:1.8.6 and dependency version conflicts between Expo SDK 49, React Native 0.72, and newer AndroidX libraries.
 
 ## Root Cause Analysis
-1. **Expo SDK 49** uses React Native 0.72 
+
+1. **Expo SDK 49** uses React Native 0.72
 2. **Newer AndroidX libraries** (fragment 1.8.6+) require newer Android Gradle Plugin and compileSdk
 3. **Current AGP 7.4.2** doesn't fully support the newer AndroidX versions
 4. **D8 dexing process** is failing during the merge phase
@@ -12,6 +14,7 @@ The Android build is failing due to D8 dexing errors with androidx.fragment:1.8.
 ## Recommended Solutions (in order of preference)
 
 ### Option 1: Use Expo Development Build (RECOMMENDED)
+
 This avoids the complex native build process entirely:
 
 ```powershell
@@ -26,16 +29,19 @@ npx expo start
 ```
 
 **Pros:**
+
 - ✅ No native build issues
 - ✅ Hot reload works perfectly
 - ✅ Can test all Expo SDK features
 - ✅ Works immediately
 
 **Cons:**
+
 - ⚠️ Limited to Expo SDK modules only
 - ⚠️ Cannot test custom native modules
 
 ### Option 2: Use EAS Build (Cloud Building)
+
 Let EAS handle the complex build process in the cloud:
 
 ```powershell
@@ -55,17 +61,20 @@ eas build --platform android --profile development
 ```
 
 **Pros:**
+
 - ✅ Professional build environment
 - ✅ No local dependency issues
 - ✅ Can create production builds
 - ✅ Works with custom native modules
 
 **Cons:**
+
 - ⚠️ Requires internet connection
 - ⚠️ Build queue times
 - ⚠️ Limited free builds per month
 
 ### Option 3: Upgrade Expo SDK (Advanced)
+
 Upgrade to a newer Expo SDK that better supports current AndroidX versions:
 
 ```powershell
@@ -79,16 +88,19 @@ npm run android
 ```
 
 **Pros:**
+
 - ✅ Better compatibility with modern AndroidX
 - ✅ Latest features and bug fixes
 - ✅ Better long-term maintenance
 
 **Cons:**
+
 - ⚠️ May require code changes
 - ⚠️ Potential breaking changes
 - ⚠️ Time-consuming migration
 
 ### Option 4: Manual Dependency Resolution (Complex)
+
 Force specific AndroidX versions throughout the project:
 
 ```gradle
@@ -111,10 +123,12 @@ android {
 ### For Development Testing (Start Here):
 
 1. **Use Expo Go App:**
+
    ```powershell
    cd "c:\Users\Jayant\Documents\projects\docsshelf"
    npx expo start
    ```
+
    - Install Expo Go on Android device
    - Scan QR code to load app
    - Test all functionality
@@ -128,6 +142,7 @@ android {
 ### For Production Testing:
 
 1. **Use EAS Build for final APK:**
+
    ```powershell
    eas build --platform android --profile production
    ```
@@ -152,6 +167,7 @@ With Expo Go or EAS builds, test:
 ## Conclusion
 
 **Recommended Immediate Action:**
+
 1. Use **Expo Go** for development testing (Option 1)
 2. Use **EAS Build** for production testing when needed (Option 2)
 3. Consider **SDK upgrade** for long-term solution (Option 3)

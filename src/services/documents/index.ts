@@ -76,7 +76,7 @@ export class DocumentService {
 
       // Read file data
       const fileData = await FileSystem.readAsStringAsync(asset.uri, {
-        encoding: FileSystem.EncodingType.Base64,
+        encoding: 'base64',
       });
 
       // Save encrypted file
@@ -149,7 +149,7 @@ export class DocumentService {
               // Check storage quota before saving
               if (!StorageQuotaManager.hasSpaceFor(totalSize)) {
                 const quotaStatus = StorageQuotaManager.checkQuotaStatus();
-                
+
                 if (quotaStatus === 'critical') {
                   // Try to free space automatically
                   const spaceFreed =
@@ -279,7 +279,7 @@ export class DocumentService {
 
       // Read file data
       const fileData = await FileSystem.readAsStringAsync(asset.uri, {
-        encoding: FileSystem.EncodingType.Base64,
+        encoding: 'base64',
       });
 
       // Save encrypted file

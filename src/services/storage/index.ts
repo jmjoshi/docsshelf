@@ -1,5 +1,6 @@
 // Storage service for file operations with encryption
-import * as FileSystem from 'expo-file-system';
+// Use legacy API for getInfoAsync due to Expo SDK 54 deprecation
+import * as FileSystem from 'expo-file-system/legacy';
 import { Platform } from 'react-native';
 import { EncryptionService } from '../encryption';
 import { DatabaseService } from '../database';

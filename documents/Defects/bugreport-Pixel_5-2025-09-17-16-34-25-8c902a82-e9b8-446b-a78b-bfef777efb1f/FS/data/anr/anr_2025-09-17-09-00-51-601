@@ -1,0 +1,173 @@
+Subject: Input dispatching timed out (f047c88 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity is not responding. Waited 5008ms for FocusEvent(hasFocus=false)).
+RssHwmKb: 274604
+RssKb: 165548
+RssAnonKb: 51008
+RssShmemKb: 1104
+VmSwapKb: 47276
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758124615428
+  install_packages <
+  >
+>
+events <
+  timestamp_ms: 1758124674095
+  anr <
+    pid: 2911
+    process: "com.android.keychain"
+    process_class: 2
+    subject: "executing service com.android.keychain/.KeyChainService, waited 24580ms"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1758124724657
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 16s"
+  >
+>
+events <
+  timestamp_ms: 1758124784844
+  java_crash <
+    exception_class: "java.util.concurrent.TimeoutException"
+    pid: 5205
+    process: "com.google.android.providers.media.module"
+    process_class: 2
+    uid: 10214
+  >
+>
+events <
+  timestamp_ms: 1758124799788
+  anr <
+    pid: 1656
+    process: "system"
+    process_class: 3
+    subject: "executing service android/com.android.server.notification.NotificationHistoryJobService, waited 21805ms"
+    uid: 1000
+  >
+>
+timestamp_ms: 1758124851588
+window_ms: 300000
+
+----- dumping pid: 2183 at 132841908
+proc 2183
+context binder
+  thread 2943: l 10 need_return 0 tr 0
+    outgoing transaction 9844161: 0000000000000000 from 2183:2943 to 3332:4668 code 15 flags 12 pri 0:120 r1 elapsed 86598ms
+    transaction complete
+  buffer 9848372: 0 size 8:0:0 delivered
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 2183 at 2025-09-17 08:58:45.303429500-0700 -----
+Cmd line: com.google.android.apps.nexuslauncher
+
+sysTid=2183      0
+sysTid=2187      do_sigtimedwait
+sysTid=2188      pipe_read
+sysTid=2190      futex_wait_queue
+sysTid=2191      futex_wait_queue
+sysTid=2192      futex_wait_queue
+sysTid=2193      futex_wait_queue
+sysTid=2194      futex_wait_queue
+sysTid=2195      binder_ioctl_write_read
+sysTid=2196      binder_ioctl_write_read
+sysTid=2198      binder_ioctl_write_read
+sysTid=2199      futex_wait_queue
+sysTid=2200      do_epoll_wait
+sysTid=2202      do_sys_poll
+sysTid=2213      do_epoll_wait
+sysTid=2216      do_epoll_wait
+sysTid=2217      0
+sysTid=2218      0
+sysTid=2230      futex_wait_queue
+sysTid=2231      futex_wait_queue
+sysTid=2236      binder_ioctl_write_read
+sysTid=2237      do_epoll_wait
+sysTid=2241      binder_ioctl_write_read
+sysTid=2243      futex_wait_queue
+sysTid=2374      binder_ioctl_write_read
+sysTid=2405      do_epoll_wait
+sysTid=2744      do_epoll_wait
+sysTid=2753      do_epoll_wait
+sysTid=2780      do_epoll_wait
+sysTid=2781      futex_wait_queue
+sysTid=2808      do_epoll_wait
+sysTid=2818      do_epoll_wait
+sysTid=2863      do_epoll_wait
+sysTid=2877      do_epoll_wait
+sysTid=2879      do_epoll_wait
+sysTid=2909      binder_ioctl_write_read
+sysTid=2925      binder_ioctl_write_read
+sysTid=2943      binder_ioctl_write_read
+sysTid=2963      do_epoll_wait
+sysTid=3008      futex_wait_queue
+sysTid=8706      futex_wait_queue
+sysTid=9510      binder_ioctl_write_read
+sysTid=9531      do_epoll_wait
+sysTid=9534      futex_wait_queue
+
+----- end 2183 -----
+
+proc 2183
+context binder
+  thread 2943: l 10 need_return 0 tr 0
+    outgoing transaction 9844161: 0000000000000000 from 2183:2943 to 3332:4668 code 15 flags 12 pri 0:120 r1 elapsed 97165ms
+    transaction complete
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 2183 at 2025-09-17 08:58:55.766250200-0700 -----
+Cmd line: com.google.android.apps.nexuslauncher
+
+sysTid=2183      0
+sysTid=2187      0
+sysTid=2188      futex_wait_queue
+sysTid=2190      futex_wait_queue
+sysTid=2191      futex_wait_queue
+sysTid=2192      futex_wait_queue
+sysTid=2193      futex_wait_queue
+sysTid=2194      futex_wait_queue
+sysTid=2195      binder_ioctl_write_read
+sysTid=2196      binder_ioctl_write_read
+sysTid=2198      binder_ioctl_write_read
+sysTid=2199      futex_wait_queue
+sysTid=2200      do_epoll_wait
+sysTid=2202      do_sys_poll
+sysTid=2213      do_epoll_wait
+sysTid=2216      do_epoll_wait
+sysTid=2217      do_epoll_wait
+sysTid=2218      folio_wait_bit_common
+sysTid=2230      futex_wait_queue
+sysTid=2231      futex_wait_queue
+sysTid=2236      binder_ioctl_write_read
+sysTid=2237      do_epoll_wait
+sysTid=2241      binder_ioctl_write_read
+sysTid=2243      futex_wait_queue
+sysTid=2374      binder_ioctl_write_read
+sysTid=2405      do_epoll_wait
+sysTid=2744      do_epoll_wait
+sysTid=2753      do_epoll_wait
+sysTid=2780      do_epoll_wait
+sysTid=2781      futex_wait_queue
+sysTid=2808      do_epoll_wait
+sysTid=2818      do_epoll_wait
+sysTid=2863      do_epoll_wait
+sysTid=2877      do_epoll_wait
+sysTid=2879      do_epoll_wait
+sysTid=2909      binder_ioctl_write_read
+sysTid=2925      binder_ioctl_write_read
+sysTid=2943      binder_ioctl_write_read
+sysTid=2963      do_epoll_wait
+sysTid=3008      futex_wait_queue
+sysTid=8706      futex_wait_queue
+sysTid=9510      binder_ioctl_write_read
+sysTid=9531      do_epoll_wait
+sysTid=9534      futex_wait_queue
+
+----- end 2183 -----
+
+DurationsV5: 132840848,1036,0,128640,59,0,2,0,8,2,0,652,0,0,1,56,14952,21,2,1,4,1,381,0,1037
+
+----- dumping ended at 132977988

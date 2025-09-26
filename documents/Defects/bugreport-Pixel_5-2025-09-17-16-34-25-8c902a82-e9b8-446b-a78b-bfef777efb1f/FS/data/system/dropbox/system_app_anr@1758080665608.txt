@@ -1,0 +1,256 @@
+SystemUptimeMs: 88781265
+Process: com.android.phone
+PID: 809
+UID: 1001
+Frozen: false
+Timestamp: 2025-09-16 20:42:59.886-0700
+Flags: 0x38c83e4d
+Package: com.android.providers.telephony v36 (16)
+Package: com.android.stk v36 (16)
+Package: com.android.phone v36 (16)
+Foreground: No
+Process-Runtime: 134496
+ErrorId: 183b7e63-4171-4da1-9e2d-e79bed299ea3
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=0.00 avg60=0.49 avg300=2.72 total=1617786106
+full avg10=0.00 avg60=0.05 avg300=0.41 total=588023444
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=95.67 avg60=92.62 avg300=86.48 total=13147059021
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=9.12 avg60=18.49 avg300=21.93 total=4349531990
+full avg10=0.00 avg60=0.31 avg300=0.62 total=1087479236
+----- End output from /proc/pressure/io -----
+
+CPU usage from 7320ms to 13957ms later (2025-09-16 20:43:44.645 to 2025-09-16 20:43:51.282):
+  42% 32511/com.google.android.apps.nexuslauncher: 0.8% user + 41% kernel / faults: 1243 minor 11 major
+  32% 32016/system_server: 1.3% user + 31% kernel / faults: 803 minor
+  46% 37/kcompactd0: 0% user + 46% kernel
+  7.9% 32455/com.android.networkstack.process: 0.6% user + 7.3% kernel / faults: 66 minor
+  4% 29159/kworker/u6:0-events_unbound: 0% user + 4% kernel
+  6.7% 973/com.google.android.settings.intelligence: 0.1% user + 6.6% kernel / faults: 3 minor 2 major
+  5.8% 1034/com.google.android.healthconnect.controller: 0.1% user + 5.6% kernel / faults: 306 minor
+  2% 32319/com.android.systemui: 0% user + 2% kernel / faults: 277 minor
+  4.2% 946/com.google.android.apps.photos: 0.9% user + 3.3% kernel / faults: 199 minor
+  4.2% 503/android.hardware.sensors-service.multihal: 0% user + 4.2% kernel
+100% TOTAL: 0.8% user + 96% kernel + 2.9% softirq
+Data File: /data/anr/anr_2025-09-16-20-43-47-576
+Subject: Process ProcessRecord{6c36728 809:com.android.phone/1001} failed to complete startup
+RssHwmKb: 140572
+RssKb: 140432
+RssAnonKb: 59152
+RssShmemKb: 768
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758080329857
+  anr <
+    pid: 32319
+    process: "com.android.systemui"
+    process_class: 2
+    subject: "Process ProcessRecord{46d5ce8 32319:com.android.systemui/u0a186} failed to complete startup"
+    uid: 10186
+  >
+>
+events <
+  timestamp_ms: 1758080333545
+  system_server_started <
+  >
+>
+events <
+  timestamp_ms: 1758080373152
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 17s"
+  >
+>
+events <
+  timestamp_ms: 1758080379788
+  anr <
+    pid: 32507
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 32507:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080409166
+  anr <
+    pid: 32634
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{2aaafe7 32634:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1758080426035
+  anr <
+    pid: 32659
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 32659:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080475702
+  anr <
+    pid: 363
+    process: "com.google.android.googlequicksearchbox:interactor"
+    process_class: 2
+    subject: "Process ProcessRecord{791bba8 363:com.google.android.googlequicksearchbox:interactor/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758080482616
+  anr <
+    pid: 351
+    process: "com.google.android.providers.media.module"
+    process_class: 2
+    subject: "Process ProcessRecord{8f05bda 351:com.google.android.providers.media.module/u0a214} failed to complete startup"
+    uid: 10214
+  >
+>
+events <
+  timestamp_ms: 1758080523752
+  anr <
+    pid: 471
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 471:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080528129
+  anr <
+    pid: 523
+    process: "com.google.android.apps.messaging:rcs"
+    process_class: 2
+    subject: "Process ProcessRecord{7efa528 523:com.google.android.apps.messaging:rcs/u0a145} failed to complete startup"
+    uid: 10145
+  >
+>
+events <
+  timestamp_ms: 1758080529675
+  anr <
+    pid: 32538
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.safetycenter.action.REFRESH_SAFETY_SOURCES flg=0x10000010 xflg=0x4 pkg=com.android.settings cmp=com.android.settings/.safetycenter.SafetySourceBroadcastReceiver (has [...]"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1758080538179
+  anr <
+    pid: 32735
+    process: "com.google.android.apps.wellbeing"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.intent.action.LOCKED_BOOT_COMPLETED flg=0x89000010 cmp=com.google.android.apps.wellbeing/.common.receiver.coalescedreceivers.LockedBootCompletedCoalescedBroadcast_Rec[...]"
+    uid: 10141
+  >
+>
+events <
+  timestamp_ms: 1758080550634
+  anr <
+    pid: 749
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{f318390 749:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758080569950
+  anr <
+    pid: 744
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{eeac7d7 744:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+timestamp_ms: 1758080627537
+window_ms: 300000
+
+----- dumping pid: 809 at 88688940
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 809 at 2025-09-16 20:42:49.959991100-0700 -----
+Cmd line: com.android.phone
+
+sysTid=809       futex_wait_queue
+sysTid=821       do_sigtimedwait
+sysTid=822       pipe_read
+sysTid=823       futex_wait_queue
+sysTid=824       0
+sysTid=825       futex_wait_queue
+sysTid=826       futex_wait_queue
+sysTid=827       futex_wait_queue
+sysTid=829       binder_ioctl_write_read
+sysTid=830       binder_ioctl_write_read
+sysTid=838       futex_wait_queue
+sysTid=870       do_epoll_wait
+sysTid=871       do_epoll_wait
+sysTid=877       do_epoll_wait
+sysTid=879       futex_wait_queue
+sysTid=889       do_epoll_wait
+sysTid=896       binder_ioctl_write_read
+sysTid=908       binder_ioctl_write_read
+sysTid=960       do_epoll_wait
+sysTid=962       futex_wait_queue
+sysTid=1015      do_epoll_wait
+sysTid=1019      do_epoll_wait
+
+----- end 809 -----
+
+proc 809
+context binder
+  thread 809: l 10 need_return 0 tr 0
+    outgoing transaction 6735897: 0000000000000000 from 809:809 to 32016:32266 code 17 flags 12 pri 0:120 r1 elapsed 2516ms
+    transaction complete
+libdebuggerd_client: timeout expired (update_timeout)
+
+----- Waiting Channels: pid 809 at 2025-09-16 20:43:01.048018200-0700 -----
+Cmd line: com.android.phone
+
+sysTid=809       binder_ioctl_write_read
+sysTid=821       0
+sysTid=822       pipe_read
+sysTid=823       futex_wait_queue
+sysTid=824       0
+sysTid=825       futex_wait_queue
+sysTid=826       futex_wait_queue
+sysTid=827       futex_wait_queue
+sysTid=829       futex_wait_queue
+sysTid=830       binder_ioctl_write_read
+sysTid=838       futex_wait_queue
+sysTid=870       do_epoll_wait
+sysTid=871       do_epoll_wait
+sysTid=877       do_epoll_wait
+sysTid=879       futex_wait_queue
+sysTid=889       do_epoll_wait
+sysTid=896       binder_ioctl_write_read
+sysTid=908       binder_ioctl_write_read
+sysTid=960       do_epoll_wait
+sysTid=1015      do_epoll_wait
+sysTid=1019      do_epoll_wait
+
+----- end 809 -----
+
+DurationsV5: 88688657,0,0,46880,11022,2462,0,0,31,0,0,7561,0,0,0,5,32808,281,1,0,4,1,0,0,0
+
+----- dumping ended at 88746583
+End Data File

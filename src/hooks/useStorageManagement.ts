@@ -22,7 +22,7 @@ export function useStorageManagement(): UseStorageManagement {
   const refreshStorage = () => {
     const newStorageInfo = StorageQuotaManager.getStorageInfo();
     const newQuotaStatus = StorageQuotaManager.checkQuotaStatus();
-    
+
     setStorageInfo(newStorageInfo);
     setQuotaStatus(newQuotaStatus);
   };
@@ -34,7 +34,7 @@ export function useStorageManagement(): UseStorageManagement {
   const cleanup = async (): Promise<boolean> => {
     try {
       const result = await StorageQuotaManager.cleanupOldDocuments();
-      
+
       if (result.cleaned) {
         refreshStorage();
         return true;
@@ -84,7 +84,7 @@ export function useStorageWarnings() {
   useEffect(() => {
     if (quotaStatus === 'critical' && !warningShown) {
       setWarningShown(true);
-      
+
       if (typeof window !== 'undefined' && window.confirm) {
         const shouldCleanup = window.confirm(
           `Storage is almost full (${Math.round(storageInfo.usagePercent * 100)}%)!\n\n` +
@@ -92,7 +92,7 @@ export function useStorageWarnings() {
             `Available: ${formatBytes(storageInfo.total)}\n\n` +
             `Would you like to automatically clean up old documents?`
         );
-        
+
         if (shouldCleanup) {
           StorageQuotaManager.cleanupOldDocuments().then((result) => {
             if (result.cleaned) {

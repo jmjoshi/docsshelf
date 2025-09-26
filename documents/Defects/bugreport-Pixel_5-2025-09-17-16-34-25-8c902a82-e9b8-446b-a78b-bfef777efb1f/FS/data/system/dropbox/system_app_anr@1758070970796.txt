@@ -1,0 +1,149 @@
+SystemUptimeMs: 79086693
+Process: com.android.settings
+PID: 22258
+UID: 1000
+Frozen: true
+Timestamp: 2025-09-16 18:02:06.461-0700
+Flags: 0x38cbbe45
+Package: com.android.settings v36 (16)
+Foreground: No
+Process-Runtime: 5343421
+ErrorId: 21f48df2-3412-4196-9f1f-4ced5ac2e0af
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=6.19 avg60=5.79 avg300=2.02 total=933275572
+full avg10=0.15 avg60=0.14 avg300=0.06 total=341323146
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=83.29 avg60=81.91 avg300=49.27 total=9550230799
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=21.16 avg60=21.42 avg300=9.98 total=3257697995
+full avg10=0.00 avg60=0.08 avg300=0.51 total=971216367
+----- End output from /proc/pressure/io -----
+
+CPU usage from 24041ms to -662ms ago (2025-09-16 18:02:19.567 to 2025-09-16 18:02:44.270):
+  37% 22241/com.google.android.ext.services: 6.1% user + 31% kernel / faults: 429 minor 45 major
+  35% 21497/system_server: 3.1% user + 32% kernel / faults: 261 minor 20 major
+  21% 22874/com.android.localtransport: 0.1% user + 21% kernel
+  18% 22258/com.android.settings: 1.2% user + 16% kernel / faults: 343 minor 161 major
+  10% 503/android.hardware.sensors-service.multihal: 0% user + 10% kernel
+  0% 21289/zygote64: 0% user + 0% kernel
+  4.3% 544/adbd: 0% user + 4.2% kernel / faults: 771 minor
+  3.1% 28503/kworker/u5:2-events_unbound: 0% user + 3.1% kernel
+  2.4% 28356/kworker/0:1-virtio_vsock: 0% user + 2.4% kernel
+  2.2% 305/jbd2/dm-55-8: 0% user + 2.2% kernel
+99% TOTAL: 4.1% user + 85% kernel + 0.1% iowait + 9.7% softirq
+Data File: /data/anr/anr_2025-09-16-18-02-46-581
+Subject: Broadcast of Intent { act=com.android.settings.battery.action.PERIODIC_JOB_UPDATE flg=0x10 xflg=0x4 cmp=com.android.settings/.fuelgauge.batteryusage.PeriodicJobReceiver }
+RssHwmKb: 211756
+RssKb: 88332
+RssAnonKb: 31264
+RssShmemKb: 964
+VmSwapKb: 35840
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758070856572
+  anr <
+    pid: 22241
+    process: "com.google.android.ext.services"
+    process_class: 2
+    subject: "executing service com.google.android.ext.services/android.ext.services.storage.CacheQuotaServiceImpl, waited 20234ms"
+    uid: 10196
+  >
+>
+timestamp_ms: 1758070963609
+window_ms: 300000
+
+----- dumping pid: 22258 at 79048834
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 22258 at 2025-09-16 18:02:15.042404700-0700 -----
+Cmd line: com.android.settings
+
+sysTid=22258     0
+sysTid=22263     do_sigtimedwait
+sysTid=22264     pipe_read
+sysTid=22265     futex_wait_queue
+sysTid=22267     0
+sysTid=22268     futex_wait_queue
+sysTid=22272     futex_wait_queue
+sysTid=22273     futex_wait_queue
+sysTid=22277     binder_ioctl_write_read
+sysTid=22278     binder_ioctl_write_read
+sysTid=22288     futex_wait_queue
+sysTid=22303     futex_wait_queue
+sysTid=22389     do_epoll_wait
+sysTid=22998     binder_ioctl_write_read
+sysTid=23313     futex_wait_queue
+sysTid=23749     futex_wait_queue
+sysTid=23750     futex_wait_queue
+sysTid=23754     binder_ioctl_write_read
+sysTid=24513     do_epoll_wait
+sysTid=24556     do_epoll_wait
+sysTid=24558     futex_wait_queue
+sysTid=25077     do_epoll_wait
+sysTid=25127     do_epoll_wait
+sysTid=25134     do_epoll_wait
+sysTid=25153     binder_ioctl_write_read
+sysTid=25370     binder_ioctl_write_read
+sysTid=26850     futex_wait_queue
+sysTid=26865     futex_wait_queue
+sysTid=26868     futex_wait_queue
+sysTid=26869     futex_wait_queue
+sysTid=26870     futex_wait_queue
+sysTid=28499     binder_ioctl_write_read
+
+----- end 22258 -----
+
+libdebuggerd_client: failed to send output fd to tombstoned: Broken pipe
+
+----- Waiting Channels: pid 22258 at 2025-09-16 18:02:27.762847200-0700 -----
+Cmd line: com.android.settings
+
+sysTid=22258     0
+sysTid=22263     0
+sysTid=22264     pipe_read
+sysTid=22265     futex_wait_queue
+sysTid=22267     0
+sysTid=22268     futex_wait_queue
+sysTid=22272     futex_wait_queue
+sysTid=22273     futex_wait_queue
+sysTid=22277     binder_ioctl_write_read
+sysTid=22278     binder_ioctl_write_read
+sysTid=22288     futex_wait_queue
+sysTid=22303     futex_wait_queue
+sysTid=22389     do_epoll_wait
+sysTid=22998     binder_ioctl_write_read
+sysTid=23313     futex_wait_queue
+sysTid=23749     futex_wait_queue
+sysTid=23750     futex_wait_queue
+sysTid=23754     binder_ioctl_write_read
+sysTid=24513     do_epoll_wait
+sysTid=24556     do_epoll_wait
+sysTid=24558     futex_wait_queue
+sysTid=25077     do_epoll_wait
+sysTid=25127     do_epoll_wait
+sysTid=25134     do_epoll_wait
+sysTid=25153     binder_ioctl_write_read
+sysTid=25370     binder_ioctl_write_read
+sysTid=26850     futex_wait_queue
+sysTid=26865     futex_wait_queue
+sysTid=26868     futex_wait_queue
+sysTid=26869     futex_wait_queue
+sysTid=26870     futex_wait_queue
+sysTid=28499     binder_ioctl_write_read
+
+----- end 22258 -----
+
+DurationsV5: 79045444,0,0,37147,2973,1690,822,0,2150,0,0,0,0,0,0,155,24168,813,2,194,4,1,0,0,0
+
+----- dumping ended at 79086180
+End Data File

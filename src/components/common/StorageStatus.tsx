@@ -26,7 +26,7 @@ export const StorageStatus: React.FC<StorageStatusProps> = ({
     getStorageBreakdown,
     formatBytes,
   } = useStorageManagement();
-  
+
   const [isCleaningUp, setIsCleaningUp] = useState(false);
 
   // Debug logging
@@ -62,7 +62,7 @@ export const StorageStatus: React.FC<StorageStatusProps> = ({
 
   const handleCleanup = async () => {
     console.log('🔥 CLEANUP BUTTON CLICKED!');
-    
+
     // Use window.alert for web platform
     if (typeof window !== 'undefined') {
       if (
@@ -73,10 +73,10 @@ export const StorageStatus: React.FC<StorageStatusProps> = ({
         return;
       }
     }
-    
+
     setIsCleaningUp(true);
     console.log('🚀 Starting cleanup...');
-    
+
     try {
       const result = await cleanup();
       console.log('🎯 Cleanup result:', result);

@@ -22,7 +22,7 @@ export default function StorageManagementScreen() {
     formatBytes,
     refreshStorage,
   } = useStorageManagement();
-  
+
   const [isCleaningUp, setIsCleaningUp] = useState(false);
   const [storageBreakdown, setStorageBreakdown] = useState<{
     [key: string]: number;
@@ -37,7 +37,7 @@ export default function StorageManagementScreen() {
     setIsCleaningUp(true);
     try {
       const success = await cleanup();
-      
+
       if (success) {
         Alert.alert(
           'Cleanup Successful',
@@ -158,7 +158,7 @@ export default function StorageManagementScreen() {
             <Title style={{ color: theme.colors.onSurface }}>
               Cleanup Options
             </Title>
-            
+
             <Button
               mode="contained"
               onPress={() => handleCleanup()}

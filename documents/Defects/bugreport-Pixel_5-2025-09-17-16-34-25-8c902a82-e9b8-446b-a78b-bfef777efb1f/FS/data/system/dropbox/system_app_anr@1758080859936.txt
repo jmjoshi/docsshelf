@@ -1,0 +1,290 @@
+SystemUptimeMs: 88973084
+Process: com.google.android.apps.nexuslauncher
+PID: 32511
+UID: 10181
+Frozen: false
+Timestamp: 2025-09-16 20:43:03.336-0700
+Flags: 0x34cbbe45
+Package: com.google.android.apps.nexuslauncher v907 (16)
+Foreground: Yes
+Process-Runtime: 523023
+ErrorId: 8153c0d9-9bec-4268-8847-94e7a3fed30d
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=0.33 avg60=0.35 avg300=2.32 total=1617904138
+full avg10=0.00 avg60=0.02 avg300=0.34 total=588028391
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=93.41 avg60=93.93 avg300=87.87 total=13196075586
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=84.12 avg60=37.30 avg300=25.63 total=4373219518
+full avg10=0.12 avg60=0.16 avg300=0.52 total=1087529980
+----- End output from /proc/pressure/io -----
+
+CPU usage from 44138ms to 175856ms later (2025-09-16 20:45:10.465 to 2025-09-16 20:47:22.184):
+  46% 32016/system_server: 2.7% user + 44% kernel / faults: 18405 minor 1 major
+  38% 37/kcompactd0: 0% user + 38% kernel
+  30% 32511/com.google.android.apps.nexuslauncher: 0.6% user + 29% kernel / faults: 5553 minor 11 major
+  8.9% 32319/com.android.systemui: 0.6% user + 8.2% kernel / faults: 4382 minor 3 major
+  5.7% 503/android.hardware.sensors-service.multihal: 0% user + 5.7% kernel
+  5.8% 32455/com.android.networkstack.process: 0.3% user + 5.4% kernel / faults: 277 minor
+  5.4% 973/com.google.android.settings.intelligence: 0.1% user + 5.2% kernel / faults: 430 minor
+  4.8% 1023/com.google.android.apps.wellbeing: 0.2% user + 4.6% kernel / faults: 2617 minor 1 major
+  3.5% 1151/com.android.phone: 0.2% user + 3.2% kernel / faults: 1808 minor
+  3.5% 946/com.google.android.apps.photos: 0.1% user + 3.3% kernel / faults: 1003 minor 17 major
+99% TOTAL: 2.2% user + 87% kernel + 2.3% iowait + 7% softirq
+Data File: /data/anr/anr_2025-09-16-20-44-40-255
+Subject: executing service com.google.android.apps.nexuslauncher/com.android.launcher3.notification.NotificationListener, waited 20741ms
+RssHwmKb: 217088
+RssKb: 213872
+RssAnonKb: 86728
+RssShmemKb: 1020
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758080379788
+  anr <
+    pid: 32507
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 32507:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080409166
+  anr <
+    pid: 32634
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{2aaafe7 32634:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1758080426035
+  anr <
+    pid: 32659
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 32659:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080475702
+  anr <
+    pid: 363
+    process: "com.google.android.googlequicksearchbox:interactor"
+    process_class: 2
+    subject: "Process ProcessRecord{791bba8 363:com.google.android.googlequicksearchbox:interactor/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758080482616
+  anr <
+    pid: 351
+    process: "com.google.android.providers.media.module"
+    process_class: 2
+    subject: "Process ProcessRecord{8f05bda 351:com.google.android.providers.media.module/u0a214} failed to complete startup"
+    uid: 10214
+  >
+>
+events <
+  timestamp_ms: 1758080523752
+  anr <
+    pid: 471
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 471:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080528129
+  anr <
+    pid: 523
+    process: "com.google.android.apps.messaging:rcs"
+    process_class: 2
+    subject: "Process ProcessRecord{7efa528 523:com.google.android.apps.messaging:rcs/u0a145} failed to complete startup"
+    uid: 10145
+  >
+>
+events <
+  timestamp_ms: 1758080529675
+  anr <
+    pid: 32538
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.safetycenter.action.REFRESH_SAFETY_SOURCES flg=0x10000010 xflg=0x4 pkg=com.android.settings cmp=com.android.settings/.safetycenter.SafetySourceBroadcastReceiver (has [...]"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1758080538179
+  anr <
+    pid: 32735
+    process: "com.google.android.apps.wellbeing"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.intent.action.LOCKED_BOOT_COMPLETED flg=0x89000010 cmp=com.google.android.apps.wellbeing/.common.receiver.coalescedreceivers.LockedBootCompletedCoalescedBroadcast_Rec[...]"
+    uid: 10141
+  >
+>
+events <
+  timestamp_ms: 1758080550634
+  anr <
+    pid: 749
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{f318390 749:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758080569950
+  anr <
+    pid: 744
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{eeac7d7 744:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1758080627568
+  anr <
+    pid: 809
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 809:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080659613
+  half_watchdog <
+    subject: "Blocked in handler on ActivityManager (ActivityManager) for 17s, Blocked in handler on CpuMonitorService (CpuMonitorService) for 17s"
+  >
+>
+timestamp_ms: 1758080678555
+window_ms: 300000
+
+----- dumping pid: 32511 at 88694936
+proc 32511
+context binder
+  node 6735486: u00007a95fb2b7820 c00007a95db2ea768 pri 0:139 hs 1 hw 1 ls 1 lw 0 is 1 iw 1 tr 1 proc 541
+  buffer 6735508: c0 size 92:0:0 delivered
+libdebuggerd_client: failed to read "/proc/32511/task/1049/wchan": No such file or directory
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 32511 at 2025-09-16 20:42:58.012650900-0700 -----
+Cmd line: com.google.android.apps.nexuslauncher
+
+sysTid=32511     futex_wait_queue
+sysTid=32516     do_sigtimedwait
+sysTid=32518     pipe_read
+sysTid=32519     futex_wait_queue
+sysTid=32520     futex_wait_queue
+sysTid=32521     futex_wait_queue
+sysTid=32522     futex_wait_queue
+sysTid=32523     futex_wait_queue
+sysTid=32524     binder_ioctl_write_read
+sysTid=32525     binder_ioctl_write_read
+sysTid=32528     binder_ioctl_write_read
+sysTid=32529     futex_wait_queue
+sysTid=32530     do_epoll_wait
+sysTid=32531     do_sys_poll
+sysTid=32533     0
+sysTid=32535     do_epoll_wait
+sysTid=32536     do_epoll_wait
+sysTid=32537     0
+sysTid=32549     futex_wait_queue
+sysTid=32550     futex_wait_queue
+sysTid=32552     0
+sysTid=32555     0
+sysTid=32556     binder_ioctl_write_read
+sysTid=32560     futex_wait_queue
+sysTid=32562     0
+sysTid=32567     binder_ioctl_write_read
+sysTid=32719     do_epoll_wait
+sysTid=884       do_epoll_wait
+sysTid=911       do_epoll_wait
+sysTid=972       do_epoll_wait
+sysTid=981       futex_wait_queue
+sysTid=1022      do_epoll_wait
+sysTid=1026      binder_ioctl_write_read
+sysTid=1027      do_epoll_wait
+sysTid=1028      do_epoll_wait
+sysTid=1029      do_epoll_wait
+
+----- end 32511 -----
+
+proc 32511
+context binder
+  thread 32511: l 10 need_return 0 tr 0
+    outgoing transaction 6736500: 0000000000000000 from 32511:32511 to 32016:0 code 29 flags 12 pri 0:110 r1 elapsed 65ms
+    transaction complete
+  thread 32536: l 10 need_return 0 tr 0
+    outgoing transaction 6735779: 0000000000000000 from 32511:32536 to 32016:470 code 13 flags 12 pri 0:118 r1 elapsed 25696ms
+    node work 6735780: u00007a95fb2bf710 c00007a961b295d90
+    transaction complete
+  thread 32537: l 10 need_return 0 tr 0
+    outgoing transaction 6736494: 0000000000000000 from 32511:32537 to 32016:0 code 4 flags 12 pri 0:118 r1 elapsed 188ms
+    transaction complete
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 32511 at 2025-09-16 20:43:24.957810400-0700 -----
+Cmd line: com.google.android.apps.nexuslauncher
+
+sysTid=32511     binder_ioctl_write_read
+sysTid=32516     futex_wait_queue
+sysTid=32518     pipe_read
+sysTid=32519     futex_wait_queue
+sysTid=32520     futex_wait_queue
+sysTid=32521     futex_wait_queue
+sysTid=32522     futex_wait_queue
+sysTid=32523     futex_wait_queue
+sysTid=32524     binder_ioctl_write_read
+sysTid=32525     binder_ioctl_write_read
+sysTid=32528     binder_ioctl_write_read
+sysTid=32529     futex_wait_queue
+sysTid=32530     do_epoll_wait
+sysTid=32531     do_sys_poll
+sysTid=32533     futex_wait_queue
+sysTid=32535     do_epoll_wait
+sysTid=32536     binder_ioctl_write_read
+sysTid=32537     0
+sysTid=32549     futex_wait_queue
+sysTid=32550     futex_wait_queue
+sysTid=32552     futex_wait_queue
+sysTid=32555     do_epoll_wait
+sysTid=32556     binder_ioctl_write_read
+sysTid=32560     futex_wait_queue
+sysTid=32562     binder_ioctl_write_read
+sysTid=32567     binder_ioctl_write_read
+sysTid=32719     do_epoll_wait
+sysTid=884       do_epoll_wait
+sysTid=911       do_epoll_wait
+sysTid=972       do_epoll_wait
+sysTid=981       futex_wait_queue
+sysTid=1022      do_epoll_wait
+sysTid=1026      binder_ioctl_write_read
+sysTid=1027      do_epoll_wait
+sysTid=1028      do_epoll_wait
+sysTid=1029      do_epoll_wait
+
+----- end 32511 -----
+
+DurationsV5: 88693637,41,0,91484,12550,2979,1,0,173,0,0,8681,0,0,1,1528,37353,0,2,0,4,1,0,0,0
+
+----- dumping ended at 88934810
+End Data File

@@ -1,0 +1,215 @@
+SystemUptimeMs: 79605424
+Process: com.google.android.gms.persistent
+PID: 28819
+UID: 10144
+Frozen: false
+Timestamp: 2025-09-16 18:11:11.096-0700
+Flags: 0xa0cabe45
+Package: com.google.android.gms v252635038 (25.26.35 (260800-783060121))
+Foreground: No
+Process-Runtime: 61244
+ErrorId: da76c8f7-17f8-41f4-8156-2c8a50c78596
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=6.72 avg60=10.11 avg300=12.65 total=1018812567
+full avg10=1.10 avg60=4.21 avg300=4.22 total=366671578
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=81.09 avg60=78.15 avg300=76.28 total=9981567491
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=22.77 avg60=25.63 avg300=27.78 total=3421296708
+full avg10=2.43 avg60=2.58 avg300=1.90 total=982189764
+----- End output from /proc/pressure/io -----
+
+CPU usage from 483ms to 14946ms later (2025-09-16 18:11:11.924 to 2025-09-16 18:11:26.387):
+  63% 28819/com.google.android.gms.persistent: 5.8% user + 57% kernel / faults: 2369 minor 20 major
+  45% 37/kcompactd0: 0% user + 45% kernel
+  23% 23999/com.google.android.googlequicksearchbox:interactor: 2.3% user + 21% kernel / faults: 63 minor 3 major
+  13% 23682/com.google.android.apps.wellbeing: 0.6% user + 12% kernel / faults: 41 minor 52 major
+  11% 503/android.hardware.sensors-service.multihal: 0% user + 11% kernel
+  6.6% 21497/system_server: 0.2% user + 6.3% kernel / faults: 191 minor 2 major
+  3.2% 28503/kworker/u5:2-events_unbound: 0% user + 3.2% kernel
+  3.1% 236/logd: 0% user + 3% kernel / faults: 46 minor 5 major
+  2.8% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 2.8% kernel
+  2.3% 22158/com.android.networkstack.process: 0.1% user + 2.1% kernel / faults: 103 minor
+95% TOTAL: 2.3% user + 79% kernel + 7.2% iowait + 6.5% softirq
+Data File: /data/anr/anr_2025-09-16-18-11-11-967
+Subject: executing service com.google.android.gms/.auth.setup.devicesignals.LockScreenService, waited 27456ms
+RssHwmKb: 134016
+RssKb: 131924
+RssAnonKb: 30512
+RssShmemKb: 768
+VmSwapKb: 29540
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758071218291
+  anr <
+    pid: 23189
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.GmsIntentOperationService, waited 23699ms"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758071240954
+  anr <
+    pid: 24070
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.PersistentIntentOperationService, waited 32325ms"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758071247120
+  anr <
+    pid: 28645
+    process: "com.google.android.googlequicksearchbox:search"
+    process_class: 2
+    subject: "Process ProcessRecord{cefaa86 28645:com.google.android.googlequicksearchbox:search/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758071303462
+  anr <
+    pid: 28707
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{d893bdf 28707:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758071373300
+  anr <
+    pid: 28735
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{86e032c 28735:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758071399180
+  anr <
+    pid: 28734
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "Process ProcessRecord{d787700 28734:com.google.android.gms/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758071421907
+  anr <
+    pid: 28791
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{6f31916 28791:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+timestamp_ms: 1758071471499
+window_ms: 300000
+
+----- dumping pid: 28819 at 79590080
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 28819 at 2025-09-16 18:11:12.565514100-0700 -----
+Cmd line: com.google.android.gms.persistent
+
+sysTid=28819     0
+sysTid=28820     do_sigtimedwait
+sysTid=28821     pipe_read
+sysTid=28822     futex_wait_queue
+sysTid=28823     futex_wait_queue
+sysTid=28824     futex_wait_queue
+sysTid=28825     futex_wait_queue
+sysTid=28826     futex_wait_queue
+sysTid=28827     binder_ioctl_write_read
+sysTid=28828     binder_ioctl_write_read
+sysTid=28829     binder_ioctl_write_read
+sysTid=28831     futex_wait_queue
+sysTid=28833     futex_wait_queue
+sysTid=28835     do_epoll_wait
+sysTid=28836     futex_wait_queue
+sysTid=28837     wait_woken
+sysTid=28839     do_epoll_wait
+sysTid=28840     futex_wait_queue
+sysTid=28842     futex_wait_queue
+sysTid=28843     futex_wait_queue
+sysTid=28845     futex_wait_queue
+sysTid=28846     do_epoll_wait
+sysTid=28847     binder_ioctl_write_read
+sysTid=28848     binder_ioctl_write_read
+sysTid=28849     binder_ioctl_write_read
+sysTid=28850     unix_stream_read_generic
+sysTid=28851     futex_wait_queue
+sysTid=28853     do_epoll_wait
+sysTid=28854     futex_wait_queue
+sysTid=28855     futex_wait_queue
+sysTid=28856     futex_wait_queue
+sysTid=28857     futex_wait_queue
+
+----- end 28819 -----
+
+proc 28819
+context binder
+  thread 28819: l 10 need_return 0 tr 0
+    outgoing transaction 6204657: 0000000000000000 from 28819:28819 to 21497:23651 code 29 flags 12 pri 0:120 r1 elapsed 89ms
+    node work 6204658: u00007750374919e0 c0000774fe7478f90
+    transaction complete
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 28819 at 2025-09-16 18:11:23.278936000-0700 -----
+Cmd line: com.google.android.gms.persistent
+
+sysTid=28819     binder_ioctl_write_read
+sysTid=28820     0
+sysTid=28821     pipe_read
+sysTid=28822     futex_wait_queue
+sysTid=28823     futex_wait_queue
+sysTid=28824     futex_wait_queue
+sysTid=28825     futex_wait_queue
+sysTid=28826     futex_wait_queue
+sysTid=28827     binder_ioctl_write_read
+sysTid=28828     binder_ioctl_write_read
+sysTid=28829     binder_ioctl_write_read
+sysTid=28831     futex_wait_queue
+sysTid=28833     futex_wait_queue
+sysTid=28835     do_epoll_wait
+sysTid=28836     futex_wait_queue
+sysTid=28837     wait_woken
+sysTid=28839     0
+sysTid=28840     futex_wait_queue
+sysTid=28842     futex_wait_queue
+sysTid=28843     futex_wait_queue
+sysTid=28845     futex_wait_queue
+sysTid=28846     do_epoll_wait
+sysTid=28847     binder_ioctl_write_read
+sysTid=28848     binder_ioctl_write_read
+sysTid=28849     binder_ioctl_write_read
+sysTid=28850     0
+sysTid=28851     futex_wait_queue
+sysTid=28853     do_epoll_wait
+sysTid=28854     futex_wait_queue
+sysTid=28855     futex_wait_queue
+sysTid=28856     futex_wait_queue
+sysTid=28864     futex_wait_queue
+
+----- end 28819 -----
+
+DurationsV5: 79590078,0,1,345,526,227,264,0,3,0,0,0,0,0,0,1,14713,1,1,13977,4,1,0,0,0
+
+----- dumping ended at 79604929
+End Data File

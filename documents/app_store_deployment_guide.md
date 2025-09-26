@@ -7,6 +7,7 @@ This guide provides comprehensive step-by-step instructions for building product
 ## Prerequisites
 
 ### Developer Accounts
+
 1. **Google Play Console**:
    - Create a Google account
    - Enroll in Google Play Developer Program ($25 one-time fee)
@@ -18,6 +19,7 @@ This guide provides comprehensive step-by-step instructions for building product
    - Verify account and payment method
 
 ### Tools and Accounts
+
 1. **Expo Account**:
    - Sign up for Expo at https://expo.dev
    - Install EAS CLI: `npm install -g eas-cli`
@@ -82,9 +84,7 @@ Update `app.json` or `app.config.js`:
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yourcompany.docshelf",
@@ -142,11 +142,13 @@ eas build:view <build-id>
 #### Android Local Build
 
 1. **Generate Keystore** (if not using Expo managed signing):
+
    ```bash
    keytool -genkeypair -v -storetype PKCS12 -keystore docshelf.keystore -alias docshelf -keyalg RSA -keysize 2048 -validity 10000
    ```
 
 2. **Configure Signing in app.json**:
+
    ```json
    {
      "expo": {
@@ -159,6 +161,7 @@ eas build:view <build-id>
    ```
 
 3. **Build AAB**:
+
    ```bash
    expo build:android --type app-bundle --keystore-path ./docshelf.keystore --keystore-alias docshelf
    ```
@@ -171,6 +174,7 @@ eas build:view <build-id>
 #### iOS Local Build (Requires macOS)
 
 1. **Install Dependencies**:
+
    ```bash
    npm install -g @expo/cli
    gem install bundler
@@ -181,6 +185,7 @@ eas build:view <build-id>
    Update `app.json` with unique bundle identifier
 
 3. **Build Archive**:
+
    ```bash
    expo build:ios --type archive
    ```
@@ -193,6 +198,7 @@ eas build:view <build-id>
 ### App Screenshots
 
 #### Android Screenshots (Google Play)
+
 - **Phone**: 1080 x 1920 (9:16 aspect ratio)
 - **Tablet**: 1200 x 1920 (10:16 aspect ratio)
 - **Large Tablet**: 1600 x 2560 (10:16 aspect ratio)
@@ -200,6 +206,7 @@ eas build:view <build-id>
 - Recommended: 8 screenshots showing key features
 
 #### iOS Screenshots (App Store)
+
 - **iPhone 6.5"**: 1242 x 2688
 - **iPhone 5.5"**: 1242 x 2208
 - **iPad Pro**: 2048 x 2732
@@ -209,17 +216,20 @@ eas build:view <build-id>
 ### App Icons and Graphics
 
 #### Android
+
 - **Icon**: 512 x 512 PNG (with transparency)
 - **Feature Graphic**: 1024 x 500 PNG
 - **Promo Graphic**: 180 x 120 PNG (optional)
 
 #### iOS
+
 - **Icon**: 1024 x 1024 PNG
 - **App Store Icon**: 1024 x 1024 PNG
 
 ### App Store Metadata
 
 #### Common Information
+
 - **App Name**: DocsShelf (max 30 characters)
 - **Short Description**: 80 characters max
 - **Full Description**: 4000 characters max
@@ -230,11 +240,13 @@ eas build:view <build-id>
 - **Privacy Policy URL**: https://yourwebsite.com/privacy
 
 #### Android Specific
+
 - **Contact Email**: developer@yourcompany.com
 - **Website**: https://yourwebsite.com
 - **Phone**: Optional
 
 #### iOS Specific
+
 - **Copyright**: © 2025 Your Company Name
 - **App Review Information**: Test account credentials
 - **Version Release Notes**: What's new in this version
@@ -349,6 +361,7 @@ eas build:view <build-id>
 ### Step 4: Upload Build
 
 1. **Using EAS Submit**:
+
    ```bash
    # Submit to TestFlight first
    eas submit --platform ios --profile production
@@ -365,6 +378,7 @@ eas build:view <build-id>
 ### Step 5: TestFlight (Optional but Recommended)
 
 1. Create TestFlight build:
+
    ```bash
    eas build --platform ios --profile preview
    eas submit --platform ios --profile preview
@@ -415,12 +429,14 @@ eas build:view <build-id>
 ### Version Updates
 
 #### Android Updates
+
 1. Increment version code in `app.json`
 2. Build new AAB
 3. Upload to Play Console
 4. Roll out update (staged or immediate)
 
 #### iOS Updates
+
 1. Increment build number in `app.json`
 2. Build new IPA
 3. Upload to App Store Connect
@@ -448,6 +464,7 @@ eas build:view <build-id>
 ### Common Build Issues
 
 #### EAS Build Failures
+
 - Check build logs: `eas build:view <build-id>`
 - Verify app.json configuration
 - Ensure all dependencies are compatible
@@ -456,12 +473,14 @@ eas build:view <build-id>
 #### Store Submission Issues
 
 **Android**:
+
 - AAB size limits
 - Missing 64-bit support
 - Privacy policy requirements
 - Target API level compliance
 
 **iOS**:
+
 - Bundle ID conflicts
 - Missing app icons
 - Privacy manifest requirements

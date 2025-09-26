@@ -11,6 +11,7 @@ DocsShelf uses React Native with Expo and Detox for E2E testing. Detox allows fo
 Before starting E2E testing, ensure the following are installed:
 
 ### System Requirements
+
 - Node.js (v18+)
 - npm or yarn
 - Expo CLI (`npm install -g @expo/cli`)
@@ -21,10 +22,13 @@ Before starting E2E testing, ensure the following are installed:
   - macOS with Xcode (13+)
   - iOS Simulator
 - Detox CLI (`npm install -g detox-cli`)
-##Jayant## - Validated
-=============
+  ##Jayant## - Validated
+  =============
+
 ### Project Setup
+
 1. Clone the repository and install dependencies:
+
    ```bash
    git clone <repository-url>
    cd docsshelf
@@ -35,8 +39,8 @@ Before starting E2E testing, ensure the following are installed:
    ```bash
    npm install detox --save-dev
    ```
-##Jayant## - Validated
-================
+   # ##Jayant## - Validated
+
 ## Setting Up Detox for E2E Testing
 
 ### 1. Configure Detox
@@ -48,92 +52,98 @@ module.exports = {
   testRunner: {
     args: {
       $0: 'jest',
-      config: 'e2e/jest.config.js'
+      config: 'e2e/jest.config.js',
     },
     jest: {
-      setupTimeout: 120000
-    }
+      setupTimeout: 120000,
+    },
   },
   apps: {
     'ios.debug': {
       type: 'ios.app',
-      binaryPath: 'ios/build/Build/Products/Debug-iphonesimulator/DocsShelf.app',
-      build: 'xcodebuild -workspace ios/DocsShelf.xcworkspace -scheme DocsShelf -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build'
+      binaryPath:
+        'ios/build/Build/Products/Debug-iphonesimulator/DocsShelf.app',
+      build:
+        'xcodebuild -workspace ios/DocsShelf.xcworkspace -scheme DocsShelf -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
     },
     'ios.release': {
       type: 'ios.app',
-      binaryPath: 'ios/build/Build/Products/Release-iphonesimulator/DocsShelf.app',
-      build: 'xcodebuild -workspace ios/DocsShelf.xcworkspace -scheme DocsShelf -configuration Release -sdk iphonesimulator -derivedDataPath ios/build'
+      binaryPath:
+        'ios/build/Build/Products/Release-iphonesimulator/DocsShelf.app',
+      build:
+        'xcodebuild -workspace ios/DocsShelf.xcworkspace -scheme DocsShelf -configuration Release -sdk iphonesimulator -derivedDataPath ios/build',
     },
     'android.debug': {
       type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/debug/app-debug.apk',
-      build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug',
-      reversePorts: [8081]
+      build:
+        'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug',
+      reversePorts: [8081],
     },
     'android.release': {
       type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/release/app-release.apk',
-      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release',
-      reversePorts: [8081]
-    }
+      build:
+        'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release',
+      reversePorts: [8081],
+    },
   },
   devices: {
     simulator: {
       type: 'ios.simulator',
       device: {
-        type: 'iPhone 14'
-      }
+        type: 'iPhone 14',
+      },
     },
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_5_API_33'
-      }
+        avdName: 'Pixel_5_API_33',
+      },
     },
     attached: {
       type: 'android.attached',
       device: {
-        adbName: '.*'
-      }
+        adbName: '.*',
+      },
     },
     ipad: {
       type: 'ios.simulator',
       device: {
-        type: 'iPad Pro (12.9-inch) (6th generation)'
-      }
-    }
+        type: 'iPad Pro (12.9-inch) (6th generation)',
+      },
+    },
   },
   configurations: {
     'ios.sim.debug': {
       device: 'simulator',
-      app: 'ios.debug'
+      app: 'ios.debug',
     },
     'ios.sim.release': {
       device: 'simulator',
-      app: 'ios.release'
+      app: 'ios.release',
     },
     'android.emu.debug': {
       device: 'emulator',
-      app: 'android.debug'
+      app: 'android.debug',
     },
     'android.emu.release': {
       device: 'emulator',
-      app: 'android.release'
+      app: 'android.release',
     },
     'android.attached.debug': {
       device: 'attached',
-      app: 'android.debug'
+      app: 'android.debug',
     },
     'android.attached.release': {
       device: 'attached',
-      app: 'android.release'
-    }
-  }
+      app: 'android.release',
+    },
+  },
 };
 ```
-##Jayant## - Validated
-================
+
+# ##Jayant## - Validated
 
 ### 2. Create Jest Configuration for E2E
 
@@ -151,11 +161,11 @@ module.exports = {
   globalTeardown: 'detox/runners/jest/globalTeardown',
   testTimeout: 120000,
   resetModules: true,
-  maxWorkers: 1
+  maxWorkers: 1,
 };
 ```
-##Jayant## - Validated
-================
+
+# ##Jayant## - Validated
 
 ### 3. Create Detox Initialization File
 
@@ -173,8 +183,8 @@ afterAll(async () => {
   await detox.cleanup();
 });
 ```
-##Jayant## - Validated
-================
+
+# ##Jayant## - Validated
 
 ### 4. Sample E2E Test
 
@@ -210,20 +220,22 @@ describe('DocsShelf E2E Tests', () => {
   });
 });
 ```
-##Jayant## - Validated
-================
+
+# ##Jayant## - Validated
 
 ## Testing on Simulators
 
 ### Android Emulator
 
 #### 1. Set Up Android Emulator
+
 1. Open Android Studio
 2. Go to AVD Manager (Tools > Device Manager)
 3. Create a new virtual device (e.g., Pixel 5 with API 33)
 4. Start the emulator
 
 #### 2. Build and Run Tests
+
 ```bash
 # Build the app for Android
 npx detox build --configuration android.emu.debug
@@ -233,6 +245,7 @@ npx detox test --configuration android.emu.debug
 ```
 
 #### 3. Alternative: Using Expo
+
 ```bash
 # Start Expo development server
 npm start
@@ -247,12 +260,14 @@ npx detox test --configuration android.emu.debug
 ### iOS Simulator
 
 #### 1. Set Up iOS Simulator
+
 1. Open Xcode
 2. Go to Xcode > Open Developer Tool > Simulator
 3. Create a new simulator (e.g., iPhone 14 with iOS 16.4)
 4. Start the simulator
 
 #### 2. Build and Run Tests
+
 ```bash
 # Build the app for iOS
 npx detox build --configuration ios.sim.debug
@@ -262,6 +277,7 @@ npx detox test --configuration ios.sim.debug
 ```
 
 #### 3. Alternative: Using Expo
+
 ```bash
 # Start Expo development server
 npm start
@@ -278,6 +294,7 @@ npx detox test --configuration ios.sim.debug
 ### Android Physical Device
 
 #### 1. Enable Developer Options
+
 1. Go to Settings > About Phone
 2. Tap "Build Number" 7 times to enable Developer Options
 3. Go to Settings > Developer Options
@@ -285,6 +302,7 @@ npx detox test --configuration ios.sim.debug
 5. Enable "Install via USB"
 
 #### 2. Connect Device
+
 1. Connect your Android device to your computer via USB
 2. Accept the USB debugging authorization on your device
 3. Verify connection:
@@ -293,6 +311,7 @@ npx detox test --configuration ios.sim.debug
    ```
 
 #### 3. Build APK for Testing
+
 ```bash
 # Build debug APK
 cd android
@@ -303,6 +322,7 @@ expo build:android --type apk
 ```
 
 #### 4. Install and Run Tests
+
 ```bash
 # Install APK on device
 adb install -r android/app/build/outputs/apk/debug/app-debug.apk
@@ -315,6 +335,7 @@ npx detox test --configuration android.attached.debug
 ```
 
 #### 5. Alternative: Using Expo Dev Client
+
 ```bash
 # Install Expo Dev Client on device
 npx expo install --fix
@@ -332,6 +353,7 @@ npx detox test --configuration android.attached.debug
 ### iOS Physical Device
 
 #### 1. Set Up Device for Development
+
 1. Connect your iPhone/iPad to your Mac via USB
 2. Open Xcode
 3. Go to Window > Devices and Simulators
@@ -339,6 +361,7 @@ npx detox test --configuration android.attached.debug
 5. Trust the computer on your device if prompted
 
 #### 2. Configure Code Signing
+
 1. In Xcode, open `ios/DocsShelf.xcworkspace`
 2. Select the project in the navigator
 3. Go to Signing & Capabilities
@@ -346,6 +369,7 @@ npx detox test --configuration android.attached.debug
 5. Ensure a valid provisioning profile is selected
 
 #### 3. Build IPA for Testing
+
 ```bash
 # Build for device
 xcodebuild -workspace ios/DocsShelf.xcworkspace -scheme DocsShelf -configuration Debug -destination generic/platform=iOS -archivePath ios/build/DocsShelf.xcarchive archive
@@ -358,6 +382,7 @@ expo build:ios --type archive
 ```
 
 #### 4. Install and Run Tests
+
 ```bash
 # Install on device using Xcode
 # Open ios/build/DocsShelf.xcarchive in Xcode
@@ -368,6 +393,7 @@ npx detox test --configuration ios.device.debug
 ```
 
 #### 5. Alternative: Using Expo Dev Client
+
 ```bash
 # Install Expo Dev Client on device
 npx expo install --fix
@@ -387,6 +413,7 @@ npx detox test --configuration ios.device.debug
 ### Android APK/AAB
 
 #### 1. Build Release APK
+
 ```bash
 # Using Gradle
 cd android
@@ -397,13 +424,16 @@ expo build:android --type apk
 ```
 
 #### 2. Build AAB (for Google Play)
+
 ```bash
 # Using Expo
 expo build:android --type app-bundle
 ```
 
 #### 3. Sign the APK (if not using Expo)
+
 1. Generate keystore:
+
    ```bash
    keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
    ```
@@ -413,6 +443,7 @@ expo build:android --type app-bundle
 ### iOS IPA
 
 #### 1. Build Release Archive
+
 ```bash
 # Using Xcode
 xcodebuild -workspace ios/DocsShelf.xcworkspace -scheme DocsShelf -configuration Release -destination generic/platform=iOS -archivePath ios/build/DocsShelf.xcarchive archive
@@ -422,6 +453,7 @@ expo build:ios --type archive
 ```
 
 #### 2. Export IPA
+
 1. Open `ios/build/DocsShelf.xcarchive` in Xcode
 2. Click "Distribute App"
 3. Select "App Store Connect" or "Ad Hoc"
@@ -442,12 +474,12 @@ const configurations = [
   'ios.sim.debug',
   'ios.sim.release',
   'android.emu.debug',
-  'android.emu.release'
+  'android.emu.release',
 ];
 
 console.log('🚀 Running E2E Tests on All Configurations');
 
-configurations.forEach(config => {
+configurations.forEach((config) => {
   try {
     console.log(`\n📱 Testing ${config}`);
     execSync(`npx detox build --configuration ${config}`, { stdio: 'inherit' });
@@ -463,6 +495,7 @@ console.log('\n🎉 All E2E tests completed successfully!');
 ```
 
 ### Running All Tests
+
 ```bash
 node scripts/run-e2e-tests.js
 ```
@@ -472,21 +505,25 @@ node scripts/run-e2e-tests.js
 ### Common Issues
 
 #### Android
+
 - **Emulator not found**: Ensure AVD is created and running
 - **ADB not found**: Add Android SDK platform-tools to PATH
 - **Device not recognized**: Enable USB debugging and authorize computer
 
 #### iOS
+
 - **Simulator not available**: Install Xcode and create simulator
 - **Code signing issues**: Ensure valid provisioning profile and certificate
 - **Device not trusted**: Trust computer on iOS device
 
 #### Detox
+
 - **Build failures**: Clean build artifacts and rebuild
 - **Test timeouts**: Increase timeout in Jest config
 - **Element not found**: Verify test IDs match app components
 
 ### Performance Optimization
+
 - Run tests in parallel where possible
 - Use `device.disableSynchronization()` for faster tests
 - Cache build artifacts between runs

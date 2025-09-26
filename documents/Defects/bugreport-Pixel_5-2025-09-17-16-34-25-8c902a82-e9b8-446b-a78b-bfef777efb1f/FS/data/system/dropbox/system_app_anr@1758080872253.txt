@@ -1,0 +1,177 @@
+SystemUptimeMs: 88991019
+Process: com.google.android.providers.media.module
+PID: 893
+UID: 10214
+Frozen: false
+Timestamp: 2025-09-16 20:43:50.994-0700
+Flags: 0x2ccabe45
+Package: com.google.android.providers.media.module v36 (16)
+Foreground: No
+Process-Runtime: 326431
+ErrorId: 918b1998-3a5e-4f95-9ff3-4dfbc4ebe091
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=1.11 avg60=0.46 avg300=1.36 total=1618480592
+full avg10=0.00 avg60=0.00 avg300=0.17 total=588092639
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=97.89 avg60=95.84 avg300=91.01 total=13374662925
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=39.03 avg60=50.14 avg300=38.15 total=4470584545
+full avg10=0.03 avg60=0.25 avg300=0.36 total=1088063219
+----- End output from /proc/pressure/io -----
+
+CPU usage from 2591ms to 12122ms later (2025-09-16 20:47:41.501 to 2025-09-16 20:47:51.032):
+  81% 37/kcompactd0: 0% user + 81% kernel
+  39% 32511/com.google.android.apps.nexuslauncher: 0.3% user + 39% kernel / faults: 562 minor 4 major
+  25% 32016/system_server: 0% user + 25% kernel / faults: 675 minor
+  6.7% 503/android.hardware.sensors-service.multihal: 0% user + 6.7% kernel
+  10% 32319/com.android.systemui: 0% user + 10% kernel / faults: 56 minor
+  6.1% 1406/android.process.acore: 0% user + 6.1% kernel / faults: 518 minor 3 major
+  5% 946/com.google.android.apps.photos: 0% user + 5% kernel / faults: 89 minor 6 major
+  5.3% 32455/com.android.networkstack.process: 0% user + 5.3% kernel / faults: 48 minor
+  3.9% 1023/com.google.android.apps.wellbeing: 0% user + 3.9% kernel / faults: 55 minor
+  4.2% 31953/netd: 0% user + 4.2% kernel / faults: 10 minor
+100% TOTAL: 1.2% user + 91% kernel + 0.3% iowait + 6.9% softirq
+Data File: /data/anr/anr_2025-09-16-20-47-47-463
+Subject: Process ProcessRecord{544f0fd 893:com.google.android.providers.media.module/u0a214} failed to complete startup
+RssHwmKb: 141280
+RssKb: 140120
+RssAnonKb: 59792
+RssShmemKb: 768
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758080569950
+  anr <
+    pid: 744
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{eeac7d7 744:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1758080627568
+  anr <
+    pid: 809
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 809:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080659613
+  half_watchdog <
+    subject: "Blocked in handler on ActivityManager (ActivityManager) for 17s, Blocked in handler on CpuMonitorService (CpuMonitorService) for 17s"
+  >
+>
+events <
+  timestamp_ms: 1758080678728
+  anr <
+    pid: 32511
+    process: "com.google.android.apps.nexuslauncher"
+    process_class: 2
+    subject: "executing service com.google.android.apps.nexuslauncher/com.android.launcher3.notification.NotificationListener, waited 20741ms"
+    uid: 10181
+  >
+>
+events <
+  timestamp_ms: 1758080846070
+  watchdog <
+    subject: "Blocked in handler on main thread (main) for 76s, Blocked in handler on ui thread (android.ui) for 76s, Blocked in handler on i/o thread (android.io) for 76s"
+    uuid: "db42c6e2-c5bb-4078-bbd4-801b9e5d50c2"
+  >
+>
+timestamp_ms: 1758080862420
+window_ms: 300000
+
+----- dumping pid: 893 at 88748253
+proc 893
+context hwbinder
+  thread 1074: l 10 need_return 0 tr 0
+    transaction complete
+    pending transaction 6737409: 0000000000000000 from 501:21393 to 893:1074 code 0 flags 0 pri 0:104 r0 elapsed 155ms size 208:40 offset 0
+  buffer 6737409: 0 size 208:40:104 active
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 893 at 2025-09-16 20:43:52.696535300-0700 -----
+Cmd line: com.google.android.providers.media.module
+
+sysTid=893       futex_wait_queue
+sysTid=897       futex_wait_queue
+sysTid=898       do_sigtimedwait
+sysTid=899       pipe_read
+sysTid=900       futex_wait_queue
+sysTid=901       0
+sysTid=902       futex_wait_queue
+sysTid=903       futex_wait_queue
+sysTid=904       futex_wait_queue
+sysTid=905       binder_ioctl_write_read
+sysTid=906       binder_ioctl_write_read
+sysTid=914       binder_ioctl_write_read
+sysTid=916       futex_wait_queue
+sysTid=947       do_epoll_wait
+sysTid=948       do_epoll_wait
+sysTid=963       0
+sysTid=1030      binder_ioctl_write_read
+sysTid=1033      do_epoll_wait
+sysTid=1063      futex_wait_queue
+sysTid=1072      futex_wait_queue
+sysTid=1074      0
+sysTid=1076      futex_wait_queue
+sysTid=1082      futex_wait_queue
+sysTid=1083      futex_wait_queue
+sysTid=1085      binder_ioctl_write_read
+
+----- end 893 -----
+
+proc 893
+context hwbinder
+  buffer 6737563: 0 size 88:16:248 delivered
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 893 at 2025-09-16 20:44:12.403794900-0700 -----
+Cmd line: com.google.android.providers.media.module
+
+sysTid=893       0
+sysTid=897       futex_wait_queue
+sysTid=898       0
+sysTid=899       pipe_read
+sysTid=900       futex_wait_queue
+sysTid=901       futex_wait_queue
+sysTid=902       futex_wait_queue
+sysTid=903       futex_wait_queue
+sysTid=904       futex_wait_queue
+sysTid=905       binder_ioctl_write_read
+sysTid=906       binder_ioctl_write_read
+sysTid=914       binder_ioctl_write_read
+sysTid=916       futex_wait_queue
+sysTid=947       do_epoll_wait
+sysTid=948       do_epoll_wait
+sysTid=963       0
+sysTid=1030      binder_ioctl_write_read
+sysTid=1033      do_epoll_wait
+sysTid=1063      futex_wait_queue
+sysTid=1072      0
+sysTid=1074      futex_wait_queue
+sysTid=1076      0
+sysTid=1082      futex_wait_queue
+sysTid=1083      futex_wait_queue
+sysTid=1085      binder_ioctl_write_read
+
+----- end 893 -----
+
+DurationsV5: 88746468,0,0,231425,8553,0,0,0,4263,0,0,3509,0,0,1,2,28086,1416,1,0,4,1,0,0,0
+
+----- dumping ended at 88989717
+End Data File

@@ -1,0 +1,148 @@
+SystemUptimeMs: 79376276
+Process: com.google.android.googlequicksearchbox:search
+PID: 28645
+UID: 10147
+Frozen: false
+Timestamp: 2025-09-16 18:07:03.722-0700
+Flags: 0x28dbbe45
+Package: com.google.android.googlequicksearchbox v301482860 (16.9.50.ve.x86_64)
+Foreground: No
+Process-Runtime: 63359
+ErrorId: f5a27c25-3b1a-49b7-adb7-9ee31c4a7ec8
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=31.88 avg60=20.63 avg300=12.98 total=988839869
+full avg10=14.98 avg60=7.22 avg300=3.14 total=354413215
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=92.21 avg60=90.21 avg300=73.17 total=9798033585
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=22.20 avg60=32.18 avg300=23.88 total=3348132667
+full avg10=0.00 avg60=0.84 avg300=1.10 total=975953318
+----- End output from /proc/pressure/io -----
+
+CPU usage from 4028ms to -8412ms ago (2025-09-16 18:07:21.940 to 2025-09-16 18:07:34.380):
+  41% 47/kswapd0: 0% user + 41% kernel
+  35% 21497/system_server: 3.3% user + 32% kernel / faults: 2170 minor 49 major
+  16% 23939/com.google.android.permissioncontroller: 1.3% user + 15% kernel / faults: 57 minor 578 major
+  18% 28645/com.google.android.googlequicksearchbox:search: 2.9% user + 15% kernel / faults: 942 minor 27 major
+  14% 503/android.hardware.sensors-service.multihal: 0% user + 14% kernel
+  8.5% 23682/com.google.android.apps.wellbeing: 0.9% user + 7.5% kernel / faults: 34 minor 128 major
+  5.6% 25704/com.android.phone: 0.4% user + 5.2% kernel / faults: 197 minor 1 major
+  5.4% 24070/com.google.android.gms.persistent: 0.2% user + 5.2% kernel / faults: 68 minor 1 major
+  4.1% 28356/kworker/0:1-virtio_vsock: 0% user + 4.1% kernel
+  3.6% 23189/com.google.android.gms: 0.1% user + 3.5% kernel
+100% TOTAL: 4.3% user + 89% kernel + 0.1% iowait + 6.1% softirq
+Data File: /data/anr/anr_2025-09-16-18-07-27-214
+Subject: Process ProcessRecord{cefaa86 28645:com.google.android.googlequicksearchbox:search/u0a147} failed to complete startup
+RssHwmKb: 63532
+RssKb: 63516
+RssAnonKb: 25372
+RssShmemKb: 128
+VmSwapKb: 30600
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758070965759
+  anr <
+    pid: 22258
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Broadcast of Intent { act=com.android.settings.battery.action.PERIODIC_JOB_UPDATE flg=0x10 xflg=0x4 cmp=com.android.settings/.fuelgauge.batteryusage.PeriodicJobReceiver }"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1758071088298
+  install_packages <
+  >
+>
+events <
+  timestamp_ms: 1758071134935
+  anr <
+    pid: 24374
+    process: "com.google.android.settings.intelligence"
+    process_class: 2
+    subject: "No response to onStartJob"
+    uid: 10137
+  >
+>
+events <
+  timestamp_ms: 1758071165641
+  half_watchdog <
+    subject: "Blocked in monitor com.android.server.am.ActivityManagerService on monitor thread (watchdog.monitor) for 17s, Blocked in handler on i/o thread (android.io) for 17s"
+  >
+>
+events <
+  timestamp_ms: 1758071218291
+  anr <
+    pid: 23189
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.GmsIntentOperationService, waited 23699ms"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758071240954
+  anr <
+    pid: 24070
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.PersistentIntentOperationService, waited 32325ms"
+    uid: 10144
+  >
+>
+timestamp_ms: 1758071245968
+window_ms: 300000
+
+----- dumping pid: 28645 at 79348240
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 28645 at 2025-09-16 18:07:13.621407000-0700 -----
+Cmd line: com.google.android.googlequicksearchbox:search
+
+sysTid=28645     0
+sysTid=28646     do_sigtimedwait
+sysTid=28647     pipe_read
+sysTid=28648     futex_wait_queue
+sysTid=28649     0
+sysTid=28650     futex_wait_queue
+sysTid=28651     futex_wait_queue
+sysTid=28652     futex_wait_queue
+sysTid=28655     binder_ioctl_write_read
+sysTid=28656     binder_ioctl_write_read
+sysTid=28665     binder_ioctl_write_read
+
+----- end 28645 -----
+
+libdebuggerd_client: failed to send output fd to tombstoned: Broken pipe
+
+----- Waiting Channels: pid 28645 at 2025-09-16 18:07:26.430595600-0700 -----
+Cmd line: com.google.android.googlequicksearchbox:search
+
+sysTid=28645     futex_wait_queue
+sysTid=28646     0
+sysTid=28647     pipe_read
+sysTid=28648     futex_wait_queue
+sysTid=28649     futex_wait_queue
+sysTid=28650     futex_wait_queue
+sysTid=28651     futex_wait_queue
+sysTid=28652     futex_wait_queue
+sysTid=28655     binder_ioctl_write_read
+sysTid=28656     binder_ioctl_write_read
+sysTid=28665     binder_ioctl_write_read
+
+----- end 28645 -----
+
+DurationsV5: 79342705,0,0,22245,1154,0,0,0,1152,0,0,0,0,0,1,5570,23931,5421,3,1462,4,1,0,0,0
+
+----- dumping ended at 79373137
+End Data File

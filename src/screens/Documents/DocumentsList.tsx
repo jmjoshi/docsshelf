@@ -231,7 +231,7 @@ export default function DocumentsListScreen() {
       }
     } catch (error) {
       console.error('Upload failed:', error);
-      
+
       if (error instanceof QuotaExceededError) {
         showSnackbar(error.message, 'error');
         Alert.alert(

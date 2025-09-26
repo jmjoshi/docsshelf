@@ -36,16 +36,18 @@ export const emergencyCleanup = {
     try {
       const docCleared = emergencyCleanup.clearDocuments();
       const reduxCleared = emergencyCleanup.clearReduxPersist();
-      
+
       // Also clear any other app data
-      const appKeys = Object.keys(localStorage).filter(key => 
+      const appKeys = Object.keys(localStorage).filter((key) =>
         key.startsWith('docsshelf_')
       );
-      appKeys.forEach(key => localStorage.removeItem(key));
-      
-      console.log(`✅ Emergency cleanup complete. Cleared ${appKeys.length} additional keys.`);
+      appKeys.forEach((key) => localStorage.removeItem(key));
+
+      console.log(
+        `✅ Emergency cleanup complete. Cleared ${appKeys.length} additional keys.`
+      );
       console.log('🔄 Please refresh the page to restart with clean state.');
-      
+
       return docCleared && reduxCleared;
     } catch (error) {
       console.error('❌ Emergency cleanup failed:', error);
@@ -58,32 +60,36 @@ export const emergencyCleanup = {
     try {
       const info = {
         totalKeys: Object.keys(localStorage).length,
-        docsKeys: Object.keys(localStorage).filter(k => k.startsWith('docsshelf_')),
-        persistKeys: Object.keys(localStorage).filter(k => k.startsWith('persist:')),
+        docsKeys: Object.keys(localStorage).filter((k) =>
+          k.startsWith('docsshelf_')
+        ),
+        persistKeys: Object.keys(localStorage).filter((k) =>
+          k.startsWith('persist:')
+        ),
       };
-      
+
       console.table(info);
-      
+
       // Show size breakdown
       let totalSize = 0;
       const sizeBreakdown: { [key: string]: number } = {};
-      
+
       for (let key in localStorage) {
         const value = localStorage.getItem(key) || '';
         const size = key.length + value.length;
         totalSize += size;
-        
+
         if (key.startsWith('docsshelf_')) {
           sizeBreakdown[key] = size;
         } else if (key.startsWith('persist:')) {
           sizeBreakdown[key] = size;
         }
       }
-      
+
       console.log('📊 Storage size breakdown:');
       console.table(sizeBreakdown);
       console.log(`📈 Total size: ${(totalSize / 1024).toFixed(2)} KB`);
-      
+
       return info;
     } catch (error) {
       console.error('❌ Failed to show storage info:', error);
@@ -97,63 +103,77 @@ export const emergencyCleanup = {
       const docsData = localStorage.getItem('docsshelf_documents');
       const filesData = localStorage.getItem('docsshelf_files');
       const persistData = localStorage.getItem('persist:documents');
-      
+
       const issues = [];
-      
+
       if (docsData) {
         const docs = JSON.parse(docsData);
-        const ids = docs.map((d: any) => d.id);
+        const ids = docs.map((d: unknown) => (d as { id: string }).id);
         const uniqueIds = [...new Set(ids)];
         if (ids.length !== uniqueIds.length) {
-          issues.push(`🔴 Found ${ids.length - uniqueIds.length} duplicate documents in docsshelf_documents`);
+          issues.push(
+            `🔴 Found ${ids.length - uniqueIds.length} duplicate documents in docsshelf_documents`
+          );
         } else {
-          issues.push(`✅ No duplicates in docsshelf_documents (${docs.length} documents)`);
+          issues.push(
+            `✅ No duplicates in docsshelf_documents (${docs.length} documents)`
+          );
         }
       }
-      
+
       if (filesData) {
         const files = JSON.parse(filesData);
-        const ids = files.map((f: any) => f.id);
+        const ids = files.map((f: unknown) => (f as { id: string }).id);
         const uniqueIds = [...new Set(ids)];
         if (ids.length !== uniqueIds.length) {
-          issues.push(`🔴 Found ${ids.length - uniqueIds.length} duplicate files in docsshelf_files`);
+          issues.push(
+            `🔴 Found ${ids.length - uniqueIds.length} duplicate files in docsshelf_files`
+          );
         } else {
-          issues.push(`✅ No duplicates in docsshelf_files (${files.length} files)`);
+          issues.push(
+            `✅ No duplicates in docsshelf_files (${files.length} files)`
+          );
         }
       }
-      
+
       if (persistData) {
         try {
           const parsed = JSON.parse(persistData);
           if (parsed.documents) {
             const reduxDocs = JSON.parse(parsed.documents);
-            const ids = reduxDocs.map((d: any) => d.id);
+            const ids = reduxDocs.map((d: unknown) => (d as { id: string }).id);
             const uniqueIds = [...new Set(ids)];
             if (ids.length !== uniqueIds.length) {
-              issues.push(`🔴 Found ${ids.length - uniqueIds.length} duplicate documents in Redux persist`);
+              issues.push(
+                `🔴 Found ${ids.length - uniqueIds.length} duplicate documents in Redux persist`
+              );
             } else {
-              issues.push(`✅ No duplicates in Redux persist (${reduxDocs.length} documents)`);
+              issues.push(
+                `✅ No duplicates in Redux persist (${reduxDocs.length} documents)`
+              );
             }
           }
-        } catch (e) {
+        } catch {
           issues.push(`⚠️ Could not parse Redux persist data`);
         }
       }
-      
+
       console.log('🔍 Duplicate check results:');
-      issues.forEach(issue => console.log(issue));
-      
+      issues.forEach((issue) => console.log(issue));
+
       return issues;
     } catch (error) {
       console.error('❌ Failed to check duplicates:', error);
       return [];
     }
-  }
+  },
 };
 
 // Make it available globally for emergency use
 if (typeof window !== 'undefined') {
-  (window as any).emergencyCleanup = emergencyCleanup;
+  (
+    window as unknown as { emergencyCleanup: typeof emergencyCleanup }
+  ).emergencyCleanup = emergencyCleanup;
 }
 
 export default emergencyCleanup;

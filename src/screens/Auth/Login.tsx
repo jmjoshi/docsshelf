@@ -34,17 +34,17 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const theme = useTheme();
 
   useEffect(() => {
-    checkBiometricAvailability();
+    (async () => {
+      try {
+        // Check if biometric sensor is available (without prompting)
+        const { available } =
+          await AuthService['biometrics'].isSensorAvailable();
+        setIsBiometricAvailable(!!available);
+      } catch {
+        setIsBiometricAvailable(false);
+      }
+    })();
   }, []);
-
-  const checkBiometricAvailability = async () => {
-    try {
-      const available = await AuthService.authenticateWithBiometrics();
-      setIsBiometricAvailable(available);
-    } catch {
-      console.log('Biometric not available');
-    }
-  };
 
   const showSnackbar = (message: string) => {
     setSnackbarMessage(message);
@@ -53,16 +53,14 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   const handleBiometricLogin = async () => {
     HapticFeedback.trigger('impactLight');
-    try {
-      const success = await AuthService.authenticateWithBiometrics();
-      if (success) {
-        showSnackbar(
-          'Biometric authentication successful! Please enter your email to proceed.'
-        );
-        HapticFeedback.trigger('notificationSuccess');
-      }
-    } catch {
-      showSnackbar('Biometric authentication failed');
+    const success = await AuthService.authenticateWithBiometrics();
+    if (success) {
+      showSnackbar(
+        'Biometric authentication successful! Please enter your email to proceed.'
+      );
+      HapticFeedback.trigger('notificationSuccess');
+    } else {
+      showSnackbar('Biometric authentication not available or failed.');
       HapticFeedback.trigger('notificationError');
     }
   };
@@ -145,19 +143,20 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </Button>
-          {isBiometricAvailable && (
-            <Button
-              mode="outlined"
-              onPress={handleBiometricLogin}
-              style={styles.button}
-              icon="fingerprint"
-              accessible={true}
-              accessibilityLabel="Biometric login"
-              accessibilityHint="Use fingerprint or face ID to log in"
-            >
-              Use Biometric Login
-            </Button>
-          )}
+          <Button
+            mode="outlined"
+            onPress={handleBiometricLogin}
+            style={styles.button}
+            icon="fingerprint"
+            disabled={!isBiometricAvailable}
+            accessible={true}
+            accessibilityLabel="Biometric login"
+            accessibilityHint="Use fingerprint or face ID to log in"
+          >
+            {isBiometricAvailable
+              ? 'Use Biometric Login'
+              : 'Biometric Unavailable'}
+          </Button>
           <Button
             mode="outlined"
             onPress={() => {

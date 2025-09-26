@@ -1,0 +1,18 @@
+Subject: executing service com.android.keychain/.KeyChainService, waited 24580ms
+RssHwmKb: 109436
+RssKb: 77180
+RssAnonKb: 24828
+RssShmemKb: 640
+VmSwapKb: 30208
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758124615428
+  install_packages <
+  >
+>
+timestamp_ms: 1758124669275
+window_ms: 300000
+

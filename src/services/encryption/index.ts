@@ -1,4 +1,5 @@
 // Encryption service for secure data handling using AES-256-CBC
+import 'react-native-get-random-values';
 import CryptoJS from 'crypto-js';
 import * as Keychain from 'react-native-keychain';
 

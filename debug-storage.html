@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Debug Storage</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Storage Debug</h1>
     <button onclick="showStorageInfo()">Show Storage Info</button>
     <button onclick="addTestData()">Add Test Data</button>
@@ -12,143 +12,148 @@
     <div id="output"></div>
 
     <script>
-        class StorageQuotaManager {
-            static MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
-            static QUOTA_WARNING_THRESHOLD = 0.8; // 80%
-            static QUOTA_CRITICAL_THRESHOLD = 0.95; // 95%
+      class StorageQuotaManager {
+        static MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
+        static QUOTA_WARNING_THRESHOLD = 0.8; // 80%
+        static QUOTA_CRITICAL_THRESHOLD = 0.95; // 95%
 
-            static getStorageInfo() {
-                let used = 0;
-                const total = this.MAX_STORAGE_SIZE;
+        static getStorageInfo() {
+          let used = 0;
+          const total = this.MAX_STORAGE_SIZE;
 
-                try {
-                    for (const key in localStorage) {
-                        if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
-                            const value = localStorage.getItem(key) || '';
-                            used += key.length + value.length;
-                        }
-                    }
-
-                    const remaining = Math.max(0, total - used);
-                    const usagePercent = used / total;
-
-                    return {
-                        used,
-                        remaining,
-                        total,
-                        usagePercent,
-                    };
-                } catch (error) {
-                    console.error('Failed to calculate storage info:', error);
-                    return {
-                        used: total,
-                        remaining: 0,
-                        total,
-                        usagePercent: 1,
-                    };
-                }
-            }
-
-            static checkQuotaStatus() {
-                const info = this.getStorageInfo();
-                if (info.usagePercent >= this.QUOTA_CRITICAL_THRESHOLD) {
-                    return 'critical';
-                } else if (info.usagePercent >= this.QUOTA_WARNING_THRESHOLD) {
-                    return 'warning';
-                }
-                return 'normal';
-            }
-
-            static formatBytes(bytes) {
-                if (bytes === 0) return '0 B';
-                const k = 1024;
-                const sizes = ['B', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-        }
-
-        function showStorageInfo() {
-            const output = document.getElementById('output');
-            const info = StorageQuotaManager.getStorageInfo();
-            const status = StorageQuotaManager.checkQuotaStatus();
-            
-            let html = `<h2>Storage Information</h2>`;
-            html += `<p><strong>Used:</strong> ${StorageQuotaManager.formatBytes(info.used)}</p>`;
-            html += `<p><strong>Total:</strong> ${StorageQuotaManager.formatBytes(info.total)}</p>`;
-            html += `<p><strong>Usage:</strong> ${Math.round(info.usagePercent * 100)}%</p>`;
-            html += `<p><strong>Status:</strong> ${status}</p>`;
-            html += `<h3>Keys in localStorage:</h3><ul>`;
-            
+          try {
             for (const key in localStorage) {
+              if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
                 const value = localStorage.getItem(key) || '';
-                const size = key.length + value.length;
-                html += `<li><strong>${key}:</strong> ${StorageQuotaManager.formatBytes(size)}</li>`;
+                used += key.length + value.length;
+              }
             }
-            
-            html += `</ul>`;
-            output.innerHTML = html;
+
+            const remaining = Math.max(0, total - used);
+            const usagePercent = used / total;
+
+            return {
+              used,
+              remaining,
+              total,
+              usagePercent,
+            };
+          } catch (error) {
+            console.error('Failed to calculate storage info:', error);
+            return {
+              used: total,
+              remaining: 0,
+              total,
+              usagePercent: 1,
+            };
+          }
         }
 
-        function addTestData() {
-            // Add some test documents to trigger storage warning
-            const testDocs = [];
-            for (let i = 0; i < 50; i++) {
-                testDocs.push({
-                    id: `test-doc-${i}`,
-                    name: `Test Document ${i}`,
-                    content: 'A'.repeat(1000), // 1KB each
-                    createdAt: new Date().toISOString()
-                });
-            }
-            localStorage.setItem('docsshelf_documents', JSON.stringify(testDocs));
-            
-            // Add some file data
-            const testFiles = [];
-            for (let i = 0; i < 20; i++) {
-                testFiles.push({
-                    id: `test-file-${i}`,
-                    data: 'B'.repeat(5000) // 5KB each
-                });
-            }
-            localStorage.setItem('docsshelf_files', JSON.stringify(testFiles));
-            
-            showStorageInfo();
+        static checkQuotaStatus() {
+          const info = this.getStorageInfo();
+          if (info.usagePercent >= this.QUOTA_CRITICAL_THRESHOLD) {
+            return 'critical';
+          } else if (info.usagePercent >= this.QUOTA_WARNING_THRESHOLD) {
+            return 'warning';
+          }
+          return 'normal';
         }
 
-        function testCleanup() {
-            // Simple cleanup test
-            const docsData = localStorage.getItem('docsshelf_documents');
-            const filesData = localStorage.getItem('docsshelf_files');
-            
-            let cleaned = false;
-            if (filesData) {
-                localStorage.removeItem('docsshelf_files');
-                cleaned = true;
-                console.log('Removed files data');
-            }
-            
-            if (docsData) {
-                const docs = JSON.parse(docsData);
-                if (docs.length > 3) {
-                    const keepDocs = docs.slice(0, 3);
-                    localStorage.setItem('docsshelf_documents', JSON.stringify(keepDocs));
-                    cleaned = true;
-                    console.log(`Kept 3 docs, removed ${docs.length - 3}`);
-                }
-            }
-            
-            alert(cleaned ? 'Cleanup completed!' : 'Nothing to clean');
-            showStorageInfo();
+        static formatBytes(bytes) {
+          if (bytes === 0) return '0 B';
+          const k = 1024;
+          const sizes = ['B', 'KB', 'MB', 'GB'];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return (
+            parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+          );
+        }
+      }
+
+      function showStorageInfo() {
+        const output = document.getElementById('output');
+        const info = StorageQuotaManager.getStorageInfo();
+        const status = StorageQuotaManager.checkQuotaStatus();
+
+        let html = `<h2>Storage Information</h2>`;
+        html += `<p><strong>Used:</strong> ${StorageQuotaManager.formatBytes(info.used)}</p>`;
+        html += `<p><strong>Total:</strong> ${StorageQuotaManager.formatBytes(info.total)}</p>`;
+        html += `<p><strong>Usage:</strong> ${Math.round(info.usagePercent * 100)}%</p>`;
+        html += `<p><strong>Status:</strong> ${status}</p>`;
+        html += `<h3>Keys in localStorage:</h3><ul>`;
+
+        for (const key in localStorage) {
+          const value = localStorage.getItem(key) || '';
+          const size = key.length + value.length;
+          html += `<li><strong>${key}:</strong> ${StorageQuotaManager.formatBytes(size)}</li>`;
         }
 
-        function clearStorage() {
-            localStorage.clear();
-            showStorageInfo();
-        }
+        html += `</ul>`;
+        output.innerHTML = html;
+      }
 
-        // Show info on load
+      function addTestData() {
+        // Add some test documents to trigger storage warning
+        const testDocs = [];
+        for (let i = 0; i < 50; i++) {
+          testDocs.push({
+            id: `test-doc-${i}`,
+            name: `Test Document ${i}`,
+            content: 'A'.repeat(1000), // 1KB each
+            createdAt: new Date().toISOString(),
+          });
+        }
+        localStorage.setItem('docsshelf_documents', JSON.stringify(testDocs));
+
+        // Add some file data
+        const testFiles = [];
+        for (let i = 0; i < 20; i++) {
+          testFiles.push({
+            id: `test-file-${i}`,
+            data: 'B'.repeat(5000), // 5KB each
+          });
+        }
+        localStorage.setItem('docsshelf_files', JSON.stringify(testFiles));
+
         showStorageInfo();
+      }
+
+      function testCleanup() {
+        // Simple cleanup test
+        const docsData = localStorage.getItem('docsshelf_documents');
+        const filesData = localStorage.getItem('docsshelf_files');
+
+        let cleaned = false;
+        if (filesData) {
+          localStorage.removeItem('docsshelf_files');
+          cleaned = true;
+          console.log('Removed files data');
+        }
+
+        if (docsData) {
+          const docs = JSON.parse(docsData);
+          if (docs.length > 3) {
+            const keepDocs = docs.slice(0, 3);
+            localStorage.setItem(
+              'docsshelf_documents',
+              JSON.stringify(keepDocs)
+            );
+            cleaned = true;
+            console.log(`Kept 3 docs, removed ${docs.length - 3}`);
+          }
+        }
+
+        alert(cleaned ? 'Cleanup completed!' : 'Nothing to clean');
+        showStorageInfo();
+      }
+
+      function clearStorage() {
+        localStorage.clear();
+        showStorageInfo();
+      }
+
+      // Show info on load
+      showStorageInfo();
     </script>
-</body>
+  </body>
 </html>

@@ -1,0 +1,227 @@
+SystemUptimeMs: 88693674
+Process: com.google.android.as
+PID: 744
+UID: 10146
+Frozen: false
+Timestamp: 2025-09-16 20:42:29.091-0700
+Flags: 0x30cbbe45
+Package: com.google.android.as v14753270 (B.0.playstore.pixel6.738427685)
+Foreground: No
+Process-Runtime: 62397
+ErrorId: f9bf6ce0-667d-422b-9cf3-381b6319be5c
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=0.30 avg60=1.11 avg300=3.30 total=1617681328
+full avg10=0.08 avg60=0.11 avg300=0.50 total=588001731
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=92.85 avg60=87.71 avg300=84.49 total=13091602735
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=25.43 avg60=31.24 avg300=24.29 total=4343139499
+full avg10=0.49 avg60=0.80 avg300=0.76 total=1087449729
+----- End output from /proc/pressure/io -----
+
+CPU usage from 8257ms to -1035ms ago (2025-09-16 20:42:39.968 to 2025-09-16 20:42:49.260):
+  53% 32511/com.google.android.apps.nexuslauncher: 1.1% user + 52% kernel / faults: 1397 minor
+  27% 541/surfaceflinger: 0.4% user + 26% kernel
+  25% 32016/system_server: 1.1% user + 24% kernel / faults: 1137 minor
+  3.4% 243/vold: 0.5% user + 2.8% kernel / faults: 15 minor
+  8.7% 503/android.hardware.sensors-service.multihal: 0% user + 8.7% kernel
+  8.7% 32455/com.android.networkstack.process: 0.9% user + 7.7% kernel / faults: 110 minor
+  6.7% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 6.7% kernel
+  6.5% 32319/com.android.systemui: 0.8% user + 5.7% kernel / faults: 143 minor
+  3.5% 16/rcu_preempt: 0% user + 3.5% kernel
+  3.2% 912/com.android.keychain: 0% user + 3.2% kernel / faults: 371 minor
+98% TOTAL: 3.3% user + 85% kernel + 1.1% iowait + 8.7% softirq
+Data File: /data/anr/anr_2025-09-16-20-42-50-124
+Subject: Process ProcessRecord{eeac7d7 744:com.google.android.as/u0a146} failed to complete startup
+RssHwmKb: 127892
+RssKb: 124416
+RssAnonKb: 57160
+RssShmemKb: 768
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758080288575
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1758080329857
+  anr <
+    pid: 32319
+    process: "com.android.systemui"
+    process_class: 2
+    subject: "Process ProcessRecord{46d5ce8 32319:com.android.systemui/u0a186} failed to complete startup"
+    uid: 10186
+  >
+>
+events <
+  timestamp_ms: 1758080333545
+  system_server_started <
+  >
+>
+events <
+  timestamp_ms: 1758080373152
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 17s"
+  >
+>
+events <
+  timestamp_ms: 1758080379788
+  anr <
+    pid: 32507
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 32507:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080409166
+  anr <
+    pid: 32634
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{2aaafe7 32634:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1758080426035
+  anr <
+    pid: 32659
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 32659:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080475702
+  anr <
+    pid: 363
+    process: "com.google.android.googlequicksearchbox:interactor"
+    process_class: 2
+    subject: "Process ProcessRecord{791bba8 363:com.google.android.googlequicksearchbox:interactor/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758080482616
+  anr <
+    pid: 351
+    process: "com.google.android.providers.media.module"
+    process_class: 2
+    subject: "Process ProcessRecord{8f05bda 351:com.google.android.providers.media.module/u0a214} failed to complete startup"
+    uid: 10214
+  >
+>
+events <
+  timestamp_ms: 1758080523752
+  anr <
+    pid: 471
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{6c36728 471:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758080528129
+  anr <
+    pid: 523
+    process: "com.google.android.apps.messaging:rcs"
+    process_class: 2
+    subject: "Process ProcessRecord{7efa528 523:com.google.android.apps.messaging:rcs/u0a145} failed to complete startup"
+    uid: 10145
+  >
+>
+events <
+  timestamp_ms: 1758080529675
+  anr <
+    pid: 32538
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.safetycenter.action.REFRESH_SAFETY_SOURCES flg=0x10000010 xflg=0x4 pkg=com.android.settings cmp=com.android.settings/.safetycenter.SafetySourceBroadcastReceiver (has [...]"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1758080538179
+  anr <
+    pid: 32735
+    process: "com.google.android.apps.wellbeing"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.intent.action.LOCKED_BOOT_COMPLETED flg=0x89000010 cmp=com.google.android.apps.wellbeing/.common.receiver.coalescedreceivers.LockedBootCompletedCoalescedBroadcast_Rec[...]"
+    uid: 10141
+  >
+>
+events <
+  timestamp_ms: 1758080550634
+  anr <
+    pid: 749
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{f318390 749:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+timestamp_ms: 1758080568370
+window_ms: 300000
+
+----- dumping pid: 744 at 88668043
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 744 at 2025-09-16 20:42:29.062865100-0700 -----
+Cmd line: com.google.android.as
+
+sysTid=744       folio_wait_bit_common
+sysTid=746       do_sigtimedwait
+sysTid=747       pipe_read
+sysTid=751       futex_wait_queue
+sysTid=752       futex_wait_queue
+sysTid=753       futex_wait_queue
+sysTid=754       futex_wait_queue
+sysTid=755       futex_wait_queue
+sysTid=761       binder_ioctl_write_read
+sysTid=763       binder_ioctl_write_read
+sysTid=793       binder_ioctl_write_read
+sysTid=797       futex_wait_queue
+sysTid=858       futex_wait_queue
+
+----- end 744 -----
+
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 744 at 2025-09-16 20:42:39.731625000-0700 -----
+Cmd line: com.google.android.as
+
+sysTid=744       folio_wait_bit_common
+sysTid=746       0
+sysTid=747       pipe_read
+sysTid=751       futex_wait_queue
+sysTid=752       0
+sysTid=753       futex_wait_queue
+sysTid=754       futex_wait_queue
+sysTid=755       futex_wait_queue
+sysTid=761       binder_ioctl_write_read
+sysTid=763       binder_ioctl_write_read
+sysTid=793       binder_ioctl_write_read
+sysTid=797       futex_wait_queue
+
+----- end 744 -----
+
+DurationsV5: 88667931,0,0,19277,1726,0,1,0,1581,0,0,0,0,0,1,249,13565,112,2,1,4,1,0,0,0
+
+----- dumping ended at 88690624
+End Data File

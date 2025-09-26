@@ -1,0 +1,60 @@
+SystemUptimeMs: 132837360
+Process: com.android.keychain
+PID: 2911
+UID: 1000
+Frozen: false
+Timestamp: 2025-09-17 08:57:48.960-0700
+Flags: 0x30883e45
+Package: com.android.keychain v36 (16)
+Foreground: No
+Process-Runtime: 43518201
+ErrorId: d21fc14f-5853-4a9d-8763-bc6995aba266
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=69.12 avg60=43.14 avg300=17.06 total=1816747834
+full avg10=18.60 avg60=14.93 avg300=7.67 total=658781263
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=94.15 avg60=77.23 avg300=46.71 total=20102707890
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=15.15 avg60=19.09 avg300=8.76 total=5028678410
+full avg10=0.07 avg60=1.64 avg300=1.34 total=1151267914
+----- End output from /proc/pressure/io -----
+
+CPU usage from 517ms to 32874ms later (2025-09-17 08:57:49.491 to 2025-09-17 08:58:21.848):
+  33% 1656/system_server: 1.8% user + 31% kernel / faults: 2166 minor 186 major
+  29% 503/android.hardware.sensors-service.multihal: 0% user + 29% kernel
+  21% 37/kcompactd0: 0% user + 21% kernel
+  12% 3188/com.google.android.gms: 1.1% user + 11% kernel / faults: 607 minor 1437 major
+  12% 47/kswapd0: 0% user + 12% kernel
+  12% 2911/com.android.keychain: 0.3% user + 11% kernel / faults: 1681 minor 382 major
+  11% 9998/com.google.android.googlequicksearchbox:search: 0.1% user + 11% kernel / faults: 838 minor 2120 major
+  9.7% 4160/com.google.android.googlequicksearchbox:interactor: 1.3% user + 8.3% kernel / faults: 129 minor 1 major
+  5.2% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 5.2% kernel
+  4.8% 3332/zygote64: 0.6% user + 4.1% kernel / faults: 10 minor 136 major
+99% TOTAL: 4.7% user + 86% kernel + 0.1% iowait + 8.5% softirq
+Data File: /data/anr/anr_2025-09-17-08-57-55-381
+Subject: executing service com.android.keychain/.KeyChainService, waited 24580ms
+RssHwmKb: 109436
+RssKb: 77180
+RssAnonKb: 24828
+RssShmemKb: 640
+VmSwapKb: 30208
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758124615428
+  install_packages <
+  >
+>
+timestamp_ms: 1758124669275
+window_ms: 300000
+
+End Data File

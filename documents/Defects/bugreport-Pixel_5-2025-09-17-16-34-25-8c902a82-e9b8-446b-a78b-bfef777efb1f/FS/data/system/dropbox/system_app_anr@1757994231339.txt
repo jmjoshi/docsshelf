@@ -1,0 +1,137 @@
+SystemUptimeMs: 2349627
+Process: com.google.android.googlequicksearchbox:search
+PID: 8694
+UID: 10147
+Frozen: false
+Timestamp: 2025-09-15 20:43:35.375-0700
+Flags: 0x28dbbe45
+Package: com.google.android.googlequicksearchbox v301482860 (16.9.50.ve.x86_64)
+Foreground: No
+Process-Runtime: 36688
+ErrorId: 62305405-9996-4471-8ba3-cdc696116615
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=6.93 avg60=1.60 avg300=3.33 total=178421003
+full avg10=2.36 avg60=0.60 avg300=1.68 total=68431179
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=62.74 avg60=31.29 avg300=19.94 total=1123312970
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=35.93 avg60=12.94 avg300=22.07 total=1077855239
+full avg10=5.96 avg60=2.91 avg300=13.43 total=447232431
+----- End output from /proc/pressure/io -----
+
+CPU usage from 3ms to 15344ms later (2025-09-15 20:43:34.807 to 2025-09-15 20:43:50.148):
+  51% 8694/com.google.android.googlequicksearchbox:search: 11% user + 39% kernel / faults: 4753 minor 135 major
+  48% 503/android.hardware.sensors-service.multihal: 0.5% user + 47% kernel / faults: 1 minor 6 major
+  25% 895/system_server: 6.4% user + 18% kernel / faults: 200 minor 2 major
+  7.3% 5136/com.google.android.gms.persistent: 1.8% user + 5.4% kernel / faults: 208 minor 4 major
+  6.5% 507/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 6.3% kernel
+  2.7% 1734/com.android.systemui: 0.6% user + 2% kernel / faults: 14 minor
+  2.1% 8641/kworker/1:0H: 0% user + 2.1% kernel
+  1.8% 236/logd: 0% user + 1.7% kernel / faults: 7 minor
+  1.7% 1124/kworker/0:0-virtio_vsock: 0% user + 1.7% kernel
+  1.4% 4042/com.google.android.gms: 0.4% user + 1% kernel / faults: 18 minor 276 major
+80% TOTAL: 3.5% user + 36% kernel + 39% iowait + 1% softirq
+Data File: /data/anr/anr_2025-09-15-20-43-35-526
+Subject: Process ProcessRecord{3af8ec1 8694:com.google.android.googlequicksearchbox:search/u0a147} failed to complete startup
+RssHwmKb: 141504
+RssKb: 141504
+RssAnonKb: 33824
+RssShmemKb: 640
+VmSwapKb: 28216
+
+
+--- CriticalEventLog ---
+capacity: 20
+timestamp_ms: 1757994215386
+window_ms: 300000
+
+----- dumping pid: 8694 at 2334075
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 8694 at 2025-09-15 20:43:35.976586200-0700 -----
+Cmd line: com.google.android.googlequicksearchbox:search
+
+sysTid=8694      folio_wait_bit_common
+sysTid=8696      do_sigtimedwait
+sysTid=8697      pipe_read
+sysTid=8698      futex_wait_queue
+sysTid=8700      futex_wait_queue
+sysTid=8701      futex_wait_queue
+sysTid=8702      futex_wait_queue
+sysTid=8703      futex_wait_queue
+sysTid=8707      binder_ioctl_write_read
+sysTid=8708      binder_ioctl_write_read
+sysTid=8709      binder_ioctl_write_read
+sysTid=8712      futex_wait_queue
+sysTid=8723      futex_wait_queue
+sysTid=8724      0
+sysTid=8725      do_epoll_wait
+sysTid=8726      futex_wait_queue
+sysTid=8727      0
+sysTid=8728      futex_wait_queue
+sysTid=8729      futex_wait_queue
+sysTid=8730      futex_wait_queue
+sysTid=8731      futex_wait_queue
+sysTid=8734      futex_wait_queue
+sysTid=8735      futex_wait_queue
+
+----- end 8694 -----
+
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 8694 at 2025-09-15 20:43:47.399066800-0700 -----
+Cmd line: com.google.android.googlequicksearchbox:search
+
+sysTid=8694      do_epoll_wait
+sysTid=8696      futex_wait_queue
+sysTid=8697      pipe_read
+sysTid=8698      0
+sysTid=8700      futex_wait_queue
+sysTid=8701      futex_wait_queue
+sysTid=8702      futex_wait_queue
+sysTid=8703      futex_wait_queue
+sysTid=8707      binder_ioctl_write_read
+sysTid=8708      binder_ioctl_write_read
+sysTid=8709      binder_ioctl_write_read
+sysTid=8712      futex_wait_queue
+sysTid=8723      futex_wait_queue
+sysTid=8724      futex_wait_queue
+sysTid=8725      binder_ioctl_write_read
+sysTid=8726      futex_wait_queue
+sysTid=8727      0
+sysTid=8728      0
+sysTid=8729      futex_wait_queue
+sysTid=8730      futex_wait_queue
+sysTid=8731      folio_wait_bit_common
+sysTid=8734      futex_wait_queue
+sysTid=8735      futex_wait_queue
+sysTid=8743      futex_wait_queue
+sysTid=8744      futex_wait_queue
+sysTid=8745      futex_wait_queue
+sysTid=8746      futex_wait_queue
+sysTid=8748      futex_wait_queue
+sysTid=8749      futex_wait_queue
+sysTid=8750      futex_wait_queue
+sysTid=8751      futex_wait_queue
+sysTid=8752      futex_wait_queue
+sysTid=8753      0
+sysTid=8754      futex_wait_queue
+sysTid=8755      futex_wait_queue
+sysTid=8756      do_epoll_wait
+sysTid=8757      futex_wait_queue
+sysTid=8758      futex_wait_queue
+sysTid=8759      futex_wait_queue
+
+----- end 8694 -----
+
+DurationsV5: 2333778,0,1,8,584,884,1,0,0,0,0,0,0,0,0,140,15141,66,2,14476,4,1,0,0,0
+
+----- dumping ended at 2348990
+End Data File

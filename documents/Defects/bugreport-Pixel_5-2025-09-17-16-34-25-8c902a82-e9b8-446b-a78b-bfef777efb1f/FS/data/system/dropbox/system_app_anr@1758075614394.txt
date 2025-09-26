@@ -1,0 +1,110 @@
+SystemUptimeMs: 83733213
+Process: com.google.android.googlequicksearchbox:search
+PID: 29488
+UID: 10147
+Frozen: false
+Timestamp: 2025-09-16 19:19:50.063-0700
+Flags: 0x28dbbe45
+Package: com.google.android.googlequicksearchbox v301482860 (16.9.50.ve.x86_64)
+Foreground: No
+Process-Runtime: 59954
+ErrorId: c7b888bb-3cb5-4ea8-a7b9-86ef130af132
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=45.04 avg60=30.69 avg300=12.89 total=1205079162
+full avg10=12.46 avg60=12.89 avg300=5.41 total=468585097
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=92.04 avg60=80.77 avg300=41.92 total=10820095049
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=20.36 avg60=20.43 avg300=11.90 total=3627758594
+full avg10=0.05 avg60=2.27 avg300=2.53 total=1023079453
+----- End output from /proc/pressure/io -----
+
+CPU usage from 4912ms to -1647ms ago (2025-09-16 19:20:06.500 to 2025-09-16 19:20:13.059):
+  66% 24729/com.google.android.gms.ui: 1.7% user + 64% kernel
+  38% 37/kcompactd0: 0% user + 38% kernel
+  35% 28121/com.google.android.apps.messaging: 0.9% user + 34% kernel / faults: 100 minor 383 major
+  20% 21497/system_server: 1.1% user + 19% kernel / faults: 235 minor 1 major
+  11% 503/android.hardware.sensors-service.multihal: 0% user + 11% kernel
+  9.3% 29044/com.google.android.gms.persistent: 0.6% user + 8.6% kernel / faults: 119 minor
+  2.6% 29488/com.google.android.googlequicksearchbox:search: 0% user + 2.6% kernel / faults: 29 minor
+  1.5% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 1.5% kernel
+  1% 16/rcu_preempt: 0% user + 1% kernel
+  1.1% 29397/kworker/0:2-virtio_vsock: 0% user + 1.1% kernel
+96% TOTAL: 0.4% user + 91% kernel + 4.2% softirq
+Data File: /data/anr/anr_2025-09-16-19-20-14-220
+Subject: Process ProcessRecord{5889c04 29488:com.google.android.googlequicksearchbox:search/u0a147} failed to complete startup
+RssHwmKb: 131136
+RssKb: 129576
+RssAnonKb: 29580
+RssShmemKb: 640
+VmSwapKb: 29032
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758075587280
+  anr <
+    pid: 29475
+    process: "com.google.android.bluetooth"
+    process_class: 2
+    subject: "executing service com.google.android.bluetooth/com.android.bluetooth.btservice.AdapterService, waited 21782ms"
+    uid: 1002
+  >
+>
+timestamp_ms: 1758075614112
+window_ms: 300000
+
+----- dumping pid: 29488 at 83709554
+libdebuggerd_client: timeout expired before poll
+
+----- Waiting Channels: pid 29488 at 2025-09-16 19:19:55.054106900-0700 -----
+Cmd line: com.google.android.googlequicksearchbox:search
+
+sysTid=29488     0
+sysTid=29491     do_sigtimedwait
+sysTid=29492     pipe_read
+sysTid=29494     futex_wait_queue
+sysTid=29495     0
+sysTid=29496     futex_wait_queue
+sysTid=29497     futex_wait_queue
+sysTid=29498     futex_wait_queue
+sysTid=29499     binder_ioctl_write_read
+sysTid=29500     binder_ioctl_write_read
+sysTid=29504     binder_ioctl_write_read
+sysTid=29509     futex_wait_queue
+
+----- end 29488 -----
+
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 29488 at 2025-09-16 19:20:07.944713900-0700 -----
+Cmd line: com.google.android.googlequicksearchbox:search
+
+sysTid=29488     migration_entry_wait_on_locked
+sysTid=29491     do_sigtimedwait
+sysTid=29492     pipe_read
+sysTid=29494     futex_wait_queue
+sysTid=29495     futex_wait_queue
+sysTid=29496     futex_wait_queue
+sysTid=29497     futex_wait_queue
+sysTid=29498     futex_wait_queue
+sysTid=29499     binder_ioctl_write_read
+sysTid=29500     binder_ioctl_write_read
+sysTid=29504     binder_ioctl_write_read
+sysTid=29509     futex_wait_queue
+sysTid=29540     migration_entry_wait_on_locked
+
+----- end 29488 -----
+
+DurationsV5: 83706347,329,597,22439,3491,0,1,0,107,0,0,1611,0,0,0,1,22006,979,2,0,4,1,0,0,0
+
+----- dumping ended at 83733208
+End Data File

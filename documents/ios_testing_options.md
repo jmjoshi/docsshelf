@@ -3,6 +3,7 @@
 ## Option 1: EAS Build (Cloud Building) - RECOMMENDED
 
 ### Prerequisites
+
 ```powershell
 # Install EAS CLI
 npm install -g @expo/eas-cli
@@ -12,6 +13,7 @@ eas login
 ```
 
 ### Steps
+
 ```powershell
 # Navigate to project directory
 cd "c:\Users\Jayant\Documents\projects\docsshelf"
@@ -27,6 +29,7 @@ eas build --platform ios --profile preview
 ```
 
 ### Testing the Build
+
 1. Download the `.ipa` file from EAS dashboard
 2. Use TestFlight for distribution to test devices
 3. Install on physical iOS devices via TestFlight
@@ -34,6 +37,7 @@ eas build --platform ios --profile preview
 ## Option 2: Expo Go App Testing
 
 ### Steps
+
 ```powershell
 # Start development server
 npm start
@@ -43,6 +47,7 @@ expo start --tunnel
 ```
 
 ### Testing Process
+
 1. Install **Expo Go** app on iOS device from App Store
 2. Scan QR code from Expo CLI
 3. App will load in Expo Go for testing
@@ -51,6 +56,7 @@ expo start --tunnel
 ## Option 3: iOS Simulator via Cloud macOS
 
 ### If using cloud macOS service:
+
 1. Connect to cloud macOS instance
 2. Install Xcode and iOS Simulator
 3. Run the same commands as local macOS:
@@ -75,6 +81,7 @@ npm run web:prod
 ```
 
 ### Testing in Browser
+
 1. Open Chrome/Edge DevTools
 2. Toggle device toolbar (mobile view)
 3. Select iPhone device simulation
@@ -95,12 +102,14 @@ npm test -- --testNamePattern="iOS"
 ## Limitations of Windows-based iOS Testing
 
 ### What you CAN'T do on Windows:
+
 - Run iOS Simulator natively
 - Build iOS apps locally without cloud services
 - Debug iOS apps directly
 - Use iOS-specific development tools
 
 ### What you CAN do on Windows:
+
 - Build iOS apps using EAS (cloud)
 - Test React Native logic with unit tests
 - Test in Expo Go app

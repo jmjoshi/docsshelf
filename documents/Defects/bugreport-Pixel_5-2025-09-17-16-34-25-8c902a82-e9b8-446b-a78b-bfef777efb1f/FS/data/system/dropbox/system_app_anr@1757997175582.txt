@@ -1,0 +1,281 @@
+SystemUptimeMs: 5294517
+Process: com.google.android.inputmethod.latin
+PID: 11364
+UID: 10152
+Frozen: false
+Timestamp: 2025-09-15 21:32:41.506-0700
+Flags: 0x20cabe45
+Package: com.google.android.inputmethod.latin v163542536 (15.1.08.726012951-preload-x86_64)
+Foreground: No
+Process-Runtime: 42524
+ErrorId: 2007d9e6-e6dd-4cac-ba0e-a923d5137d15
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=10.46 avg60=9.31 avg300=5.99 total=361332697
+full avg10=0.91 avg60=0.76 avg300=1.08 total=155906984
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=78.70 avg60=83.29 avg300=76.34 total=2050430272
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=56.92 avg60=44.09 avg300=44.94 total=1789770655
+full avg10=1.21 avg60=1.80 avg300=5.06 total=676419269
+----- End output from /proc/pressure/io -----
+
+CPU usage from 64ms to 12476ms later (2025-09-15 21:32:41.720 to 2025-09-15 21:32:54.132):
+  20% 9774/system_server: 2.2% user + 18% kernel / faults: 2888 minor
+  10% 11199/com.google.android.googlequicksearchbox:interactor: 2.3% user + 7.8% kernel / faults: 1081 minor 5 major
+  9.1% 10225/com.android.systemui: 1.9% user + 7.2% kernel / faults: 1643 minor 11 major
+  7.9% 10650/com.google.android.gms.persistent: 1.6% user + 6.2% kernel / faults: 1449 minor 25 major
+  7.4% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 7.4% kernel
+  7% 11327/com.google.android.googlequicksearchbox:search: 1.6% user + 5.3% kernel / faults: 2565 minor 4 major
+  6.1% 10780/com.google.android.apps.wellbeing: 1.6% user + 4.4% kernel / faults: 1039 minor
+  5.5% 11301/com.google.android.as: 1.2% user + 4.3% kernel / faults: 1567 minor 19 major
+  5% 11529/com.google.android.gms: 1.1% user + 3.8% kernel / faults: 2125 minor 10 major
+  3.8% 541/surfaceflinger: 0.3% user + 3.5% kernel / faults: 23 minor 11 major
+99% TOTAL: 8.2% user + 37% kernel + 52% iowait + 1% softirq
+Data File: /data/anr/anr_2025-09-15-21-32-41-929
+Subject: Process ProcessRecord{1a867dd 11364:com.google.android.inputmethod.latin/u0a152} failed to complete startup
+RssHwmKb: 138316
+RssKb: 138316
+RssAnonKb: 59536
+RssShmemKb: 768
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1757996886391
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757996909536
+  anr <
+    pid: 10225
+    process: "com.android.systemui"
+    process_class: 2
+    subject: "Process ProcessRecord{1cca20a 10225:com.android.systemui/u0a186} failed to complete startup"
+    uid: 10186
+  >
+>
+events <
+  timestamp_ms: 1757996916110
+  system_server_started <
+  >
+>
+events <
+  timestamp_ms: 1757996942964
+  anr <
+    pid: 10393
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 10393:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757996953817
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757996961140
+  anr <
+    pid: 10468
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Process ProcessRecord{313cef7 10468:com.android.settings/1000} failed to complete startup"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1757996966204
+  anr <
+    pid: 10486
+    process: "com.google.android.permissioncontroller"
+    process_class: 2
+    subject: "Process ProcessRecord{94fcfa7 10486:com.google.android.permissioncontroller/u0a192} failed to complete startup"
+    uid: 10192
+  >
+>
+events <
+  timestamp_ms: 1757996981150
+  anr <
+    pid: 10506
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 10506:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757996985622
+  anr <
+    pid: 10548
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Process ProcessRecord{f1016 10548:com.android.settings/1000} failed to complete startup"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1757997004132
+  anr <
+    pid: 10575
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{b0253fa 10575:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1757997014575
+  anr <
+    pid: 10604
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 10604:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997028153
+  half_watchdog <
+    subject: "Blocked in handler on ActivityManager (ActivityManager) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757997092278
+  anr <
+    pid: 10845
+    process: "com.google.android.googlequicksearchbox:interactor"
+    process_class: 2
+    subject: "executing service com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService, waited 22580ms"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1757997103723
+  anr <
+    pid: 10820
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{50c2a7b 10820:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1757997106846
+  anr <
+    pid: 10903
+    process: "com.google.android.apps.messaging:rcs"
+    process_class: 2
+    subject: "Process ProcessRecord{e8b05eb 10903:com.google.android.apps.messaging:rcs/u0a145} failed to complete startup"
+    uid: 10145
+  >
+>
+events <
+  timestamp_ms: 1757997112520
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1757997115071
+  anr <
+    pid: 10997
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "Process ProcessRecord{c863ebc 10997:com.google.android.gms/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1757997122584
+  anr <
+    pid: 10755
+    process: "com.android.phone"
+    process_class: 2
+    subject: "executing service com.android.phone/com.android.internal.telephony.data.CellularDataService, waited 21086ms"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1757997154896
+  anr <
+    pid: 11291
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{1a11983 11291:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+timestamp_ms: 1757997161909
+window_ms: 300000
+
+----- dumping pid: 11364 at 5280809
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 11364 at 2025-09-15 21:32:41.832452700-0700 -----
+Cmd line: com.google.android.inputmethod.latin
+
+sysTid=11364     folio_wait_bit_common
+sysTid=11376     do_sigtimedwait
+sysTid=11377     pipe_read
+sysTid=11378     do_sys_poll
+sysTid=11379     futex_wait_queue
+sysTid=11380     futex_wait_queue
+sysTid=11381     futex_wait_queue
+sysTid=11382     futex_wait_queue
+sysTid=11383     futex_wait_queue
+sysTid=11393     binder_ioctl_write_read
+sysTid=11395     binder_ioctl_write_read
+sysTid=11403     binder_ioctl_write_read
+sysTid=11437     futex_wait_queue
+sysTid=11562     do_epoll_wait
+sysTid=11576     futex_wait_queue
+
+----- end 11364 -----
+
+
+
+----- pid 11364 at 2025-09-15 21:32:52.898768100-0700 -----
+Cmd line: com.google.android.inputmethod.latin
+ABI: 'x86_64'
+
+"putmethod.latin" sysTid=11364
+libdebuggerd_client: poll timeout expired
+
+----- Waiting Channels: pid 11364 at 2025-09-15 21:32:51.920590500-0700 -----
+Cmd line: com.google.android.inputmethod.latin
+
+sysTid=11364     futex_wait_queue
+sysTid=11376     folio_wait_bit_common
+sysTid=11377     pipe_read
+sysTid=11378     do_sys_poll
+sysTid=11379     futex_wait_queue
+sysTid=11380     futex_wait_queue
+sysTid=11381     futex_wait_queue
+sysTid=11382     futex_wait_queue
+sysTid=11383     futex_wait_queue
+sysTid=11393     binder_ioctl_write_read
+sysTid=11395     binder_ioctl_write_read
+sysTid=11403     binder_ioctl_write_read
+sysTid=11437     futex_wait_queue
+sysTid=11562     do_epoll_wait
+sysTid=11576     futex_wait_queue
+
+----- end 11364 -----
+
+DurationsV5: 5280252,0,38,349,270,349,1,0,15,0,0,236,0,0,0,5,12389,388,1,12140,4,1,0,0,0
+
+----- dumping ended at 5293055
+End Data File

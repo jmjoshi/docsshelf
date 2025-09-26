@@ -1,0 +1,83 @@
+SystemUptimeMs: 87728295
+Process: com.google.android.apps.nexuslauncher
+PID: 22229
+UID: 10181
+Frozen: false
+Timestamp: 2025-09-16 20:24:13.775-0700
+Flags: 0x34cbbe45
+Package: com.google.android.apps.nexuslauncher v907 (16)
+Foreground: Yes
+Process-Runtime: 13988716
+Activity: com.google.android.apps.nexuslauncher/.NexusLauncherActivity
+ErrorId: 395da1b0-545a-4419-86c1-70ed06b0767b
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=44.82 avg60=46.74 avg300=30.69 total=1536804115
+full avg10=19.63 avg60=16.63 avg300=10.36 total=583182934
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=92.81 avg60=89.57 avg300=78.42 total=12218238394
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=16.95 avg60=18.03 avg300=19.37 total=4051060473
+full avg10=0.00 avg60=0.01 avg300=0.06 total=1075513963
+----- End output from /proc/pressure/io -----
+
+CPU usage from 84ms to 28375ms later (2025-09-16 20:25:51.065 to 2025-09-16 20:26:19.356):
+  0% 26503/com.google.android.apps.safetyhub: 0% user + 0% kernel / faults: 21 minor 173 major
+  19% 21497/system_server: 1% user + 18% kernel / faults: 1758 minor 25 major
+  18% 47/kswapd0: 0% user + 18% kernel
+  17% 503/android.hardware.sensors-service.multihal: 0% user + 17% kernel
+  17% 37/kcompactd0: 0% user + 17% kernel
+  15% 22229/com.google.android.apps.nexuslauncher: 1.5% user + 13% kernel / faults: 1309 minor 74 major
+  12% 30774/kworker/u5:2-events_unbound: 0% user + 12% kernel
+  3.8% 26/ksoftirqd/1: 0% user + 3.8% kernel
+  1.7% 21289/zygote64: 0.2% user + 1.5% kernel
+  2.7% 25987/com.android.systemui: 0% user + 2.6% kernel / faults: 133 minor 2 major
+99% TOTAL: 1.5% user + 91% kernel + 0.1% iowait + 6.1% softirq
+Data File: /data/anr/anr_2025-09-16-20-25-55-556
+Subject: Input dispatching timed out (dd07484 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity is not responding. Waited 5038ms for FocusEvent(hasFocus=true)).
+RssHwmKb: 313104
+RssKb: 123528
+RssAnonKb: 46500
+RssShmemKb: 820
+VmSwapKb: 45904
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758079401974
+  anr <
+    pid: 23939
+    process: "com.google.android.permissioncontroller"
+    process_class: 2
+    subject: "executing service com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionEventCleanupJobService, waited 26693ms"
+    uid: 10192
+  >
+>
+events <
+  timestamp_ms: 1758079478054
+  anr <
+    pid: 28918
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.GmsInternalBoundBrokerService, waited 58696ms"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758079538621
+  watchdog <
+    subject: "Blocked in handler on main thread (main) for 91s"
+    uuid: "dd244609-4c25-4e14-8a08-682d95683dfa"
+  >
+>
+timestamp_ms: 1758079551721
+window_ms: 300000
+
+End Data File

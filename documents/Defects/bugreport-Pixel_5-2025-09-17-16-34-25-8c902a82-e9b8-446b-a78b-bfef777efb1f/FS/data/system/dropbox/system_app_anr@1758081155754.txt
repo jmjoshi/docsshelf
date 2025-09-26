@@ -1,0 +1,235 @@
+SystemUptimeMs: 89274312
+Process: com.android.phone
+PID: 2361
+UID: 1001
+Frozen: false
+Timestamp: 2025-09-16 20:52:14.974-0700
+Flags: 0x38c83e4d
+Package: com.android.providers.telephony v36 (16)
+Package: com.android.ons v36 (16)
+Package: com.android.stk v36 (16)
+Package: com.android.phone v36 (16)
+Foreground: No
+Process-Runtime: 68459
+ErrorId: c2afc8bd-cccd-4cd1-b1ac-7831bf91c209
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=0.09 avg60=0.95 avg300=0.94 total=1620135735
+full avg10=0.00 avg60=0.02 avg300=0.06 total=588232001
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=83.93 avg60=87.13 avg300=85.47 total=13593676658
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=26.32 avg60=17.95 avg300=29.43 total=4553117931
+full avg10=0.14 avg60=0.41 avg300=1.12 total=1094585959
+----- End output from /proc/pressure/io -----
+
+CPU usage from 56ms to 17255ms later (2025-09-16 20:52:14.688 to 2025-09-16 20:52:31.887):
+  37% 541/surfaceflinger: 0% user + 37% kernel / faults: 5 minor
+  26% 1656/system_server: 1.3% user + 25% kernel / faults: 479 minor 5 major
+  25% 2183/com.google.android.apps.nexuslauncher: 0.2% user + 25% kernel / faults: 103 minor
+  11% 37/kcompactd0: 0% user + 11% kernel
+  9.9% 2383/com.google.android.inputmethod.latin: 0.7% user + 9.1% kernel / faults: 921 minor 22 major
+  9.2% 503/android.hardware.sensors-service.multihal: 0% user + 9.2% kernel
+  9.5% 2361/com.android.phone: 1.1% user + 8.3% kernel / faults: 984 minor
+  6.9% 2534/com.google.android.as: 0.2% user + 6.7% kernel / faults: 245 minor
+  5.9% 507/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 5.8% kernel
+  6% 2535/com.google.android.providers.media.module: 0.1% user + 5.8% kernel / faults: 291 minor
+99% TOTAL: 1.9% user + 90% kernel + 0.5% iowait + 6% softirq
+Data File: /data/anr/anr_2025-09-16-20-52-16-862
+Subject: Process ProcessRecord{f19e39d 2361:com.android.phone/1001} failed to complete startup
+RssHwmKb: 139060
+RssKb: 137412
+RssAnonKb: 57028
+RssShmemKb: 768
+VmSwapKb: 0
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758080846070
+  watchdog <
+    subject: "Blocked in handler on main thread (main) for 76s, Blocked in handler on ui thread (android.ui) for 76s, Blocked in handler on i/o thread (android.io) for 76s"
+    uuid: "db42c6e2-c5bb-4078-bbd4-801b9e5d50c2"
+  >
+>
+events <
+  timestamp_ms: 1758080866683
+  anr <
+    pid: 893
+    process: "com.google.android.providers.media.module"
+    process_class: 2
+    subject: "Process ProcessRecord{544f0fd 893:com.google.android.providers.media.module/u0a214} failed to complete startup"
+    uid: 10214
+  >
+>
+events <
+  timestamp_ms: 1758080873916
+  anr <
+    pid: 946
+    process: "com.google.android.apps.photos"
+    process_class: 2
+    subject: "Process ProcessRecord{5b98630 946:com.google.android.apps.photos/u0a161} failed to complete startup"
+    uid: 10161
+  >
+>
+events <
+  timestamp_ms: 1758080876984
+  anr <
+    pid: 973
+    process: "com.google.android.settings.intelligence"
+    process_class: 2
+    subject: "Process ProcessRecord{54c0677 973:com.google.android.settings.intelligence/u0a137} failed to complete startup"
+    uid: 10137
+  >
+>
+events <
+  timestamp_ms: 1758080883141
+  anr <
+    pid: 985
+    process: "com.google.android.googlequicksearchbox:search"
+    process_class: 2
+    subject: "Process ProcessRecord{709950 985:com.google.android.googlequicksearchbox:search/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758080905608
+  anr <
+    pid: 1023
+    process: "com.google.android.apps.wellbeing"
+    process_class: 2
+    subject: "Process ProcessRecord{4148404 1023:com.google.android.apps.wellbeing/u0a141} failed to complete startup"
+    uid: 10141
+  >
+>
+events <
+  timestamp_ms: 1758081002796
+  half_watchdog <
+    subject: "Blocked in handler on main thread (main) for 15s"
+  >
+>
+events <
+  timestamp_ms: 1758081049359
+  anr <
+    pid: 1994
+    process: "com.android.systemui"
+    process_class: 2
+    subject: "Process ProcessRecord{2418443 1994:com.android.systemui/u0a186} failed to complete startup"
+    uid: 10186
+  >
+>
+events <
+  timestamp_ms: 1758081053342
+  system_server_started <
+  >
+>
+events <
+  timestamp_ms: 1758081081865
+  anr <
+    pid: 2171
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 2171:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758081102821
+  native_crash <
+    pid: 2135
+    process: "com.google.android.bluetooth"
+    process_class: 2
+    uid: 1002
+  >
+>
+timestamp_ms: 1758081135620
+window_ms: 300000
+
+----- dumping pid: 2361 at 89253647
+proc 2361
+context binder
+  thread 2361: l 10 need_return 0 tr 0
+    outgoing transaction 6809680: 0000000000000000 from 2361:2361 to 1656:2325 code 2d flags 12 pri 0:120 r1 elapsed 151ms
+    node work 6809714: u000070e77ab12890 c000070e87aafe970
+    node work 6809716: u000070e77ab12200 c000070e87aaff750
+    transaction complete
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 2361 at 2025-09-16 20:52:15.108368700-0700 -----
+Cmd line: com.android.phone
+
+sysTid=2361      0
+sysTid=2362      do_sigtimedwait
+sysTid=2363      pipe_read
+sysTid=2364      futex_wait_queue
+sysTid=2365      futex_wait_queue
+sysTid=2366      futex_wait_queue
+sysTid=2367      futex_wait_queue
+sysTid=2368      futex_wait_queue
+sysTid=2369      binder_ioctl_write_read
+sysTid=2370      binder_ioctl_write_read
+sysTid=2373      futex_wait_queue
+sysTid=2428      do_epoll_wait
+sysTid=2429      do_epoll_wait
+sysTid=2435      do_epoll_wait
+sysTid=2438      futex_wait_queue
+sysTid=2451      do_epoll_wait
+sysTid=2454      binder_ioctl_write_read
+sysTid=2458      binder_ioctl_write_read
+sysTid=2459      binder_ioctl_write_read
+sysTid=2474      do_epoll_wait
+sysTid=2501      do_epoll_wait
+sysTid=2507      do_epoll_wait
+sysTid=2515      do_epoll_wait
+sysTid=2527      do_epoll_wait
+sysTid=2528      do_epoll_wait
+sysTid=2630      do_epoll_wait
+
+----- end 2361 -----
+
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 2361 at 2025-09-16 20:52:27.065305800-0700 -----
+Cmd line: com.android.phone
+
+sysTid=2361      0
+sysTid=2362      0
+sysTid=2363      pipe_read
+sysTid=2364      futex_wait_queue
+sysTid=2365      futex_wait_queue
+sysTid=2366      futex_wait_queue
+sysTid=2367      futex_wait_queue
+sysTid=2368      futex_wait_queue
+sysTid=2369      binder_ioctl_write_read
+sysTid=2370      binder_ioctl_write_read
+sysTid=2373      futex_wait_queue
+sysTid=2428      do_epoll_wait
+sysTid=2429      do_epoll_wait
+sysTid=2435      do_epoll_wait
+sysTid=2438      futex_wait_queue
+sysTid=2451      do_epoll_wait
+sysTid=2454      binder_ioctl_write_read
+sysTid=2458      futex_wait_queue
+sysTid=2459      binder_ioctl_write_read
+sysTid=2474      do_epoll_wait
+sysTid=2501      do_epoll_wait
+sysTid=2507      do_epoll_wait
+sysTid=2515      do_epoll_wait
+sysTid=2527      do_epoll_wait
+sysTid=2528      do_epoll_wait
+sysTid=2630      do_epoll_wait
+sysTid=2640      do_epoll_wait
+
+----- end 2361 -----
+
+DurationsV5: 89253441,0,0,174,1432,4171,430,0,9,0,0,515,0,0,0,1469,17287,75,1,14349,4,1,0,0,0
+
+----- dumping ended at 89270866
+End Data File

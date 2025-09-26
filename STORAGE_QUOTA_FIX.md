@@ -1,32 +1,39 @@
 # Storage Quota Management Fix
 
 ## Problem
+
 The application was experiencing `QuotaExceededError` when uploading documents because:
+
 1. Files were being stored as base64 data in localStorage
 2. Document metadata was duplicated across Redux state and localStorage
 3. localStorage has a limited quota (typically 5-10MB in browsers)
 4. No cleanup mechanism was in place
 
 ## Solution
+
 Implemented comprehensive storage quota management system:
 
 ### 1. Storage Quota Manager (`src/utils/storageQuota.ts`)
+
 - Monitors localStorage usage and remaining space
 - Provides quota status (normal/warning/critical)
 - Automatic cleanup of oldest documents when space is low
 - Storage usage breakdown by category
 
 ### 2. Updated Services
+
 - **Database Service**: Added quota checking before saving documents
 - **Document Service**: Enhanced upload functions with quota validation
 - **Redux Store**: Reduced persistence scope to only essential data
 
 ### 3. User Interface Components
+
 - **StorageStatus Component**: Shows real-time storage usage
 - **Storage Management Screen**: Full storage management interface
 - **Storage Warning Hooks**: Automatic user notifications
 
 ### 4. Error Handling
+
 - Custom `QuotaExceededError` class for specific error handling
 - User-friendly error messages with storage information
 - Automatic cleanup suggestions
@@ -34,6 +41,7 @@ Implemented comprehensive storage quota management system:
 ## Key Features
 
 ### Automatic Space Management
+
 ```typescript
 // Check if there's space for a new file
 if (!StorageQuotaManager.hasSpaceFor(fileSize)) {
@@ -46,6 +54,7 @@ if (!StorageQuotaManager.hasSpaceFor(fileSize)) {
 ```
 
 ### Real-time Storage Monitoring
+
 ```typescript
 const { storageInfo, quotaStatus, canUpload } = useStorageManagement();
 
@@ -56,6 +65,7 @@ if (quotaStatus === 'critical') {
 ```
 
 ### Storage Breakdown
+
 - Files: Base64 document data
 - Documents: Document metadata
 - Redux: Application state persistence
@@ -65,12 +75,14 @@ if (quotaStatus === 'critical') {
 ## Usage
 
 ### For Users
+
 1. Upload documents normally
 2. Monitor storage usage via the storage status bar
 3. Get automatic warnings when storage is low
 4. Use cleanup options when needed
 
 ### For Developers
+
 ```typescript
 import { StorageQuotaManager } from '../utils/storageQuota';
 
@@ -88,6 +100,7 @@ await StorageQuotaManager.cleanupOldDocuments(targetFreeSpace);
 ## Testing
 
 Test the system from browser console:
+
 ```javascript
 // Test storage quota management
 window.testStorageQuota();
@@ -96,6 +109,7 @@ window.testStorageQuota();
 ## Configuration
 
 Storage thresholds can be adjusted in `StorageQuotaManager`:
+
 - `QUOTA_WARNING_THRESHOLD`: 80% (show warnings)
 - `QUOTA_CRITICAL_THRESHOLD`: 95% (trigger auto-cleanup)
 - `MAX_STORAGE_SIZE`: 5MB (estimated localStorage limit)

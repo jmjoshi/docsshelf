@@ -7,6 +7,7 @@ This guide provides comprehensive instructions for testing your React Native Doc
 ## Quick Reference Commands
 
 ### Android Testing
+
 ```powershell
 # 1. Start emulator, then:
 npm install
@@ -19,6 +20,7 @@ npm run test:all
 ```
 
 ### iOS Testing (Limited on Windows)
+
 ```powershell
 # Development testing with Expo Go
 npm start
@@ -40,6 +42,7 @@ eas build --platform ios --profile development
    - Git
 
 2. **Run Setup Script** (Optional):
+
    ```powershell
    cd "c:\Users\Jayant\Documents\projects\docsshelf"
    powershell -ExecutionPolicy Bypass -File scripts\windows-setup.ps1
@@ -52,6 +55,7 @@ eas build --platform ios --profile development
 ### Step-by-Step Android Testing
 
 #### Step 1: Create Virtual Device
+
 1. Open Android Studio
 2. Go to **Tools > AVD Manager**
 3. Click **Create Virtual Device**
@@ -60,6 +64,7 @@ eas build --platform ios --profile development
 6. Name your AVD (e.g., "DocsShelf_Test")
 
 #### Step 2: Start Development Environment
+
 ```powershell
 # Terminal 1: Start Android Emulator
 emulator -avd DocsShelf_Test
@@ -71,6 +76,7 @@ npm start
 ```
 
 #### Step 3: Run on Android
+
 ```powershell
 # Terminal 3: Deploy to Android
 npm run android
@@ -80,6 +86,7 @@ expo run:android --device
 ```
 
 #### Step 4: Testing Features
+
 - **Camera functionality**: Test document scanning
 - **Storage**: Test document saving/loading
 - **OCR**: Test text recognition
@@ -87,6 +94,7 @@ expo run:android --device
 - **Performance**: Monitor memory usage
 
 #### Step 5: Run Automated Tests
+
 ```powershell
 # Unit tests
 npm test
@@ -100,6 +108,7 @@ npx detox test --configuration android.emu.debug
 ```
 
 #### Step 6: Physical Device Testing
+
 1. Enable **Developer Options** on Android device
 2. Enable **USB Debugging**
 3. Connect via USB
@@ -113,11 +122,13 @@ npx detox test --configuration android.emu.debug
 ### Understanding iOS Limitations
 
 **What you CANNOT do on Windows**:
+
 - Run iOS Simulator natively
 - Build iOS apps locally
 - Debug iOS apps directly with Xcode
 
 **What you CAN do on Windows**:
+
 - Test with Expo Go app (development)
 - Build iOS apps in the cloud (EAS)
 - Run unit tests for iOS-specific code
@@ -126,12 +137,14 @@ npx detox test --configuration android.emu.debug
 ### Method 1: Expo Go Testing (Recommended for Development)
 
 #### Step 1: Setup
+
 ```powershell
 cd "c:\Users\Jayant\Documents\projects\docsshelf"
 npm install
 ```
 
 #### Step 2: Start Development Server
+
 ```powershell
 # Start with tunnel for external device access
 expo start --tunnel
@@ -141,11 +154,13 @@ npm start
 ```
 
 #### Step 3: Test on iOS Device
+
 1. Install **Expo Go** app from App Store on iOS device
 2. Scan QR code displayed in terminal/browser
 3. App loads in Expo Go for testing
 
 #### Limitations of Expo Go:
+
 - Limited to Expo SDK features
 - Cannot test native modules fully
 - Cannot test app store builds
@@ -153,6 +168,7 @@ npm start
 ### Method 2: Cloud Building with EAS
 
 #### Step 1: Setup EAS
+
 ```powershell
 # Install and login
 npm install -g @expo/eas-cli
@@ -160,11 +176,13 @@ eas login
 ```
 
 #### Step 2: Configure Project (if not done)
+
 ```powershell
 eas build:configure
 ```
 
 #### Step 3: Build iOS App
+
 ```powershell
 # Development build
 eas build --platform ios --profile development
@@ -177,6 +195,7 @@ eas build --platform ios --profile production
 ```
 
 #### Step 4: Distribute for Testing
+
 1. **Internal Distribution**: Download `.ipa` file directly
 2. **TestFlight**: Submit to App Store Connect for beta testing
 3. **Ad-hoc Distribution**: Install on registered devices
@@ -192,6 +211,7 @@ npm run build:web:prod
 ```
 
 Test in browser with:
+
 1. Chrome DevTools > Toggle Device Toolbar
 2. Select iPhone device
 3. Test responsive behavior and touch interactions
@@ -308,7 +328,7 @@ Your project already includes these test commands:
 ```powershell
 # Individual test types
 npm run test:unit          # Unit tests
-npm run test:integration   # Integration tests  
+npm run test:integration   # Integration tests
 npm run test:components    # Component tests
 npm run test:performance   # Performance tests
 

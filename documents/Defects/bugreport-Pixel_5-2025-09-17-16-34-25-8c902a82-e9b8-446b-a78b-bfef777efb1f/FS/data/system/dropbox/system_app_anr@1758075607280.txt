@@ -1,0 +1,111 @@
+SystemUptimeMs: 83726261
+Process: com.google.android.bluetooth
+PID: 29475
+UID: 1002
+Frozen: false
+Timestamp: 2025-09-16 19:19:45.626-0700
+Flags: 0x20c8be45
+Package: com.google.android.bluetooth v36 (16)
+Foreground: No
+Process-Runtime: 62063
+ErrorId: efe6f857-d4ef-47e2-96f1-de7994e3e0cb
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=47.28 avg60=24.48 avg300=10.05 total=1194382595
+full avg10=21.33 avg60=10.57 avg300=4.16 total=463849002
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=92.37 avg60=74.35 avg300=36.92 total=10795366284
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=14.59 avg60=20.10 avg300=11.02 total=3621941270
+full avg10=0.20 avg60=3.58 avg300=2.79 total=1023021826
+----- End output from /proc/pressure/io -----
+
+CPU usage from 11292ms to 19704ms later (2025-09-16 19:19:58.087 to 2025-09-16 19:20:06.500):
+  24% 24729/com.google.android.gms.ui: 0.6% user + 23% kernel / faults: 2 minor 23 major
+  44% 37/kcompactd0: 0% user + 44% kernel
+  0.1% 28121/com.google.android.apps.messaging: 0% user + 0% kernel / faults: 45 minor 1582 major
+  22% 21497/system_server: 1.8% user + 20% kernel / faults: 399 minor 2 major
+  9.3% 503/android.hardware.sensors-service.multihal: 0% user + 9.3% kernel
+  7.3% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 7.3% kernel
+  7.3% 29044/com.google.android.gms.persistent: 0.8% user + 6.4% kernel / faults: 200 minor 3 major
+  7.2% 598/media.metrics: 0.7% user + 6.4% kernel
+  5.8% 29475/com.google.android.bluetooth: 0% user + 5.8% kernel / faults: 56 minor 5 major
+  2.6% 29467/kworker/0:1-virtio_vsock: 0% user + 2.6% kernel
+97% TOTAL: 3% user + 86% kernel + 1.5% iowait + 6.4% softirq
+Data File: /data/anr/anr_2025-09-16-19-19-47-280
+Subject: executing service com.google.android.bluetooth/com.android.bluetooth.btservice.AdapterService, waited 21782ms
+RssHwmKb: 79428
+RssKb: 79428
+RssAnonKb: 25284
+RssShmemKb: 512
+VmSwapKb: 30052
+
+
+--- CriticalEventLog ---
+capacity: 20
+timestamp_ms: 1758075587279
+window_ms: 300000
+
+----- dumping pid: 29475 at 83705883
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 29475 at 2025-09-16 19:19:47.484719600-0700 -----
+Cmd line: com.google.android.bluetooth
+
+sysTid=29475     0
+sysTid=29476     do_sigtimedwait
+sysTid=29477     pipe_read
+sysTid=29478     futex_wait_queue
+sysTid=29479     0
+sysTid=29480     futex_wait_queue
+sysTid=29481     futex_wait_queue
+sysTid=29482     futex_wait_queue
+sysTid=29483     binder_ioctl_write_read
+sysTid=29484     binder_ioctl_write_read
+sysTid=29485     futex_wait_queue
+sysTid=29508     binder_ioctl_write_read
+
+----- end 29475 -----
+
+proc 29475
+context binder
+  node 6407702: u00007750374976b0 c0000774fe7474e50 pri 0:139 hs 1 hw 1 ls 5 lw 0 is 6 iw 6 tr 1 proc 25704 29044 23999 25987 26414 21497
+    pending async transaction 6407828: 0000000000000000 from 21497:21827 to 29475:0 code 34 flags 11 pri 0:120 r0 elapsed 1274ms node 6407702 size 184:16 offset ffffffffffffff58
+    pending async transaction 6407831: 0000000000000000 from 21497:21827 to 29475:0 code 2 flags 11 pri 0:120 r0 elapsed 1273ms node 6407702 size 160:8 offset fffffffffffffe90
+    pending async transaction 6407853: 0000000000000000 from 21497:21827 to 29475:0 code 56 flags 11 pri 0:120 r0 elapsed 872ms node 6407702 size 184:16 offset fffffffffffffde8
+    pending async transaction 6407876: 0000000000000000 from 29044:29052 to 29475:0 code 56 flags 11 pri 0:120 r0 elapsed 417ms node 6407702 size 424:16 offset fffffffffffffd20
+  buffer 6407825: 0 size 160:8:0 delivered
+  buffer 6407828: a8 size 184:16:0 active
+  buffer 6407831: 170 size 160:8:0 active
+  buffer 6407853: 218 size 184:16:0 active
+  buffer 6407876: 2e0 size 424:16:0 active
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 29475 at 2025-09-16 19:20:00.956799100-0700 -----
+Cmd line: com.google.android.bluetooth
+
+sysTid=29475     do_epoll_wait
+sysTid=29476     do_sigtimedwait
+sysTid=29477     pipe_read
+sysTid=29478     futex_wait_queue
+sysTid=29479     futex_wait_queue
+sysTid=29480     futex_wait_queue
+sysTid=29481     futex_wait_queue
+sysTid=29482     futex_wait_queue
+sysTid=29483     binder_ioctl_write_read
+sysTid=29484     binder_ioctl_write_read
+sysTid=29485     futex_wait_queue
+sysTid=29508     binder_ioctl_write_read
+
+----- end 29475 -----
+
+DurationsV5: 83704241,24,160,596,1242,10167,0,0,1,0,0,0,0,0,0,1,19106,650,1,18042,4,1,0,0,0
+
+----- dumping ended at 83724308
+End Data File

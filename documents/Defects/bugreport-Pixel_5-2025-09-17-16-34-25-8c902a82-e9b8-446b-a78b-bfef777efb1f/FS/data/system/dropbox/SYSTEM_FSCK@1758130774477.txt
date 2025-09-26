@@ -1,0 +1,33 @@
+isPrevious: true
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Hardware: goldfish_x86_64
+Revision: 0
+Bootloader: unknown
+Radio: null
+Kernel: Linux version 6.6.66-android15-8-gd0c43a640eab-ab13812146 (kleaf@build-host) (Android (11368308, +pgo, +bolt, +lto, +mlgo, based on r510928) clang version 18.0.0 (https://android.googlesource.com/toolchain/llvm-project 477610d4d0d988e69dbc3fae4fe86bff3f07f2b5), LLD 18.0.0) #1 SMP PREEMPT Mon Jul 21 17:41:13 UTC 2025
+
+e2fsck 1.46.6 (1-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Inode 352996 extent tree (at level 1) could be shorter.  Optimize? yes
+
+Pass 1E: Optimizing extent trees
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+[QUOTA WARNING] Usage inconsistent for ID 10144:actual (65093632, 1721) != expected (65097728, 1721)
+Update quota info for quota type 0? yes
+
+[QUOTA WARNING] Usage inconsistent for ID 10144:actual (59129856, 1657) != expected (59133952, 1657)
+Update quota info for quota type 1? yes
+
+[QUOTA WARNING] Usage inconsistent for ID 0:actual (1841967104, 8351) != expected (1841971200, 8351)
+Update quota info for quota type 2? yes
+
+
+/dev/block/mapper/userdata: ***** FILE SYSTEM WAS MODIFIED *****
+/dev/block/mapper/userdata: 8367/393216 files (4.5% non-contiguous), 494605/1572864 blocks
+e2fsck terminated by exit(1)
+
+
+fs_stat,/dev/block/vdc,0x40b

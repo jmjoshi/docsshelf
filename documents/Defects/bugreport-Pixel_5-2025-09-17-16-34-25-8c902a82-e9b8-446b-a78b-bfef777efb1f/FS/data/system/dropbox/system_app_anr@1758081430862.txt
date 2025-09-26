@@ -1,0 +1,425 @@
+SystemUptimeMs: 89549652
+Process: com.google.android.gms.persistent
+PID: 3898
+UID: 10144
+Frozen: false
+Timestamp: 2025-09-16 20:56:55.645-0700
+Flags: 0xa0cabe45
+Package: com.google.android.gms v252635038 (25.26.35 (260800-783060121))
+Foreground: No
+Process-Runtime: 64648
+ErrorId: 1f5f1f21-3de5-49cd-8925-8e5e7ba1782e
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=16.58 avg60=7.68 avg300=3.51 total=1633463248
+full avg10=2.00 avg60=1.44 avg300=0.88 total=592586646
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=89.74 avg60=89.00 avg300=88.11 total=13847651014
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=45.94 avg60=32.07 avg300=29.78 total=4637030653
+full avg10=0.84 avg60=0.79 avg300=0.75 total=1096711906
+----- End output from /proc/pressure/io -----
+
+CPU usage from 105ms to 14283ms later (2025-09-16 20:56:55.475 to 2025-09-16 20:57:09.654):
+  59% 3952/com.google.android.googlequicksearchbox:search: 6.2% user + 53% kernel / faults: 8318 minor 81 major
+  34% 1656/system_server: 1.2% user + 33% kernel / faults: 2452 minor
+  15% 3898/com.google.android.gms.persistent: 0.9% user + 14% kernel / faults: 1599 minor 2 major
+  8.6% 4038/com.android.phone: 0.7% user + 7.8% kernel / faults: 2569 minor 11 major
+  8.4% 47/kswapd0: 0% user + 8.4% kernel
+  8.3% 4160/com.google.android.googlequicksearchbox:interactor: 0.2% user + 8% kernel / faults: 1963 minor 1 major
+  7.4% 507/android.hardware.graphics.composer3-service.ranchu: 0% user + 7.4% kernel / faults: 79 major
+  7.2% 503/android.hardware.sensors-service.multihal: 0% user + 7.2% kernel
+  5.6% 4116/crash_dump64: 0% user + 5.5% kernel / faults: 1350 minor 126 major
+  4.4% 4135/com.google.android.as.oss: 0% user + 4.4% kernel / faults: 612 minor 3 major
+99% TOTAL: 5.1% user + 89% kernel + 0.3% iowait + 4.6% softirq
+Data File: /data/anr/anr_2025-09-16-20-56-56-151
+Subject: executing service com.google.android.gms/com.google.android.location.network.NetworkLocationService, waited 30633ms
+RssHwmKb: 195684
+RssKb: 195684
+RssAnonKb: 67572
+RssShmemKb: 884
+VmSwapKb: 768
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758081168755
+  anr <
+    pid: 2439
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{abe8964 2439:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758081172323
+  anr <
+    pid: 2536
+    process: "com.google.android.googlequicksearchbox:interactor"
+    process_class: 2
+    subject: "Process ProcessRecord{ae3982b 2536:com.google.android.googlequicksearchbox:interactor/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758081187444
+  anr <
+    pid: 2534
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{d06cd77 2534:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1758081190191
+  native_crash <
+    pid: 2512
+    process: "com.google.android.bluetooth"
+    process_class: 2
+    uid: 1002
+  >
+>
+events <
+  timestamp_ms: 1758081192520
+  anr <
+    pid: 2581
+    process: "com.google.android.apps.messaging:rcs"
+    process_class: 2
+    subject: "Process ProcessRecord{107efbc 2581:com.google.android.apps.messaging:rcs/u0a145} failed to complete startup"
+    uid: 10145
+  >
+>
+events <
+  timestamp_ms: 1758081197260
+  anr <
+    pid: 2711
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 2711:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758081218234
+  anr <
+    pid: 2807
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{4799370 2807:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758081231928
+  anr <
+    pid: 2927
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 2927:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758081240118
+  anr <
+    pid: 2471
+    process: "com.google.android.apps.wellbeing"
+    process_class: 2
+    subject: "Broadcast of Intent { act=android.intent.action.LOCKED_BOOT_COMPLETED flg=0x89000010 cmp=com.google.android.apps.wellbeing/.common.receiver.coalescedreceivers.LockedBootCompletedCoalescedBroadcast_Rec[...]"
+    uid: 10141
+  >
+>
+events <
+  timestamp_ms: 1758081269594
+  anr <
+    pid: 2948
+    process: "com.google.android.as"
+    process_class: 2
+    subject: "Process ProcessRecord{4de8c54 2948:com.google.android.as/u0a146} failed to complete startup"
+    uid: 10146
+  >
+>
+events <
+  timestamp_ms: 1758081274108
+  anr <
+    pid: 2964
+    process: "com.google.android.inputmethod.latin"
+    process_class: 2
+    subject: "Process ProcessRecord{8878680 2964:com.google.android.inputmethod.latin/u0a152} failed to complete startup"
+    uid: 10152
+  >
+>
+events <
+  timestamp_ms: 1758081281368
+  anr <
+    pid: 3130
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "Process ProcessRecord{a0363d1 3130:com.google.android.gms.persistent/u0a144} failed to complete startup"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758081284844
+  anr <
+    pid: 3153
+    process: "com.google.android.googlequicksearchbox:search"
+    process_class: 2
+    subject: "Process ProcessRecord{df490d4 3153:com.google.android.googlequicksearchbox:search/u0a147} failed to complete startup"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758081285725
+  anr <
+    pid: 3189
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 3189:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758081320602
+  anr <
+    pid: 3396
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 3396:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758081331423
+  anr <
+    pid: 3376
+    process: "com.google.android.gms.persistent"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.PersistentInternalBoundBrokerService, waited 21229ms"
+    uid: 10144
+  >
+>
+events <
+  timestamp_ms: 1758081333955
+  anr <
+    pid: 3301
+    process: "com.google.android.bluetooth"
+    process_class: 2
+    subject: "executing service com.google.android.bluetooth/com.android.bluetooth.avrcpcontroller.BluetoothMediaBrowserService, waited 20322ms"
+    uid: 1002
+  >
+>
+events <
+  timestamp_ms: 1758081356069
+  anr <
+    pid: 3652
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 3652:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+events <
+  timestamp_ms: 1758081359362
+  anr <
+    pid: 3516
+    process: "com.google.android.googlequicksearchbox:search"
+    process_class: 2
+    subject: "No response to onStartJob"
+    uid: 10147
+  >
+>
+events <
+  timestamp_ms: 1758081385753
+  anr <
+    pid: 3817
+    process: "com.android.phone"
+    process_class: 2
+    subject: "Process ProcessRecord{f19e39d 3817:com.android.phone/1001} failed to complete startup"
+    uid: 1001
+  >
+>
+timestamp_ms: 1758081415696
+window_ms: 300000
+
+----- dumping pid: 3898 at 89534444
+proc 3898
+context binder
+  thread 3908: l 02 need_return 0 tr 0
+    incoming transaction 6867559: 0000000000000000 from 3952:4016 to 3898:3908 code 1f flags 12 pri 0:129 r1 elapsed 67ms buffer free
+  thread 3909: l 01 need_return 0 tr 0
+    incoming transaction 6867438: 0000000000000000 from 3332:3446 to 3898:3909 code 2e flags 12 pri 0:129 r1 elapsed 578ms node 6866056 size 1912:8 offset ffffffffffffffc0
+  thread 3995: l 00 need_return 0 tr 0
+    outgoing transaction 6867570: 0000000000000000 from 3898:3995 to 1656:3107 code 13 flags 12 pri 0:129 r1 elapsed 52ms
+    node work 6867571: u000070e77ab22bb0 c000070e87ab03f50
+    transaction complete
+  thread 4004: l 11 need_return 0 tr 0
+    pending transaction 6867562: 0000000000000000 from 1656:3107 to 3898:0 code 3 flags 11 pri 0:120 r0 elapsed 64ms node 6855250 size 3300:8 offset fffffffffffff650
+  thread 4089: l 10 need_return 0 tr 0
+    transaction complete
+    pending transaction 6867557: 0000000000000000 from 1656:2803 to 3898:4089 code 0 flags 0 pri 0:120 r0 elapsed 75ms size 8:0 offset 0
+  thread 4118: l 10 need_return 0 tr 0
+    outgoing transaction 6866508: 0000000000000000 from 3898:4118 to 3188:3633 code 1 flags 12 pri 0:129 r1 elapsed 4939ms
+    node work 6866680: u000070e77ab209f0 c000070e87ab01b50
+    transaction complete
+  node 6855250: u000070e77ab08360 c000070e87aaeeef0 pri 0:139 hs 1 hw 1 ls 2 lw 0 is 1 iw 1 tr 1 proc 1656
+    pending async transaction 6867565: 0000000000000000 from 1656:3107 to 3898:0 code 8 flags 11 pri 0:120 r0 elapsed 63ms node 6855250 size 920:16 offset ffffffffffffe960
+  buffer 6867557: 0 size 8:0:0 active
+  buffer 6867527: 8 size 8:0:0 delivered
+  buffer 6867438: 40 size 1912:8:0 active
+  buffer 6867562: 9b0 size 3300:8:0 active
+  buffer 6867565: 16a0 size 920:16:0 active
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 3898 at 2025-09-16 20:56:55.585084300-0700 -----
+Cmd line: com.google.android.gms.persistent
+
+sysTid=3898      0
+sysTid=3901      do_sigtimedwait
+sysTid=3902      pipe_read
+sysTid=3903      0
+sysTid=3904      0
+sysTid=3905      futex_wait_queue
+sysTid=3906      futex_wait_queue
+sysTid=3907      futex_wait_queue
+sysTid=3908      0
+sysTid=3909      0
+sysTid=3916      futex_wait_queue
+sysTid=3924      futex_wait_queue
+sysTid=3938      do_epoll_wait
+sysTid=3970      0
+sysTid=3973      0
+sysTid=3974      wait_woken
+sysTid=3989      futex_wait_queue
+sysTid=3990      futex_wait_queue
+sysTid=3994      do_epoll_wait
+sysTid=3995      0
+sysTid=4004      0
+sysTid=4005      binder_ioctl_write_read
+sysTid=4006      binder_ioctl_write_read
+sysTid=4014      0
+sysTid=4026      futex_wait_queue
+sysTid=4051      0
+sysTid=4052      futex_wait_queue
+sysTid=4053      futex_wait_queue
+sysTid=4066      futex_wait_queue
+sysTid=4069      binder_ioctl_write_read
+sysTid=4070      binder_ioctl_write_read
+sysTid=4077      0
+sysTid=4089      0
+sysTid=4106      0
+sysTid=4117      futex_wait_queue
+sysTid=4118      binder_ioctl_write_read
+sysTid=4136      do_epoll_wait
+sysTid=4176      do_epoll_wait
+sysTid=4177      futex_wait_queue
+sysTid=4182      futex_wait_queue
+sysTid=4183      0
+sysTid=4201      binder_ioctl_write_read
+sysTid=4206      0
+
+----- end 3898 -----
+
+proc 3898
+context binder
+  thread 3908: l 12 need_return 0 tr 0
+    transaction complete
+    pending transaction 6869470: 0000000000000000 from 1656:3107 to 3898:3908 code 0 flags 0 pri 0:120 r0 elapsed 64ms size 4:0 offset ffffffffffffdba0
+  thread 3909: l 11 need_return 0 tr 0
+    outgoing transaction 6869453: 0000000000000000 from 3898:3909 to 3332:3446 code 3 flags 12 pri 0:129 r1 elapsed 164ms
+    incoming transaction 6868821: 0000000000000000 from 3332:3446 to 3898:3909 code 2e flags 12 pri 0:129 r1 elapsed 3754ms node 6866056 size 1820:8 offset 0
+    node work 6869454: u000070e77ab2a7a0 c000070e87ab07fd0
+    transaction complete
+  thread 4004: l 11 need_return 0 tr 0
+    pending transaction 6869461: 0000000000000000 from 3952:4016 to 3898:0 code 1f flags 12 pri 0:129 r1 elapsed 135ms node 6864493 size 504:8 offset ffffffffffffe790
+  thread 4005: l 11 need_return 0 tr 0
+    pending transaction 6869476: 0000000000000000 from 1656:3107 to 3898:0 code 8 flags 11 pri 0:120 r0 elapsed 23ms node 6855250 size 1212:16 offset ffffffffffffe590
+  thread 4006: l 01 need_return 0 tr 0
+    incoming transaction 6868977: 0000000000000000 from 3952:4041 to 3898:4006 code 1 flags 12 pri 0:131 r1 elapsed 2162ms node 6858798 size 444:16 offset ffffffffffffe018
+  thread 4069: l 11 need_return 0 tr 0
+    pending transaction 6869423: 0000000000000000 from 3952:4016 to 3898:0 code 1 flags 11 pri 0:120 r0 elapsed 136ms node 6864506 size 5004:8 offset ffffffffffffbc58
+  thread 4070: l 01 need_return 0 tr 0
+    incoming transaction 6868123: 0000000000000000 from 3979:4114 to 3898:4070 code 1f flags 12 pri 0:129 r1 elapsed 7847ms node 6865921 size 448:8 offset ffffffffffffeb28
+  thread 4089: l 10 need_return 0 tr 0
+    outgoing transaction 6869473: 0000000000000000 from 3898:4089 to 1656:3107 code 23 flags 12 pri 0:120 r1 elapsed 44ms
+    transaction complete
+  node 6855250: u000070e77ab08360 c000070e87aaeeef0 pri 0:139 hs 1 hw 1 ls 1 lw 0 is 1 iw 1 tr 2 proc 1656
+  node 6864506: u000070e77ab1dcc0 c000070e87aaffd50 pri 0:139 hs 1 hw 1 ls 1 lw 0 is 1 iw 1 tr 1 proc 3952
+  node 6869190: u000070e77ab2b4c0 c000070e87ab08b10 pri 0:139 hs 1 hw 1 ls 1 lw 0 is 1 iw 1 tr 1 proc 1656
+  buffer 6868821: 0 size 1820:8:0 active
+  buffer 6868123: 14d8 size 448:8:0 active
+  buffer 6869461: 1870 size 504:8:0 active
+  buffer 6869476: 1a70 size 1212:16:0 active
+  buffer 6868977: 1fe8 size 444:16:0 active
+  buffer 6869275: 2350 size 132:8:0 delivered
+  buffer 6869349: 23e0 size 88:0:0 delivered
+  buffer 6869470: 2460 size 4:0:0 active
+  buffer 6868850: 24b0 size 7924:0:0 delivered
+  buffer 6869423: 43a8 size 5004:8:0 active
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 3898 at 2025-09-16 20:57:07.213090600-0700 -----
+Cmd line: com.google.android.gms.persistent
+
+sysTid=3898      futex_wait_queue
+sysTid=3901      futex_wait_queue
+sysTid=3902      pipe_read
+sysTid=3903      0
+sysTid=3904      0
+sysTid=3905      futex_wait_queue
+sysTid=3906      futex_wait_queue
+sysTid=3907      futex_wait_queue
+sysTid=3908      binder_ioctl_write_read
+sysTid=3909      binder_ioctl_write_read
+sysTid=3916      futex_wait_queue
+sysTid=3924      futex_wait_queue
+sysTid=3938      do_epoll_wait
+sysTid=3970      0
+sysTid=3973      0
+sysTid=3974      wait_woken
+sysTid=3989      futex_wait_queue
+sysTid=3990      futex_wait_queue
+sysTid=3994      do_epoll_wait
+sysTid=3995      futex_wait_queue
+sysTid=4004      0
+sysTid=4005      binder_ioctl_write_read
+sysTid=4006      0
+sysTid=4014      0
+sysTid=4026      binder_ioctl_write_read
+sysTid=4051      0
+sysTid=4052      futex_wait_queue
+sysTid=4053      futex_wait_queue
+sysTid=4069      binder_ioctl_write_read
+sysTid=4070      0
+sysTid=4077      0
+sysTid=4089      binder_ioctl_write_read
+sysTid=4106      0
+sysTid=4117      futex_wait_queue
+sysTid=4118      futex_wait_queue
+sysTid=4136      do_epoll_wait
+sysTid=4176      do_epoll_wait
+sysTid=4177      futex_wait_queue
+sysTid=4182      futex_wait_queue
+sysTid=4183      0
+sysTid=4201      binder_ioctl_write_read
+sysTid=4206      futex_wait_queue
+sysTid=4208      0
+sysTid=4211      futex_wait_queue
+sysTid=4227      do_epoll_wait
+sysTid=4237      0
+
+----- end 3898 -----
+
+DurationsV5: 89534304,0,21,29,778,2204,388,0,65,0,0,317,0,0,0,3,14232,51,1,13453,4,1,0,0,0
+
+----- dumping ended at 89548602
+End Data File

@@ -1,0 +1,261 @@
+SystemUptimeMs: 79363883
+Process: com.google.android.gms.persistent
+PID: 24070
+UID: 10144
+Frozen: false
+Timestamp: 2025-09-16 18:06:36.021-0700
+Flags: 0xa0cabe45
+Package: com.google.android.gms v252635038 (25.26.35 (260800-783060121))
+Foreground: No
+Process-Runtime: 5306811
+ErrorId: ae2ed16a-5041-47ae-946c-28a42ab593f4
+Build: google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys
+Loading-Progress: 1.0
+Dropped-Count: 0
+
+----- Output from /proc/pressure/memory -----
+some avg10=14.85 avg60=17.32 avg300=12.17 total=985678647
+full avg10=5.12 avg60=5.14 avg300=2.65 total=352693386
+----- End output from /proc/pressure/memory -----
+----- Output from /proc/pressure/cpu -----
+some avg10=94.19 avg60=90.18 avg300=72.81 total=9792737885
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+----- End output from /proc/pressure/cpu -----
+----- Output from /proc/pressure/io -----
+some avg10=25.90 avg60=33.82 avg300=24.04 total=3346730906
+full avg10=0.00 avg60=0.93 avg300=1.13 total=975950764
+----- End output from /proc/pressure/io -----
+
+CPU usage from 4378ms to -4395ms ago (2025-09-16 18:07:13.167 to 2025-09-16 18:07:21.940):
+  34% 21497/system_server: 3% user + 31% kernel / faults: 636 minor 12 major
+  32% 37/kcompactd0: 0% user + 32% kernel
+  6.8% 47/kswapd0: 0% user + 6.8% kernel
+  15% 503/android.hardware.sensors-service.multihal: 0% user + 15% kernel
+  14% 23682/com.google.android.apps.wellbeing: 0.9% user + 13% kernel / faults: 11 minor 91 major
+  11% 24070/com.google.android.gms.persistent: 1.7% user + 9.3% kernel / faults: 207 minor 16 major
+  11% 28645/com.google.android.googlequicksearchbox:search: 2.4% user + 8.9% kernel / faults: 258 minor 7 major
+  7% 23189/com.google.android.gms: 0.5% user + 6.4% kernel / faults: 575 minor 71 major
+  6.1% 25704/com.android.phone: 0.4% user + 5.6% kernel / faults: 181 minor 1 major
+  4.8% 507/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 4.7% kernel
+100% TOTAL: 4.1% user + 89% kernel + 6.2% softirq
+Data File: /data/anr/anr_2025-09-16-18-07-21-389
+Subject: executing service com.google.android.gms/.chimera.PersistentIntentOperationService, waited 32325ms
+RssHwmKb: 228432
+RssKb: 194656
+RssAnonKb: 60044
+RssShmemKb: 2284
+VmSwapKb: 22960
+
+
+--- CriticalEventLog ---
+capacity: 20
+events <
+  timestamp_ms: 1758070965759
+  anr <
+    pid: 22258
+    process: "com.android.settings"
+    process_class: 2
+    subject: "Broadcast of Intent { act=com.android.settings.battery.action.PERIODIC_JOB_UPDATE flg=0x10 xflg=0x4 cmp=com.android.settings/.fuelgauge.batteryusage.PeriodicJobReceiver }"
+    uid: 1000
+  >
+>
+events <
+  timestamp_ms: 1758071088298
+  install_packages <
+  >
+>
+events <
+  timestamp_ms: 1758071134935
+  anr <
+    pid: 24374
+    process: "com.google.android.settings.intelligence"
+    process_class: 2
+    subject: "No response to onStartJob"
+    uid: 10137
+  >
+>
+events <
+  timestamp_ms: 1758071165641
+  half_watchdog <
+    subject: "Blocked in monitor com.android.server.am.ActivityManagerService on monitor thread (watchdog.monitor) for 17s, Blocked in handler on i/o thread (android.io) for 17s"
+  >
+>
+events <
+  timestamp_ms: 1758071218291
+  anr <
+    pid: 23189
+    process: "com.google.android.gms"
+    process_class: 2
+    subject: "executing service com.google.android.gms/.chimera.GmsIntentOperationService, waited 23699ms"
+    uid: 10144
+  >
+>
+timestamp_ms: 1758071240951
+window_ms: 300000
+
+----- dumping pid: 24070 at 79312157
+proc 24070
+context binder
+  thread 24070: l 10 need_return 0 tr 0
+    outgoing transaction 6192194: 0000000000000000 from 24070:24070 to 21497:22402 code 23 flags 10 pri 0:120 r1 elapsed 7840ms
+    transaction complete
+  thread 25070: l 10 need_return 0 tr 0
+    outgoing transaction 6190526: 0000000000000000 from 24070:25070 to 21497:23970 code 23 flags 10 pri 0:129 r1 elapsed 48526ms
+    transaction complete
+libdebuggerd_client: failed to read status response from tombstoned: timeout reached?
+
+----- Waiting Channels: pid 24070 at 2025-09-16 18:07:00.981291800-0700 -----
+Cmd line: com.google.android.gms.persistent
+
+sysTid=24070     binder_ioctl_write_read
+sysTid=24078     do_sigtimedwait
+sysTid=24079     pipe_read
+sysTid=24082     futex_wait_queue
+sysTid=24083     futex_wait_queue
+sysTid=24084     futex_wait_queue
+sysTid=24085     futex_wait_queue
+sysTid=24086     futex_wait_queue
+sysTid=24088     binder_ioctl_write_read
+sysTid=24089     binder_ioctl_write_read
+sysTid=24095     futex_wait_queue
+sysTid=24118     futex_wait_queue
+sysTid=24134     do_epoll_wait
+sysTid=24164     wait_woken
+sysTid=24165     do_epoll_wait
+sysTid=24169     binder_ioctl_write_read
+sysTid=24170     binder_ioctl_write_read
+sysTid=24171     futex_wait_queue
+sysTid=24196     futex_wait_queue
+sysTid=24197     futex_wait_queue
+sysTid=24199     do_epoll_wait
+sysTid=24231     binder_ioctl_write_read
+sysTid=24232     binder_ioctl_write_read
+sysTid=24244     futex_wait_queue
+sysTid=24255     futex_wait_queue
+sysTid=24277     binder_ioctl_write_read
+sysTid=24292     binder_ioctl_write_read
+sysTid=24360     binder_ioctl_write_read
+sysTid=24384     futex_wait_queue
+sysTid=24393     do_epoll_wait
+sysTid=24395     binder_ioctl_write_read
+sysTid=24401     do_epoll_wait
+sysTid=24431     futex_wait_queue
+sysTid=24442     binder_ioctl_write_read
+sysTid=24502     do_epoll_wait
+sysTid=24529     binder_ioctl_write_read
+sysTid=24712     do_epoll_wait
+sysTid=24746     do_epoll_wait
+sysTid=24768     futex_wait_queue
+sysTid=24817     do_epoll_wait
+sysTid=24958     do_epoll_wait
+sysTid=24979     futex_wait_queue
+sysTid=25012     binder_ioctl_write_read
+sysTid=25062     futex_wait_queue
+sysTid=25064     futex_wait_queue
+sysTid=25069     futex_wait_queue
+sysTid=25070     binder_ioctl_write_read
+sysTid=25128     binder_ioctl_write_read
+sysTid=25371     binder_ioctl_write_read
+sysTid=25427     futex_wait_queue
+sysTid=25628     0
+sysTid=26348     futex_wait_queue
+sysTid=26349     futex_wait_queue
+sysTid=26351     futex_wait_queue
+sysTid=26352     futex_wait_queue
+sysTid=28244     do_epoll_wait
+sysTid=28260     do_epoll_wait
+sysTid=28261     do_epoll_wait
+sysTid=28262     futex_wait_queue
+sysTid=28263     futex_wait_queue
+sysTid=28264     do_epoll_wait
+sysTid=28265     futex_wait_queue
+sysTid=28266     futex_wait_queue
+sysTid=28464     futex_wait_queue
+sysTid=28521     do_sys_poll
+sysTid=28583     futex_wait_queue
+sysTid=28584     futex_wait_queue
+sysTid=28653     futex_wait_queue
+
+----- end 24070 -----
+
+libdebuggerd_client: failed to read status response from tombstoned: Try again
+
+----- Waiting Channels: pid 24070 at 2025-09-16 18:07:14.503861500-0700 -----
+Cmd line: com.google.android.gms.persistent
+
+sysTid=24070     do_epoll_wait
+sysTid=24078     0
+sysTid=24079     pipe_read
+sysTid=24082     futex_wait_queue
+sysTid=24083     futex_wait_queue
+sysTid=24084     futex_wait_queue
+sysTid=24085     futex_wait_queue
+sysTid=24086     futex_wait_queue
+sysTid=24088     binder_ioctl_write_read
+sysTid=24089     binder_ioctl_write_read
+sysTid=24095     futex_wait_queue
+sysTid=24118     futex_wait_queue
+sysTid=24134     do_epoll_wait
+sysTid=24164     wait_woken
+sysTid=24165     do_epoll_wait
+sysTid=24169     binder_ioctl_write_read
+sysTid=24170     binder_ioctl_write_read
+sysTid=24171     futex_wait_queue
+sysTid=24196     futex_wait_queue
+sysTid=24197     futex_wait_queue
+sysTid=24199     do_epoll_wait
+sysTid=24231     binder_ioctl_write_read
+sysTid=24232     binder_ioctl_write_read
+sysTid=24244     futex_wait_queue
+sysTid=24255     futex_wait_queue
+sysTid=24277     binder_ioctl_write_read
+sysTid=24292     binder_ioctl_write_read
+sysTid=24360     binder_ioctl_write_read
+sysTid=24384     futex_wait_queue
+sysTid=24393     do_epoll_wait
+sysTid=24395     binder_ioctl_write_read
+sysTid=24401     do_epoll_wait
+sysTid=24431     futex_wait_queue
+sysTid=24442     binder_ioctl_write_read
+sysTid=24502     do_epoll_wait
+sysTid=24529     binder_ioctl_write_read
+sysTid=24712     do_epoll_wait
+sysTid=24746     do_epoll_wait
+sysTid=24768     futex_wait_queue
+sysTid=24817     do_epoll_wait
+sysTid=24958     do_epoll_wait
+sysTid=24979     futex_wait_queue
+sysTid=25012     binder_ioctl_write_read
+sysTid=25062     futex_wait_queue
+sysTid=25064     futex_wait_queue
+sysTid=25069     futex_wait_queue
+sysTid=25070     futex_wait_queue
+sysTid=25128     binder_ioctl_write_read
+sysTid=25371     binder_ioctl_write_read
+sysTid=25427     futex_wait_queue
+sysTid=25628     binder_ioctl_write_read
+sysTid=26348     futex_wait_queue
+sysTid=26349     futex_wait_queue
+sysTid=26351     futex_wait_queue
+sysTid=26352     futex_wait_queue
+sysTid=28244     do_epoll_wait
+sysTid=28260     do_epoll_wait
+sysTid=28261     do_epoll_wait
+sysTid=28262     futex_wait_queue
+sysTid=28263     futex_wait_queue
+sysTid=28264     do_epoll_wait
+sysTid=28265     futex_wait_queue
+sysTid=28266     futex_wait_queue
+sysTid=28464     futex_wait_queue
+sysTid=28521     do_sys_poll
+sysTid=28583     0
+sysTid=28584     futex_wait_queue
+sysTid=28653     0
+sysTid=28671     futex_wait_queue
+
+----- end 24070 -----
+
+DurationsV5: 79311816,0,0,44712,3660,2435,1,0,3,0,0,0,0,0,1,1708,45196,192,2,1517,4,1,0,0,0
+
+----- dumping ended at 79363696
+End Data File

@@ -239,10 +239,19 @@ export class DatabaseService {
       `);
 
       // Get current migration version
-      const [result] = await this.db.executeSql(
+      const migrationResult = await this.db.executeSql(
         'SELECT MAX(id) as currentVersion FROM migrations'
       );
-      const currentVersion = result.rows.item(0).currentVersion || 0;
+      let currentVersion = 0;
+      if (Array.isArray(migrationResult) && migrationResult.length > 0) {
+        const [result] = migrationResult;
+        if (result.rows && result.rows.length > 0) {
+          const item = result.rows.item(0);
+          if (item && item.currentVersion != null) {
+            currentVersion = item.currentVersion;
+          }
+        }
+      }
 
       // Run pending migrations
       for (const migration of this.migrations) {
@@ -270,10 +279,14 @@ export class DatabaseService {
     if (!this.db) throw new Error('Database not initialized');
 
     try {
-      const [result] = await this.db.executeSql(
+      const rollbackResult = await this.db.executeSql(
         'SELECT id, name FROM migrations WHERE id > ? ORDER BY id DESC',
         [version]
       );
+      if (!Array.isArray(rollbackResult)) {
+        throw new Error('Rollback query did not return an array');
+      }
+      const [result] = rollbackResult;
 
       for (let i = 0; i < result.rows.length; i++) {
         const migration = result.rows.item(i);
@@ -366,10 +379,14 @@ export class DatabaseService {
       // Handle SQLite (mobile)
       if (!this.db) throw new Error('Database not initialized');
 
-      const [results] = await this.db.executeSql(
+      const userResult = await this.db.executeSql(
         'SELECT * FROM users WHERE email = ?',
         [email]
       );
+      if (!Array.isArray(userResult)) {
+        throw new Error('User query did not return an array');
+      }
+      const [results] = userResult;
 
       if (results.rows.length > 0) {
         const row = results.rows.item(0);
@@ -389,10 +406,14 @@ export class DatabaseService {
     if (!this.db) throw new Error('Database not initialized');
 
     try {
-      const [results] = await this.db.executeSql(
+      const userIdResult = await this.db.executeSql(
         'SELECT * FROM users WHERE id = ?',
         [id]
       );
+      if (!Array.isArray(userIdResult)) {
+        throw new Error('User by ID query did not return an array');
+      }
+      const [results] = userIdResult;
 
       if (results.rows.length > 0) {
         const row = results.rows.item(0);
@@ -561,7 +582,7 @@ export class DatabaseService {
         // Check storage quota before saving
         if (!StorageQuotaManager.hasSpaceFor(documentSize)) {
           const quotaStatus = StorageQuotaManager.checkQuotaStatus();
-          
+
           if (quotaStatus === 'critical') {
             // Try to free space
             const spaceFreed =

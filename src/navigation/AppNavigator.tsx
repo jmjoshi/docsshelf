@@ -1,65 +1,52 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {
-  RootStackParamList,
-  AuthStackParamList,
-  MainTabParamList,
-} from './types';
-import HomeScreen from '../screens/Home';
-import DocumentsListScreen from '../screens/Documents/DocumentsList';
-import SettingsMainScreen from '../screens/Settings/SettingsMain';
-import LoginScreen from '../screens/Auth/Login';
-import RegisterScreen from '../screens/Auth/Register';
+import { View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { Ionicons } from '@expo/vector-icons';
+import LoginSimple from '../screens/Auth/LoginSimple';
 
-const RootStack = createStackNavigator<RootStackParamList>();
-const AuthStack = createStackNavigator<AuthStackParamList>();
-const MainTab = createBottomTabNavigator<MainTabParamList>();
+const RootStack = createStackNavigator();
+
+// Simple placeholder components
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>🏠 Home Screen</Text>
+      <Text style={{ fontSize: 16, marginTop: 10 }}>
+        Navigation is working!
+      </Text>
+    </View>
+  );
+}
+
+function RegisterScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
+        📝 Register Screen
+      </Text>
+      <Text style={{ fontSize: 16, marginTop: 10 }}>
+        Registration form will go here
+      </Text>
+    </View>
+  );
+}
 
 function AuthNavigator() {
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthStack.Screen name="Login" component={LoginScreen} />
-      <AuthStack.Screen name="Register" component={RegisterScreen} />
-    </AuthStack.Navigator>
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Screen name="Login" component={LoginSimple} />
+      <RootStack.Screen name="Register" component={RegisterScreen} />
+    </RootStack.Navigator>
   );
 }
 
 function MainNavigator() {
   return (
-    <MainTab.Navigator screenOptions={{ headerShown: false }}>
-      <MainTab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Documents"
-        component={DocumentsListScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document" color={color} size={size} />
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Settings"
-        component={SettingsMainScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" color={color} size={size} />
-          ),
-        }}
-      />
-    </MainTab.Navigator>
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Screen name="Home" component={HomeScreen} />
+    </RootStack.Navigator>
   );
 }
 
@@ -67,6 +54,8 @@ export default function AppNavigator() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+
+  console.log('[DEBUG] AppNavigator - isAuthenticated:', isAuthenticated);
 
   return (
     <NavigationContainer>

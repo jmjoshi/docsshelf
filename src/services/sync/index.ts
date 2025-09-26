@@ -39,7 +39,7 @@ class SyncServiceClass {
     }
 
     this.isSyncing = true;
-    
+
     try {
       const state = store.getState();
       const userId = state.auth.user?.id;
@@ -181,7 +181,7 @@ class SyncServiceClass {
           // Check if document already exists in database to avoid duplicates
           const existingDocs = await DatabaseService.getDocumentsByUser(userId);
           const docExists = existingDocs.some((doc) => doc.id === document.id);
-          
+
           if (!docExists) {
             // Document is already added to Redux, now save to database with existing ID
             await DatabaseService.saveDocumentMetadata(
